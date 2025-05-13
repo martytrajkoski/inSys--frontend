@@ -6,7 +6,7 @@ interface ScanInvoiceModalProps {
     onClose: () => void;
 }
 
-const ScanInvoiceModal: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
+const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
 
     const [file, setFile] = useState<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -77,4 +77,4 @@ const ScanInvoiceModal: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
     )
 }
 
-export default ScanInvoiceModal;
+export default ImportFile;

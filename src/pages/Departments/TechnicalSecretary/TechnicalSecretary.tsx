@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ScanInvoiceModal from "../../../components/ImportFile/ScanInvoiceModal";
+import ImportFile from "../../../components/ImportFile/ImportFile";
 
 const TechnicalSecretary: React.FC = () => {
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
@@ -34,7 +34,7 @@ const TechnicalSecretary: React.FC = () => {
                 </div>
             </form>
             {openImportModal && (
-                <ScanInvoiceModal onClose={handleImportModal}/>
+                <ImportFile onClose={handleImportModal}/>
             )}
         </>
     )
