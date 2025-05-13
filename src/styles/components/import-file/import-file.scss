@@ -1,0 +1,100 @@
+.import-file-backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1002;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.616);
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .upload-container {
+        background-color: rgba(255, 255, 255, 0.836);
+        border: 3px dashed #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+        width: 100%;
+        height: 50vh;
+        max-width: 500px;
+        cursor: pointer;
+        animation: slideUp 0.3s ease-in-out;
+
+    }
+
+    .upload-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .upload-icon {
+        margin-bottom: 10px;
+        background-color: #FCDEE9;
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-icon i {
+        margin-top: 20px;
+        width: 40px;
+        height: 40px;
+        color: #ff4081;
+    }
+
+    .upload-choose {
+        color: #ff4081;
+        cursor: pointer;
+    }
+
+    .upload-formats {
+        color: #aaa;
+        margin-top: 10px;
+    }
+
+    .upload-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-container:hover {
+        background-color: #f8f8f8af;
+    }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

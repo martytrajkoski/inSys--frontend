@@ -1,0 +1,40 @@
+.mainmenu-sidebar-backdrop{
+    background-color: #F0F0F0;
+    width: 20%;
+    height: 90vh;
+    position: fixed;
+    left: 0;
+    top: 10vh;
+    z-index: 1000;
+
+    .mainmenu-sidebar{
+        height: 90%;
+        border-left: 1px solid black;
+        margin: 38px 24px;
+        padding: 25px 11px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;  
+        align-items: left; 
+        font-size: 20px;
+        // border: 1px solid blue;
+        
+        .sidebar-items, .sidebar-user{
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+    
+            button{
+                border: none;
+                background: none;
+                font-weight: bold;
+                font-size: 20px;
+                text-align: left;
+                padding: 0;
+                width: 100px;
+                cursor: pointer;
+            }
+        }
+    }
+}
