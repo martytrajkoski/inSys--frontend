@@ -8,7 +8,7 @@ const ProcurementApplicant: React.FC = () => {
                     <h3>Информации за евиденција </h3>
                     <div className="form-item-inputs">
                         <input type="text" placeholder="Барател на набавката која е предмет на наплата"/>
-                        <input type="text" placeholder="Број на картон" />
+                        <input type="text" placeholder="Број на картон (Конто)" />
                         <input type="text" placeholder="Назив на проектот/работата" />
                     </div>
                     <div className="form-item-radio">

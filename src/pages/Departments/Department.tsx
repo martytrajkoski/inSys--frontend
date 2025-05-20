@@ -9,7 +9,7 @@ const Department: React.FC = () => {
             <div className="department-title">
                 <button><FontAwesomeIcon icon={faArrowLeft}/> Назад</button>
                 <p>ЗАДОЛЖЕН ПРИЛОГ НА ВЛЕЗНА ФАКТУРА</p>
-                <div></div>
+                <div>Број на фактура</div>
             </div>
             <div className="department-container">
                 <Outlet/>

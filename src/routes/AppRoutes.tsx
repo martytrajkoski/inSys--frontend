@@ -9,12 +9,14 @@ import PublicProcurementDepartment from "../pages/Departments/PublicProcurementD
 import ProcurementApplicant from "../pages/Departments/ProcurementApplicant/ProcurementApplicant";
 import Accounting from "../pages/Departments/Accounting/Accounting";
 import ViceDeanFinance from "../pages/Departments/ViceDeanFinance/ViceDeanFinance";
+import SignIn from "../pages/Sign/SignIn";
 
 const AppRoutes: React.FC = () => {
     return(
         <Router>
             <Routes>
                 <Route path="/signup" element={<Signup/>}/>
+                <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/" element={<Home/>}>
                     <Route index element={<MainMenu/>} />
                     <Route element={<Department/>}>

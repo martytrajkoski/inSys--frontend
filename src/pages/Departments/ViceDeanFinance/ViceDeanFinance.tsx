@@ -20,7 +20,6 @@ const ViceDeanFinance: React.FC = () =>{
                         <select name="" id="">
                             <option value="">Јавна набавка</option>
                             <option value="">Набавка без тендер</option>
-                            <option value="">Набавка по е-пазар</option>
                         </select>
                     </div>
                 </div>

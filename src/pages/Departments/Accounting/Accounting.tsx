@@ -7,7 +7,7 @@ const Accounting:React.FC = () => {
                 <div className="form-item">
                     <h3>Информации од сметководство</h3>
                     <div className="form-item-inputs">
-                        <input type="text" placeholder="Број на картон"/>
+                        <input type="text" placeholder="Број на картон (Конто)"/>
                         <input type="text" placeholder="Состојба на картон"/>
                     </div>
                     <div className="form-item-radio">
