@@ -1,20 +1,20 @@
 //components
-@use '../styles/components/header/header.scss';
-@use '../styles/components/mainmenu/mainmenu-sidebar.scss';
-@use '../styles/components/mainmenu/invoice-card.scss';
-@use '../styles/components/import-file/import-file.scss';
+@use "../styles/components/header/header.scss";
+@use "../styles/components/mainmenu/mainmenu-sidebar.scss";
+@use "../styles/components/mainmenu/invoice-card.scss";
+@use "../styles/components/import-file/import-file.scss";
 
 //pages
-@use '../styles/pages/sign/sign.scss';
-@use '../styles/pages/mainmenu/mainmenu.scss';
+@use "../styles/pages/sign/sign.scss";
+@use "../styles/pages/sign/changePassword.scss";
+@use "../styles/pages/mainmenu/mainmenu.scss";
 
-@use '../styles/pages/departments/department.scss';
-@use '../styles/pages/departments/technical-secretary/technical-secretary.scss';
-@use '../styles/pages/departments/public-procurement-department/public-procurement-department.scss';
-
+@use "../styles/pages/departments/department.scss";
+@use "../styles/pages/departments/technical-secretary/technical-secretary.scss";
+@use "../styles/pages/departments/public-procurement-department/public-procurement-department.scss";
 
 //fonts
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 // Other defaults
 html,
@@ -30,18 +30,19 @@ small,
 input {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-html{
-  font-family: 'Inter';
+html {
+  font-family: "Inter";
 }
 
-body{
+body {
   height: 100%;
 }
 
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
 }
 
 ol,
@@ -51,8 +52,9 @@ ul {
   padding: 0;
 }
 
-input, textarea{
-    &:focus {
-      outline: none;
-    }
+input,
+textarea {
+  &:focus {
+    outline: none;
+  }
 }

@@ -33,6 +33,16 @@
       }
     }
 
+    button {
+      background-color: black;
+      color: white;
+      font-size: 16px;
+      padding: 8px 171px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+    }
+
     form {
       display: flex;
       flex-direction: column;
@@ -54,16 +64,6 @@
             background-color: rgb(199, 199, 199);
           }
         }
-      }
-
-      button {
-        background-color: black;
-        color: white;
-        font-size: 16px;
-        padding: 8px 171px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
       }
     }
   }
