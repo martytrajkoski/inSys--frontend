@@ -21,7 +21,7 @@ const AppRoutes: React.FC = () => {
                     <Route index element={<MainMenu/>} />
                     <Route element={<Department/>}>
                         <Route path="tehnickisekretar" element={<TehnickiSekretar/>}/>
-                        <Route path="baratelnabavka" element={<BaratelNabavka/>}/>
+                        <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka/>}/>
                         <Route path="tipnabavka/:br_faktura" element={<TipNabavka/>}/>
                         <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo/>}/>
                         <Route path="prodekan" element={<Prodekan/>}/>
