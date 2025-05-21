@@ -1,78 +1,144 @@
-import React from "react";
+import React, { useState } from "react";
+import axiosClient from "../../../axiosClient/axiosClient";
+import { useParams } from "react-router-dom";
 
 const Smetkovodstvo:React.FC = () => {
+    const { br_faktura } = useParams<string>();
+    const [brKarton, setBrKarton] = useState<number>();
+    const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
+    const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<boolean>();
+    const [formular, setFormular] = useState<boolean>();
+    const [vneseniSredstva, setVneseniSredstva] = useState<boolean>();
+    const [smetka, setSmetka] = useState<string>("");
+    const [konto, setKonto] = useState<string>("");
+    const [datum, setDatum] = useState<string>("");
+
+    const storeSmetkovodstvo = async(e:any) => {
+        e.preventDefault();
+
+        try {
+            const response = await axiosClient.post('/smetkovodstvo/addDocument',{
+                br_karton: brKarton,
+                br_faktura: parseInt(br_faktura || "0", 10),
+                sostojba_karton: sostojbaKarton,
+                osnova_evidentiranje: osnovaEvidentiranje,
+                formular: formular,
+                vneseni_sredstva: vneseniSredstva,
+                smetka: smetka,
+                konto: konto,
+                datum: datum,
+                read: true
+            })
+
+            if(response.status === 201){
+                console.log('Smetkovodstvo stored');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return(
         <>
-            <form action="">
+            <form onSubmit={storeSmetkovodstvo}>
                 <div className="form-item">
                     <h3>Информации од сметководство</h3>
                     <div className="form-item-inputs">
-                        <input type="text" placeholder="Број на картон (Конто)"/>
-                        <input type="text" placeholder="Состојба на картон"/>
+                        <input
+                            type="number"
+                            placeholder="Број на картон (Конто)"
+                            value={brKarton}
+                            onChange={(e) => setBrKarton(Number(e.target.value))}
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Состојба на картон"
+                            value={sostojbaKarton}
+                            onChange={(e) => setSostojbaKarton(e.target.value)}
+                            required
+                        />
                     </div>
+
                     <div className="form-item-radio">
-                        <p>Предметот на набавка има основа за евидентирање како основно средство(а):</p>
+                        <p>Основa за евидентирање:</p>
                         <div className="form-radio">
-                            <div>
-                                <input type="radio" name="ima_osnova_evidencija"/>
-                                <label>Да</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="ima_osnova_evidencija"/>
-                                <label>Не</label>
-                            </div>
+                            <label>
+                                <input type="radio" name="osnova" onChange={() => setOsnovaEvidentiranje(true)} />
+                                Да
+                            </label>
+                            <label>
+                                <input type="radio" name="osnova" onChange={() => setOsnovaEvidentiranje(false)} />
+                                Не
+                            </label>
                         </div>
                     </div>
+
                     <div className="form-item-radio">
-                        <p>Пополнет е формулар за задолжување на основно средство:</p>
+                        <p>Пополнет формулар:</p>
                         <div className="form-radio">
-                            <div>
-                                <input type="radio" name="formular"/>
-                                <label>Да</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="formular"/>
-                                <label>Не</label>
-                            </div>
+                            <label>
+                                <input type="radio" name="formular" onChange={() => setFormular(true)} />
+                                Да
+                            </label>
+                            <label>
+                                <input type="radio" name="formular" onChange={() => setFormular(false)} />
+                                Не
+                            </label>
                         </div>
                     </div>
+
                     <div className="form-item-radio">
-                        <p>Средствата се внесени (поединечно) како новонабавени за тековната година:</p>
+                        <p>Средства внесени:</p>
                         <div className="form-radio">
-                            <div>
-                                <input type="radio" name="poedinecno"/>
-                                <label>Да</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="poedinecno"/>
-                                <label>Не</label>
-                            </div>
+                            <label>
+                                <input type="radio" name="sredstva" onChange={() => setVneseniSredstva(true)} />
+                                Да
+                            </label>
+                            <label>
+                                <input type="radio" name="sredstva" onChange={() => setVneseniSredstva(false)} />
+                                Не
+                            </label>
                         </div>
                     </div>
+
                     <div className="form-item-radio">
                         <p>Предлог сметка за наплата од:</p>
                         <div className="form-radio">
-                            <div>
-                                <input type="radio" name="predlog_smetka"/>
-                                <label>603</label>
-                            </div>
-                            <div>
-                                <input type="radio" name="predlog_smetka"/>
-                                <label>788</label>
-                            </div>
+                            <label>
+                                <input type="radio" name="smetka" onChange={() => setSmetka("603")} />
+                                603
+                            </label>
+                            <label>
+                                <input type="radio" name="smetka" onChange={() => setSmetka("788")} />
+                                788
+                            </label>
                         </div>
                     </div>
+
                     <div className="form-item-inputs">
-                        <input type="text" placeholder="Предлог конго за наплата до:"/>
-                        <input type="text" placeholder="Датум"/>
-                        <input type="text" placeholder="Потпис"/>
+                        <input
+                            type="text"
+                            placeholder="Предлог конто за наплата до:"
+                            value={konto}
+                            onChange={(e) => setKonto(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="date"
+                            placeholder="Датум"
+                            value={datum}
+                            onChange={(e) => setDatum(e.target.value)}
+                            required
+                        />
                     </div>
+
                     <div className="form-buttons">
                         <div></div>
                         <div className="form-buttons-edit">
-                            <button>Save</button>
-                            <button>Edit</button>
-                            <button>Delete</button>
+                            <button type="submit">Save</button>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
                         </div>
                     </div>
                 </div>
