@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-
-interface Baratel {
-  id: number;
-  name: string;
-}
+import type { Baratel } from "../../../types/types";
+import { useParams } from "react-router-dom";
 
 const BaratelNabavka: React.FC = () => {
-  // Individual states for form attributes
-  const [brFaktura, setBrFaktura] = useState("");
+  const { br_faktura } = useParams<{ br_faktura: string }>();
   const [brKarton, setBrKarton] = useState("");
   const [nazivProekt, setNazivProekt] = useState("");
   const [poteklo, setPoteklo] = useState("");
@@ -18,6 +14,28 @@ const BaratelNabavka: React.FC = () => {
   const [editMode, setEditMode] = useState(true);
   const [recordId, setRecordId] = useState<number | null>(null);
   const [barateli, setBarateli] = useState<Baratel[]>([]);
+
+  const storeBaratelNabavka = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.post("/baratelNabavka/addDocument", {
+        br_faktura: parseInt(br_faktura || "0", 10),
+        br_karton: brKarton,
+        naziv_proekt: nazivProekt,
+        poteklo: poteklo,
+        datum: datum,
+        baratel_id: baratelId,
+        read: true,
+      });
+
+      if (response.status === 201) {
+        console.log("BaratelNabavka created");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Fetch barateli on mount
   useEffect(() => {
@@ -34,7 +52,7 @@ const BaratelNabavka: React.FC = () => {
 
   const handleSave = async () => {
     const payload = {
-      br_faktura: brFaktura,
+      br_faktura: parseInt(br_faktura || "0", 10),
       br_karton: brKarton,
       naziv_proekt: nazivProekt,
       poteklo,
@@ -44,10 +62,16 @@ const BaratelNabavka: React.FC = () => {
 
     try {
       if (recordId) {
-        await axiosClient.put(`/baratel-nabavka/${recordId}`, payload);
+        await axiosClient.put(
+          `/baratelNabavka/addDocument/${recordId}`,
+          payload
+        );
         alert("Successfully updated.");
       } else {
-        const response = await axiosClient.post("/baratel-nabavka", payload);
+        const response = await axiosClient.post(
+          "/baratelNabavka/addDocument",
+          payload
+        );
         setRecordId(response.data.id);
         alert("Successfully saved.");
       }
@@ -61,9 +85,8 @@ const BaratelNabavka: React.FC = () => {
   const handleDelete = async () => {
     if (!recordId) return;
     try {
-      await axiosClient.delete(`/baratel-nabavka/${recordId}`);
+      await axiosClient.delete(`/baratelNabavka/addDocument/${recordId}`);
       alert("Deleted.");
-      setBrFaktura("");
       setBrKarton("");
       setNazivProekt("");
       setPoteklo("");
@@ -78,7 +101,7 @@ const BaratelNabavka: React.FC = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={storeBaratelNabavka}>
       <div className="form-item">
         <h3>Информации за евиденција</h3>
 
