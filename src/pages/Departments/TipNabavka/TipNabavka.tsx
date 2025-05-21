@@ -17,7 +17,7 @@ const TipNabavka: React.FC = () => {
 
     const storeTipNabavka = async (e:any) => {
         e.preventDefault();
-        console.log('istTip, vkPotroseno', istTip, vkPotroseno)
+
         try {
             const response = await axiosClient.post("/tipnabavka/addDocument", {
                 br_faktura: parseInt(br_faktura || "0", 10),
