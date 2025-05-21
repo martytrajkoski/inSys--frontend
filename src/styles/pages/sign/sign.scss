@@ -17,6 +17,27 @@
     flex-direction: column;
     gap: 24px;
 
+    .password-input-wrapper {
+      position: relative;
+
+      input {
+        width: 100%; // Ensure full width so the button aligns inside properly
+      }
+
+      .toggle-password-btn {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 14px;
+        color: #007bff;
+        cursor: pointer;
+        padding: 0;
+      }
+    }
+
     .sign-info {
       display: flex;
       flex-direction: column;

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false); // 👈 Password visibility state
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [resetEmail, setResetEmail] = useState<string>("");
@@ -39,7 +42,7 @@ const SignIn: React.FC = () => {
       const response = await axiosClient.get("/auth/reset-password", {
         params: { email: resetEmail },
       });
-
+      console.log(response);
       setResetMessage("Password reset instructions sent to your email.");
     } catch (err: any) {
       setResetMessage("Failed to send reset instructions. Please try again.");
@@ -64,13 +67,25 @@ const SignIn: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Password..."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+
+          {/* Password with Show/Hide Toggle */}
+          <div className="password-input-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
+
           <button type="submit">Login</button>
           <button type="button" onClick={() => setShowModal(true)}>
             Forgot Password
