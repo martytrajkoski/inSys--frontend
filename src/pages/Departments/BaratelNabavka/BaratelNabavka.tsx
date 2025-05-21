@@ -1,6 +1,6 @@
 import React from "react";
 
-const PublicProcurementDepartment: React.FC = () => {
+const BaratelNabavka: React.FC = () => {
     return(
         <>
             <form>
@@ -98,4 +98,4 @@ const PublicProcurementDepartment: React.FC = () => {
     )
 }
 
-export default PublicProcurementDepartment;
+export default BaratelNabavka;

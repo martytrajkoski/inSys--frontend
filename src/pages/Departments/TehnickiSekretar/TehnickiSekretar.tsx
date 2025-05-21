@@ -3,7 +3,7 @@ import ImportFile from "../../../components/ImportFile/ImportFile";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { IzdavaciType } from "../../../types/types";
 
-const TechnicalSecretary: React.FC = () => {
+const TehnickiSekretar: React.FC = () => {
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
     const [arhivski_br, setArhivski_br] = useState<string>('');
     const [br_faktura, setBr_faktura] = useState<number>();
@@ -113,4 +113,4 @@ const TechnicalSecretary: React.FC = () => {
     )
 }
 
-export default TechnicalSecretary;
+export default TehnickiSekretar;

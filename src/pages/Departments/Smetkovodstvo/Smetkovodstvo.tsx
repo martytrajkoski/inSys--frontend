@@ -1,6 +1,6 @@
 import React from "react";
 
-const Accounting:React.FC = () => {
+const Smetkovodstvo:React.FC = () => {
     return(
         <>
             <form action="">
@@ -81,4 +81,4 @@ const Accounting:React.FC = () => {
     )   
 }
 
-export default Accounting;
+export default Smetkovodstvo;

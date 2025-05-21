@@ -1,6 +1,6 @@
 import React from "react";
 
-const ViceDeanFinance: React.FC = () =>{
+const Prodekan: React.FC = () =>{
     return(
         <>
             <form action="">
@@ -179,4 +179,4 @@ const ViceDeanFinance: React.FC = () =>{
     )
 }
 
-export default ViceDeanFinance;
+export default Prodekan;

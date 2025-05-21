@@ -4,11 +4,11 @@ import Signup from "../pages/Sign/Signup";
 import Home from "../pages/Home/Home";
 import MainMenu from "../pages/MainMenu/MainMenu";
 import Department from "../pages/Departments/Department";
-import TechnicalSecretary from "../pages/Departments/TechnicalSecretary/TechnicalSecretary";
-import PublicProcurementDepartment from "../pages/Departments/PublicProcurementDepartment/PublicProcurementDepartment";
-import ProcurementApplicant from "../pages/Departments/ProcurementApplicant/ProcurementApplicant";
-import Accounting from "../pages/Departments/Accounting/Accounting";
-import ViceDeanFinance from "../pages/Departments/ViceDeanFinance/ViceDeanFinance";
+import TehnickiSekretar from "../pages/Departments/TehnickiSekretar/TehnickiSekretar";
+import BaratelNabavka from "../pages/Departments/BaratelNabavka/BaratelNabavka";
+import TipNabavka from "../pages/Departments/TipNabavka/TipNabavka";
+import Smetkovodstvo from "../pages/Departments/Smetkovodstvo/Smetkovodstvo";
+import Prodekan from "../pages/Departments/Prodekan/Prodekan";
 import SignIn from "../pages/Sign/SignIn";
 
 const AppRoutes: React.FC = () => {
@@ -20,11 +20,11 @@ const AppRoutes: React.FC = () => {
                 <Route path="/" element={<Home/>}>
                     <Route index element={<MainMenu/>} />
                     <Route element={<Department/>}>
-                        <Route path="technicalsecretary" element={<TechnicalSecretary/>}/>
-                        <Route path="procurementdepartment" element={<PublicProcurementDepartment/>}/>
-                        <Route path="procurementapplicant" element={<ProcurementApplicant/>}/>
-                        <Route path="accounting" element={<Accounting/>}/>
-                        <Route path="vicedeanfinance" element={<ViceDeanFinance/>}/>
+                        <Route path="tehnickisekretar" element={<TehnickiSekretar/>}/>
+                        <Route path="baratelnabavka" element={<BaratelNabavka/>}/>
+                        <Route path="tipnabavka" element={<TipNabavka/>}/>
+                        <Route path="smetkovodstvo" element={<Smetkovodstvo/>}/>
+                        <Route path="prodekan" element={<Prodekan/>}/>
                     </Route>
                 </Route>
             </Routes>

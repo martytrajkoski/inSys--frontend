@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProcurementApplicant: React.FC = () => {
+const TipNabavka: React.FC = () => {
     return (
         <>
             <form action="">
@@ -42,4 +42,4 @@ const ProcurementApplicant: React.FC = () => {
     );
 };
 
-export default ProcurementApplicant;
+export default TipNabavka;
