@@ -8,6 +8,11 @@ export interface IzdavaciType{
     name: string
 }
 
+export interface RoleType{
+    id: string,
+    name: string
+}
+
 export interface FakturaType{
     "id": number,
     "br_faktura": number,
@@ -24,3 +29,4 @@ export interface FakturaType{
     "created_at": string,
     "updated_at": string,
 }
+
