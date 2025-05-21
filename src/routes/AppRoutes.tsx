@@ -12,24 +12,24 @@ import Prodekan from "../pages/Departments/Prodekan/Prodekan";
 import SignIn from "../pages/Sign/SignIn";
 
 const AppRoutes: React.FC = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/" element={<Home />}>
-          <Route index element={<MainMenu />} />
-          <Route element={<Department />}>
-            <Route path="tehnickisekretar" element={<TehnickiSekretar />} />
-            <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />}/>
-            <Route path="tipnabavka" element={<TipNabavka />} />
-            <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />
-            <Route path="prodekan" element={<Prodekan />} />
-          </Route>
-        </Route>
-      </Routes>
-    </Router>
-  );
-};
+    return(
+        <Router>
+            <Routes>
+                <Route path="/signup" element={<Signup/>}/>
+                <Route path="/signin" element={<SignIn/>}/>
+                <Route path="/" element={<Home/>}>
+                    <Route index element={<MainMenu/>} />
+                    <Route element={<Department/>}>
+                        <Route path="tehnickisekretar" element={<TehnickiSekretar/>}/>
+                        <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka/>}/>
+                        <Route path="tipnabavka/:br_faktura" element={<TipNabavka/>}/>
+                        <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo/>}/>
+                        <Route path="prodekan" element={<Prodekan/>}/>
+                    </Route>
+                </Route>
+            </Routes>
+        </Router>
+    )
+}
 
 export default AppRoutes;
