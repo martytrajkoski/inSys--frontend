@@ -20,8 +20,12 @@
     .password-input-wrapper {
       position: relative;
 
+      svg {
+        color: black;
+      }
+
       input {
-        width: 100%; // Ensure full width so the button aligns inside properly
+        width: 100%;
       }
 
       .toggle-password-btn {
