@@ -60,6 +60,13 @@ const SignIn: React.FC = () => {
           <button type="submit">Login</button>
         </form>
 
+        <p>
+          Don't have an account?{" "}
+          <a href="/signup" style={{ color: "blue" }}>
+            Sign Up
+          </a>
+        </p>
+        
         {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       </div>
     </div>
