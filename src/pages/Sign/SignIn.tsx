@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -51,12 +51,12 @@ const SignIn: React.FC = () => {
 
   return (
     <div className="sign">
-      <div className="app-name">App Name</div>
+      <div className="app-name">inSys</div>
 
       <div className="sign-container">
         <div className="sign-info">
           <h2>Sign In</h2>
-          <p>Enter your email and password to sign in for this app</p>
+          <p>Enter your email and password to sign in</p>
         </div>
 
         <form onSubmit={login}>
