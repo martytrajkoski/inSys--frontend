@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-
-interface Izdavac {
-  id: number;
-  name: string;
-}
+import type { Izdavac } from "../../../types/types";
+import "../../../styles/pages/departments/table-listing/table-listing.scss"; // 👈 added
 
 const IzdavaciPage: React.FC = () => {
   const [izdavaci, setIzdavaci] = useState<Izdavac[]>([]);
@@ -15,7 +12,6 @@ const IzdavaciPage: React.FC = () => {
   const fetchIzdavaci = async () => {
     try {
       const response = await axiosClient.get("/izdavaci");
-      console.log("IZDAVACI RESPONSE:", response.data);
       setIzdavaci(response.data);
     } catch (error) {
       console.error("Error fetching izdavaci:", error);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
+import "../../../styles/pages/departments/table-listing/table-listing.scss";
 
 interface Baratel {
   id: number;
@@ -92,6 +93,10 @@ const BarateliPage: React.FC = () => {
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleUpdate();
+                    }}
+                    autoFocus
                   />
                 ) : (
                   baratel.name

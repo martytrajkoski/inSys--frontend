@@ -1,0 +1,146 @@
+/* BarateliPage.scss */
+
+.container {
+  width: 100%;
+  margin: 40px;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9fb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+
+  .add-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    input {
+      width: 300px;
+      padding: 10px 14px;
+      border: 1.8px solid #ccc;
+      border-radius: 5px 0 0 5px;
+      font-size: 16px;
+
+      &:focus {
+        outline: none;
+        border-color: #ffc107;
+      }
+    }
+
+    button {
+      background-color: #ffc107;
+      border: none;
+      color: #222;
+      padding: 12px 28px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 0 5px 5px 0;
+      transition: background-color 0.25s ease;
+
+      &:hover {
+        background-color: darken(#ffc107, 10%);
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+
+    thead tr {
+      background-color: #007bff;
+      color: #fff;
+
+      th {
+        padding: 14px 20px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 17px;
+
+        &:last-child {
+          width: 160px; // slightly wider than 2 buttons combined
+          text-align: right;
+        }
+      }
+    }
+
+    tbody tr {
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+      transition: transform 0.15s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      td {
+        padding: 14px 20px;
+        font-size: 15px;
+        color: #444;
+        vertical-align: middle;
+
+        &:last-child {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+        }
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1.5px solid #007bff;
+        border-radius: 5px;
+        font-size: 15px;
+
+        &:focus {
+          outline: none;
+          border-color: darken(#007bff, 15%);
+        }
+      }
+
+      button {
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        margin-left: 8px;
+        transition: background-color 0.3s ease;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      // Edit/Save button - Blue
+      button:nth-child(1) {
+        background-color: #007bff;
+
+        &:hover {
+          background-color: darken(#007bff, 12%);
+        }
+      }
+
+      // Delete button - Red
+      button:nth-child(2) {
+        background-color: #dc3545;
+
+        &:hover {
+          background-color: darken(#dc3545, 10%);
+        }
+      }
+    }
+  }
+}

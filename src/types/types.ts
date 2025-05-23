@@ -34,3 +34,13 @@ export interface Baratel {
   id: number;
   name: string;
 }
+
+export interface Baratel {
+  id: number;
+  name: string;
+}
+
+export interface Izdavac {
+  id: number;
+  name: string;
+}
