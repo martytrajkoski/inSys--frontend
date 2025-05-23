@@ -15,6 +15,9 @@ const TipNabavka: React.FC = () => {
     const [istTip, setIstTip] = useState<boolean>();
     const [vkPotroseno, setVkPotroseno] = useState<number>();
 
+    const [created, setCreated] = useState<boolean>();
+    const [documentId, setDocumentId] = useState<number>();
+
     const storeTipNabavka = async (e:any) => {
         e.preventDefault();
 
@@ -36,11 +39,67 @@ const TipNabavka: React.FC = () => {
 
             if (response.status === 201) {
                 console.log("Tip Nabavka created");
+                setCreated(true);
+                setDocumentId(response.data.document[0].id);
             }
         } catch (error) {
             console.error(error);
         }
     };
+
+    const updateTipNabavka = async(e: any) => {
+        e.preventDefault();
+
+        try {
+            const response = await axiosClient.patch(`/tipnabavka/updateTip/${documentId}`,{
+                br_faktura: parseInt(br_faktura || "0", 10),
+                tip: tip,
+                read: true,
+                datum: datum,
+
+                br_dogovor: brDogovor,
+                vaznost_do: vaznostDo,
+                ostanati_rasp_sredstva: ostanatiRaspSredstva,
+                soglasno_dogovor: soglasnoDogovor,
+
+                ist_tip: istTip,
+                vk_potroseno: vkPotroseno,
+            })
+
+            if(response.status === 201){
+                console.log('TipNabavka is updated successfully');
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const deleteTipNabavka = async(e:any) => {
+        e.preventDefault();
+
+        try {
+            const response = await axiosClient.delete(`/tipnabavka/destroy/${documentId}`)
+
+            if(response.status===201){
+                console.log('Tip nabavka is deleted');
+
+                setCreated(false);
+                setTip('');
+                setDatum('');
+                setBrDogovor(undefined);
+                setVaznostDo('');
+                setSoglasnoDogovor(undefined);
+                setOstanatiRaspSredstva(undefined);
+                setIstTip(undefined);
+                setVkPotroseno(undefined);
+                setDocumentId(undefined);
+
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <>
@@ -161,9 +220,14 @@ const TipNabavka: React.FC = () => {
                 <div className="form-buttons">
                     <div></div>
                     <div className="form-buttons-edit">
-                        <button type="submit">Save</button>
-                        <button type="button">Edit</button>
-                        <button type="button">Delete</button>
+                       {!created ? (
+                            <button type="submit">Save</button>
+                        ) : (
+                            <button onClick={updateTipNabavka}>Edit</button>
+                        )}
+                        {created && (
+                            <button onClick={deleteTipNabavka}>Delete</button>
+                        )}
                     </div>
                 </div>
             </form>

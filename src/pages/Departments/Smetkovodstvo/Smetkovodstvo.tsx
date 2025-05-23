@@ -13,6 +13,9 @@ const Smetkovodstvo:React.FC = () => {
     const [konto, setKonto] = useState<string>("");
     const [datum, setDatum] = useState<string>("");
 
+    const [documentId, setDocumentId] = useState<number>();
+    const [created, setCreated] = useState<boolean>();
+
     const storeSmetkovodstvo = async(e:any) => {
         e.preventDefault();
 
@@ -32,9 +35,60 @@ const Smetkovodstvo:React.FC = () => {
 
             if(response.status === 201){
                 console.log('Smetkovodstvo stored');
+                setCreated(true);
+                setDocumentId(response.data.document.id);
             }
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    const updateSmetkovodstvo = async(e:any) => {
+        e.preventDefault()
+
+        try {
+            const response = await axiosClient.patch(`/smetkovodstvo/updateDocument/${documentId}`,{
+                br_karton: brKarton,
+                br_faktura: parseInt(br_faktura || "0", 10),
+                sostojba_karton: sostojbaKarton,
+                osnova_evidentiranje: osnovaEvidentiranje,
+                formular: formular,
+                vneseni_sredstva: vneseniSredstva,
+                smetka: smetka,
+                konto: konto,
+                datum: datum
+            });
+
+            if(response.status === 201){
+                console.log('Smetkovodstvo updated');
+            }
+
+        } catch (error) {
+            console.error(error);   
+        }
+    }
+
+    const deleteSmetkovodstvo = async(e:any) =>{
+        e.preventDefault()
+        
+        try {
+            const response = await axiosClient.delete(`/smetkovodstvo/destroy/${documentId}`)
+
+            if(response.status === 201){
+                console.log('Smetkovodstvo deleted');
+                
+                setBrKarton(0);
+                setSostojbaKarton('');
+                setOsnovaEvidentiranje(undefined);
+                setFormular(undefined);
+                setVneseniSredstva(undefined);
+                setSmetka('');
+                setKonto('');
+                setDatum('');
+                setCreated(false);
+            }
+        } catch (error) {
+            console.error(error);   
         }
     }
 
@@ -135,10 +189,15 @@ const Smetkovodstvo:React.FC = () => {
 
                     <div className="form-buttons">
                         <div></div>
-                        <div className="form-buttons-edit">
-                            <button type="submit">Save</button>
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
+                       <div className="form-buttons-edit">
+                            {!created ? (
+                                <button type="submit">Save</button>
+                            ) : (
+                                <button onClick={updateSmetkovodstvo}>Edit</button>
+                            )}
+                            {created && (
+                                <button onClick={deleteSmetkovodstvo}>Delete</button>
+                            )}
                         </div>
                     </div>
                 </div>

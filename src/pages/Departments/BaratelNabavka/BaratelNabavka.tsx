@@ -5,17 +5,20 @@ import type { Baratel } from "../../../types/types";
 
 const BaratelNabavka: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
-  const [brKarton, setBrKarton] = useState("");
-  const [nazivProekt, setNazivProekt] = useState("");
-  const [poteklo, setPoteklo] = useState("");
-  const [datum, setDatum] = useState("");
-  const [baratelId, setBaratelId] = useState("");
+  const [brKarton, setBrKarton] = useState<number>();
+  const [nazivProekt, setNazivProekt] = useState<string>("");
+  const [poteklo, setPoteklo] = useState<string>("");
+  const [datum, setDatum] = useState<string>("");
+  const [baratelId, setBaratelId] = useState<number>();
   const [barateli, setBarateli] = useState<Baratel[]>([]);
+
+  const [documentId, setDocumentId] = useState<number>();
+  const [created, setCreated] = useState<boolean>();
 
   useEffect(() => {
     const fetchBarateli = async () => {
       try {
-        const response = await axiosClient.get("/barateli/index");
+        const response = await axiosClient.get("/barateli/");
         setBarateli(response.data);
       } catch (error) {
         console.error("Failed to fetch barateli", error);
@@ -40,11 +43,56 @@ const BaratelNabavka: React.FC = () => {
 
       if (response.status === 201) {
         console.log("BaratelNabavka stored");
+        setDocumentId(response.data.document.id);
+        setCreated(true);
       }
     } catch (error) {
       console.error(error);
     }
   };
+  const updateBaratelNabavka = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.patch(
+        `/baratelnabavka/updateDocument/${documentId}`,
+        {
+          br_faktura: parseInt(br_faktura || "0", 10),
+          br_karton: brKarton,
+          naziv_proekt: nazivProekt,
+          poteklo,
+          datum,
+          baratel_id: baratelId,
+        }
+      );
+
+      if (response.status == 201) {
+        console.log("BaratelNabavka is updated successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteBaratelNabavka = async(e:any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.delete(`/baratelnabavka/destroy/${documentId}`);
+
+      if(response.status === 201){
+        setDocumentId(undefined);
+        setCreated(false);
+        setBaratelId(undefined);
+        setBrKarton(0);
+        setNazivProekt('');
+        setPoteklo('');
+        setDatum('');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -55,7 +103,7 @@ const BaratelNabavka: React.FC = () => {
           <div className="form-item-inputs">
             <select
               value={baratelId}
-              onChange={(e) => setBaratelId(e.target.value)}
+              onChange={(e) => setBaratelId(Number(e.target.value))}
               required
             >
               <option value="">-- Избери барател --</option>
@@ -67,10 +115,10 @@ const BaratelNabavka: React.FC = () => {
             </select>
 
             <input
-              type="text"
+              type="number"
               placeholder="Број на картон (Конто)"
               value={brKarton}
-              onChange={(e) => setBrKarton(e.target.value)}
+              onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
 
@@ -121,10 +169,18 @@ const BaratelNabavka: React.FC = () => {
 
           <div className="form-buttons">
             <div></div>
-            <div className="form-buttons-edit">
-              <button type="submit">Save</button>
-              <button type="button">Edit</button>
-              <button type="button">Delete</button>
+            <div className="form-buttons">
+              <div></div>
+              <div className="form-buttons-edit">
+                {!created ? (
+                  <button type="submit">Save</button>
+                ) : (
+                  <button onClick={updateBaratelNabavka}>Edit</button>
+                )}
+                {created && (
+                  <button onClick={deleteBaratelNabavka}>Delete</button>
+                )}
+              </div>
             </div>
           </div>
         </div>

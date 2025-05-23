@@ -15,6 +15,9 @@ const TehnickiSekretar: React.FC = () => {
     const [datum, setDatum] = useState<string>('');
     const [scan_file, setScan_file] = useState<string>('dqwdq');
 
+    const [created, setCreated] = useState<boolean>();
+    const [documentId, setDocumentId] = useState<number>();
+
     const handleImportModal = () => {
         setopenImportModal(!openImportModal);
     }
@@ -34,8 +37,35 @@ const TehnickiSekretar: React.FC = () => {
                 "scan_file": scan_file
             })
 
-            if(response.status === 200){
-                console.log('Tehnicki Sekretar and Faktuta created')    
+            if(response.status === 201){
+                console.log('Tehnicki Sekretar and Faktuta created')  
+                setDocumentId(response.data.document.id)
+                setCreated(true);
+            }
+
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const updateTehnicki = async(e: any) => {
+        e.preventDefault();
+
+        try {
+            const response = await axiosClient.patch(`/tehnickisekretar/updateDocument/${documentId}`,{
+                "arhivski_br": arhivski_br,
+                "br_faktura": br_faktura,
+                "br_dogovor": br_dogovor,
+                "izdavaci_id": izdavaci_id, 
+                "iznos_dogovor": iznos_dogovor,
+                "vk_vrednost": vk_vrednost,
+                "datum": datum,
+                "scan_file": scan_file
+            });
+
+            if(response.status === 201){
+                console.log('Tehnicki Sekretar and Faktura updated successfully');
             }
 
         } catch (error) {
@@ -43,13 +73,27 @@ const TehnickiSekretar: React.FC = () => {
         }
     }
     
-    const deleteTehnicki = async() =>{
+    const deleteTehnicki = async(e: any) =>{
+        e.preventDefault();
         try {
-            const response = await axiosClient.delete('/tehnickisekretar/destroy');
+            const response = await axiosClient.delete(`/tehnickisekretar/destroy/${documentId}`);
 
-            if(response.status === 200){
+            if(response.status === 201){
                 console.log('Tehnicki Sekretar and Faktuta deleted')    
+                
+                setArhivski_br('');
+                setBr_faktura(0);
+                setBr_dogovor(0);
+                setIzdavaci_id(0);
+                setIznos_dogovor(0);
+                setVk_vrednost(0);
+                setDatum('');
+                setScan_file('');
+                setCreated(false);
+                setDocumentId(0);
             }
+
+
         } catch (error) {
             console.error(error);
         }
@@ -57,10 +101,10 @@ const TehnickiSekretar: React.FC = () => {
 
     const fetchIzdavaci = async() => {
         try {
-            const response = await axiosClient.get('/izdavaci/index');
+            const response = await axiosClient.get('/izdavaci/');
 
             if(response.status===200){
-                setIzdavaci(response.data.izdavaci);
+                setIzdavaci(response.data);
             }
 
         } catch (error) {
@@ -78,20 +122,20 @@ const TehnickiSekretar: React.FC = () => {
             <form onSubmit={storeTehnicki}>
                 <div className="form-item">
                     <div className="form-item-inputs">
-                        <input type="text" placeholder="Архивски број на влезна фактура 05-12-" onChange={(e)=>setArhivski_br(e.target.value)}/>
-                        <input type="number" placeholder="Број на фактура" onChange={(e) => setBr_faktura(Number(e.target.value))}/>
-                        <input type="number" placeholder="Број на договор" onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
-                        <input type="number" placeholder="Износ на фактура" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
-                        <input type="date" placeholder="Датум" onChange={(e) => setDatum(e.target.value)}/>
-                        <select onChange={(e) => setIzdavaci_id(Number(e.target.value))}>
+                        <input type="text" value={arhivski_br} placeholder="Архивски број на влезна фактура 05-12-" onChange={(e)=>setArhivski_br(e.target.value)}/>
+                        <input type="number" value={br_faktura} placeholder="Број на фактура" onChange={(e) => setBr_faktura(Number(e.target.value))}/>
+                        <input type="number" value={br_dogovor} placeholder="Број на договор" onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
+                        <input type="number" value={iznos_dogovor} placeholder="Износ на фактура" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
+                        <input type="date" value={datum} placeholder="Датум" onChange={(e) => setDatum(e.target.value)}/>
+                        <select value={izdavaci_id ?? ''} onChange={(e) => setIzdavaci_id(Number(e.target.value))}>
                             <option value="">Избери издавач</option>
                             {izdavaci.map((item) => (
                                 <option key={item.id} value={item.id}>
-                                    {item.name}
+                                {item.name}
                                 </option>
                             ))}
                         </select>
-                        <input type="number" placeholder="Вкупна вредност на фактура (со ДДВ)" onChange={(e) => setVk_vrednost(Number(e.target.value))}/>
+                        <input type="number" value={vk_vrednost} placeholder="Вкупна вредност на фактура (со ДДВ)" onChange={(e) => setVk_vrednost(Number(e.target.value))}/>
                     </div>
                     <div className="form-buttons">
                         <div className="form-button-scan">
@@ -99,9 +143,14 @@ const TehnickiSekretar: React.FC = () => {
                             <span>Document.txt</span>
                         </div>
                         <div className="form-buttons-edit">
-                            <button type="submit">Save</button>
-                            <button>Edit</button>
-                            <button onClick={deleteTehnicki}>Delete</button>
+                            {!created ? (
+                                <button type="submit">Save</button>
+                            ) : (
+                                <button onClick={updateTehnicki}>Edit</button>
+                            )}
+                            {created && (
+                                <button onClick={deleteTehnicki}>Delete</button>
+                            )}
                         </div>
                     </div>
                 </div>
