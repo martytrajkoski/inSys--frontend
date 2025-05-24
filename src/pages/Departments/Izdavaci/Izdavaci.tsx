@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { Izdavac } from "../../../types/types";
-import "../../../styles/pages/departments/table-listing/table-listing.scss"; // 👈 added
 
 const IzdavaciPage: React.FC = () => {
   const [izdavaci, setIzdavaci] = useState<Izdavac[]>([]);
@@ -60,56 +59,58 @@ const IzdavaciPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Преглед на издавачи</h1>
+    <div className="mainmenu-content">
+      <div className="departments-container">
+        <h1>Преглед на издавачи</h1>
 
-      <div className="add-section">
-        <input
-          type="text"
-          placeholder="Внеси нов издавач..."
-          value={newIzdavac}
-          onChange={(e) => setNewIzdavac(e.target.value)}
-        />
-        <button onClick={handleAdd}>Внеси</button>
-      </div>
+        <div className="add-section">
+          <input
+            type="text"
+            placeholder="Внеси нов издавач..."
+            value={newIzdavac}
+            onChange={(e) => setNewIzdavac(e.target.value)}
+          />
+          <button onClick={handleAdd}>Внеси</button>
+        </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Име</th>
-            <th>Акции</th>
-          </tr>
-        </thead>
-        <tbody>
-          {izdavaci.map((izdavac) => (
-            <tr key={izdavac.id}>
-              <td>
-                {editId === izdavac.id ? (
-                  <input
-                    type="text"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                  />
-                ) : (
-                  izdavac.name
-                )}
-              </td>
-              <td>
-                {editId === izdavac.id ? (
-                  <button onClick={handleUpdate}>Зачувај</button>
-                ) : (
-                  <button onClick={() => handleEdit(izdavac.id, izdavac.name)}>
-                    Измени
-                  </button>
-                )}
-                <button onClick={() => handleDelete(izdavac.id)}>
-                  Избриши
-                </button>
-              </td>
+        <table>
+          <thead>
+            <tr>
+              <th>Име</th>
+              <th>Акции</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {izdavaci.map((izdavac) => (
+              <tr key={izdavac.id}>
+                <td>
+                  {editId === izdavac.id ? (
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                    />
+                  ) : (
+                    izdavac.name
+                  )}
+                </td>
+                <td>
+                  {editId === izdavac.id ? (
+                    <button onClick={handleUpdate}>Зачувај</button>
+                  ) : (
+                    <button onClick={() => handleEdit(izdavac.id, izdavac.name)}>
+                      Измени
+                    </button>
+                  )}
+                  <button onClick={() => handleDelete(izdavac.id)}>
+                    Избриши
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

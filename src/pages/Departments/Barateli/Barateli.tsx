@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import "../../../styles/pages/departments/table-listing/table-listing.scss";
 
 interface Baratel {
   id: number;
@@ -64,60 +63,61 @@ const BarateliPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Преглед на баратели на набавка</h1>
+    <div className="mainmenu-content">
+      <div className="departments-container">
+        <h1>Преглед на баратели на набавка</h1>
+        <div className="add-section">
+          <input
+            type="text"
+            placeholder="Внеси нов барател..."
+            value={newBaratel}
+            onChange={(e) => setNewBaratel(e.target.value)}
+          />
+          <button onClick={handleAdd}>Внеси</button>
+        </div>
 
-      <div className="add-section">
-        <input
-          type="text"
-          placeholder="Внеси нов барател..."
-          value={newBaratel}
-          onChange={(e) => setNewBaratel(e.target.value)}
-        />
-        <button onClick={handleAdd}>Внеси</button>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Име</th>
-            <th>Акции</th>
-          </tr>
-        </thead>
-        <tbody>
-          {barateli.map((baratel) => (
-            <tr key={baratel.id}>
-              <td>
-                {editId === baratel.id ? (
-                  <input
-                    type="text"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleUpdate();
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  baratel.name
-                )}
-              </td>
-              <td>
-                {editId === baratel.id ? (
-                  <button onClick={handleUpdate}>Зачувај</button>
-                ) : (
-                  <button onClick={() => handleEdit(baratel.id, baratel.name)}>
-                    Измени
-                  </button>
-                )}
-                <button onClick={() => handleDelete(baratel.id)}>
-                  Избриши
-                </button>
-              </td>
+        <table>
+          <thead>
+            <tr>
+              <th>Име</th>
+              <th>Акции</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {barateli.map((baratel) => (
+              <tr key={baratel.id}>
+                <td>
+                  {editId === baratel.id ? (
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleUpdate();
+                      }}
+                      autoFocus
+                    />
+                  ) : (
+                    baratel.name
+                  )}
+                </td>
+                <td>
+                  {editId === baratel.id ? (
+                    <button onClick={handleUpdate}>Зачувај</button>
+                  ) : (
+                    <button onClick={() => handleEdit(baratel.id, baratel.name)}>
+                      Измени
+                    </button>
+                  )}
+                  <button onClick={() => handleDelete(baratel.id)}>
+                    Избриши
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

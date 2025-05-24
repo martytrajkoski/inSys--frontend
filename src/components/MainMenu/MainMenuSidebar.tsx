@@ -7,7 +7,7 @@ const MainMenuSidebar: React.FC = () => {
     <div className="mainmenu-sidebar-backdrop">
       <div className="mainmenu-sidebar">
         <div className="sidebar-items">
-          <Link to="/">Преглед на фактури</Link>
+          <Link to="/lista-fakturi">Преглед на фактури</Link>
           <Link to="/lista-barateli">Преглед на баратели на набавка</Link>
           <Link to="/lista-izdavaci">Преглед на издавачи</Link>
         </div>
