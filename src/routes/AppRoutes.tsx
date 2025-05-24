@@ -12,6 +12,7 @@ import Prodekan from "../pages/Departments/Prodekan/Prodekan";
 import SignIn from "../pages/Sign/SignIn";
 import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
+import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -20,10 +21,12 @@ const AppRoutes: React.FC = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/" element={<Home />}>
-          <Route index element={<MainMenu />} />
+          <Route element={<MainMenu />}>
+            <Route path="lista-fakturi" element={<PregledFakturi/>}/>
+            <Route path="lista-barateli" element={<Barateli />} />
+            <Route path="lista-izdavaci" element={<Izdavaci />} />
+          </Route>
           <Route element={<Department />}>
-            <Route path="/lista-barateli" element={<Barateli />} />
-            <Route path="/lista-izdavaci" element={<Izdavaci />} />
             <Route path="tehnickisekretar" element={<TehnickiSekretar />} />
             <Route
               path="baratelnabavka/:br_faktura"
