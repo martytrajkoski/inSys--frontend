@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from "../Logo/Asset_3.png";
 
 const MainMenuSidebar: React.FC = () => {
   return (
@@ -11,8 +12,7 @@ const MainMenuSidebar: React.FC = () => {
           <Link to="/lista-izdavaci">Преглед на издавачи</Link>
         </div>
         <div className="sidebar-user">
-          <p>Petar Petreski</p>
-          <button>Одјави се</button>
+          <img src={logo} alt="Лого" />
         </div>
       </div>
     </div>

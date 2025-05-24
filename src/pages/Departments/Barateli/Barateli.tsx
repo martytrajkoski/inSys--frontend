@@ -74,7 +74,7 @@ const BarateliPage: React.FC = () => {
           value={newBaratel}
           onChange={(e) => setNewBaratel(e.target.value)}
         />
-        <button onClick={handleAdd}>Додади</button>
+        <button onClick={handleAdd}>Внеси</button>
       </div>
 
       <table>

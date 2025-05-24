@@ -70,7 +70,7 @@ const IzdavaciPage: React.FC = () => {
           value={newIzdavac}
           onChange={(e) => setNewIzdavac(e.target.value)}
         />
-        <button onClick={handleAdd}>Додади</button>
+        <button onClick={handleAdd}>Внеси</button>
       </div>
 
       <table>
