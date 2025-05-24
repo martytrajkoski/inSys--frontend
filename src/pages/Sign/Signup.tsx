@@ -28,7 +28,9 @@ const Signup: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log("User created");
+        const token = response.data.token;
+        localStorage.setItem("inSys", token);
+        console.log("User created and Logged in");
         navigate("/");
       }
     } catch (error: any) {
