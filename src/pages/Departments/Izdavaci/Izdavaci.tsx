@@ -7,7 +7,11 @@ const IzdavaciPage: React.FC = () => {
   const [newIzdavac, setNewIzdavac] = useState<string>("");
   const [editId, setEditId] = useState<number | null>(null);
   const [editName, setEditName] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const filteredIzdavaci = izdavaci.filter((i) =>
+    i.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const fetchIzdavaci = async () => {
     try {
       const response = await axiosClient.get("/izdavaci");
@@ -58,10 +62,19 @@ const IzdavaciPage: React.FC = () => {
     fetchIzdavaci();
   }, []);
 
-  return (
+   return (
     <div className="mainmenu-content">
       <div className="departments-container">
         <h1>Преглед на издавачи</h1>
+
+        <div className="add-section">
+          <input
+            type="text"
+            placeholder="Пребарај издавачи..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
         <div className="add-section">
           <input
@@ -81,7 +94,7 @@ const IzdavaciPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {izdavaci.map((izdavac) => (
+            {filteredIzdavaci.map((izdavac) => (
               <tr key={izdavac.id}>
                 <td>
                   {editId === izdavac.id ? (
@@ -102,9 +115,7 @@ const IzdavaciPage: React.FC = () => {
                       Измени
                     </button>
                   )}
-                  <button onClick={() => handleDelete(izdavac.id)}>
-                    Избриши
-                  </button>
+                  <button onClick={() => handleDelete(izdavac.id)}>Избриши</button>
                 </td>
               </tr>
             ))}

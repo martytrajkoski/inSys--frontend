@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-
-interface Baratel {
-  id: number;
-  name: string;
-}
+import type { Baratel } from "../../../types/types";
 
 const BarateliPage: React.FC = () => {
   const [barateli, setBarateli] = useState<Baratel[]>([]);
   const [newBaratel, setNewBaratel] = useState<string>("");
   const [editId, setEditId] = useState<number | null>(null);
   const [editName, setEditName] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const filteredBarateli = barateli.filter((b) =>
+    b.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchBarateli = async () => {
     try {
@@ -66,6 +67,16 @@ const BarateliPage: React.FC = () => {
     <div className="mainmenu-content">
       <div className="departments-container">
         <h1>Преглед на баратели на набавка</h1>
+
+        <div className="add-section">
+          <input
+            type="text"
+            placeholder="Пребарај баратели..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
         <div className="add-section">
           <input
             type="text"
@@ -84,7 +95,7 @@ const BarateliPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {barateli.map((baratel) => (
+            {filteredBarateli.map((baratel) => (
               <tr key={baratel.id}>
                 <td>
                   {editId === baratel.id ? (
@@ -109,9 +120,7 @@ const BarateliPage: React.FC = () => {
                       Измени
                     </button>
                   )}
-                  <button onClick={() => handleDelete(baratel.id)}>
-                    Избриши
-                  </button>
+                  <button onClick={() => handleDelete(baratel.id)}>Избриши</button>
                 </td>
               </tr>
             ))}
