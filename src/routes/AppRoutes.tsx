@@ -13,6 +13,7 @@ import SignIn from "../pages/Sign/SignIn";
 import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
+import Profile from "../pages/Sign/Profile";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -22,7 +23,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/" element={<Home />}>
           <Route element={<MainMenu />}>
-            <Route path="lista-fakturi" element={<PregledFakturi/>}/>
+            <Route index element={<PregledFakturi/>}/>
             <Route path="lista-barateli" element={<Barateli />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
           </Route>
@@ -39,6 +40,7 @@ const AppRoutes: React.FC = () => {
             />
             <Route path="prodekan" element={<Prodekan />} />
           </Route>
+          <Route path="profile" element={<Profile/>}/>
         </Route>
       </Routes>
     </Router>

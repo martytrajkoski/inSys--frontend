@@ -68,7 +68,6 @@ const SignIn: React.FC = () => {
             required
           />
 
-          {/* Password with Show/Hide Toggle */}
           <div className="password-input-wrapper">
             <input
               type={showPassword ? "text" : "password"}

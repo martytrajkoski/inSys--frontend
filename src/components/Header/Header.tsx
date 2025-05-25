@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { UserType } from "../../types/types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../Logo/Asset_2.png";
 
 const Header: React.FC = () => {
@@ -13,7 +13,6 @@ const Header: React.FC = () => {
       const response = await axiosClient.get("/auth/user");
       if (response.status === 200) {
         setUser(response.data);
-        console.log("response.data", response.data);
       }
     } catch (error) {
       console.error(error);
@@ -47,7 +46,7 @@ const Header: React.FC = () => {
         </div>
       </div>
       <div className="header-user">
-        <p>{user?.name}</p>
+        <Link to='/profile'>{user?.name}</Link>
         <button onClick={logout}>Одјави се</button>
       </div>
     </div>
