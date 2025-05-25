@@ -8,19 +8,20 @@
         border: 2px solid #D9D9D9;
         border-radius: 10px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         height: 400px;
         width: 1000px;
-
+        
         .invoice-card-items {
             overflow-y: auto;
-
+            
             .invoice-card-item {
                 display: flex;
-                justify-content: space-between;
+                flex-direction: column;
+                justify-content: start;
                 box-sizing: border-box;
                 padding: 9px 10px;
-
+                
                 .invoice-flag {
                     background-color: #FF8989;
                     padding: 3px 5px;
