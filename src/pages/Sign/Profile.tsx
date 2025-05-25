@@ -18,7 +18,7 @@ const Profile: React.FC = () => {
     const fetchUser = async () => {
         try {
             const response = await axiosClient.get('/auth/user');
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setUser(response.data);
                 setResetEmail(response.data.email);
             }
