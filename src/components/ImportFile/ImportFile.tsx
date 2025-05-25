@@ -1,10 +1,8 @@
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
+import type { ScanInvoiceModalProps } from "../../types/types";
 
-interface ScanInvoiceModalProps {
-    onClose: () => void;
-}
 
 const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
 

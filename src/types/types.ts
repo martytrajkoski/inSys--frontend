@@ -50,3 +50,7 @@ export interface Izdavac {
 export interface Props {
   onClose?: () => void;
 }
+
+export interface ScanInvoiceModalProps {
+    onClose: () => void;
+}
