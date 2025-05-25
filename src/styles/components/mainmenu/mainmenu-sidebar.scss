@@ -1,43 +1,65 @@
-.mainmenu-sidebar-backdrop{
-    background-color: #F0F0F0;
-    width: 20%;
-    height: 90vh;
-    position: fixed;
-    left: 0;
-    top: 10vh;
-    z-index: 1000;
+.mainmenu-sidebar-backdrop {
+  background-color: #f0f0f0;
+  width: 20%;
+  height: 90vh;
+  position: fixed;
+  left: 0;
+  top: 10vh;
+  z-index: 1000;
 
-    .mainmenu-sidebar{
-        height: 90%;
-        border-left: 5px solid #e45830;
-        margin: 38px 24px;
-        padding: 25px 20px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;  
-        align-items: left; 
-        font-size: 20px;
-        
-        .sidebar-items, .sidebar-user{
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-
-            img {
-                width: 100%;
-            }
+  .mainmenu-sidebar {
+    height: 90%;
+    border-left: 5px solid #e45830;
+    margin: 38px 24px;
+    padding: 25px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+    font-size: 20px;
     
-            button{
-                border: none;
-                background: none;
-                font-weight: bold;
-                font-size: 20px;
-                text-align: left;
-                padding: 0;
-                width: 100px;
-                cursor: pointer;
-            }
+    .sidebar-items {
+      a {
+        text-decoration: none;
+        color: black;
+        padding: 10px 15px;
+        border-radius: 8px;
+        transition: 0.2s ease;
+
+        &:hover {
+          background-color: #e45830;
+          color: white;
         }
+
+        &.active {
+          background-color: #e45830;
+          color: white;
+          font-weight: bold;
+        }
+      }
     }
+
+    .sidebar-items,
+    .sidebar-user {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+
+      img {
+        width: 100%;
+      }
+
+      button {
+        border: none;
+        background: none;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: left;
+        padding: 0;
+        width: 100px;
+        cursor: pointer;
+      }
+    }
+  }
 }

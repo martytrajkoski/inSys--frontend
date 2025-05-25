@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../Logo/Asset_3.png";
 
 const MainMenuSidebar: React.FC = () => {
@@ -7,9 +7,25 @@ const MainMenuSidebar: React.FC = () => {
     <div className="mainmenu-sidebar-backdrop">
       <div className="mainmenu-sidebar">
         <div className="sidebar-items">
-          <Link to="/">Преглед на фактури</Link>
-          <Link to="/lista-barateli">Преглед на баратели на набавка</Link>
-          <Link to="/lista-izdavaci">Преглед на издавачи</Link>
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Преглед на фактури
+          </NavLink>
+          <NavLink
+            to="/lista-barateli"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Преглед на баратели на набавка
+          </NavLink>
+          <NavLink
+            to="/lista-izdavaci"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Преглед на издавачи
+          </NavLink>
         </div>
         <div className="sidebar-user">
           <img src={logo} alt="Лого" />
