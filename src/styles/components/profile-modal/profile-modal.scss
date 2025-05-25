@@ -1,0 +1,82 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modal-content {
+    background: white;
+    padding: 60px 40px;
+    border-radius: 15px;
+    width: 40%;
+    height: fit-content;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+
+    .close-button {
+      border: none;
+      width: fit-content;
+      padding: 10px 25px;
+      margin-left: auto;
+      background: none;
+      font-weight: bold;
+      font-size: 30px;
+      color: #e45830;
+      border: 3px solid #e45830;
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #e45830;
+        color: white;
+      }
+    }
+
+    h2 {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border-color: darkgray;
+      font-size: 20px;
+      transition: 0.3s ease-in-out;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        transition: 0.3s ease-in-out;
+        border: 2px solid #e45830;
+      }
+    }
+
+    label {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .update-button {
+        display: flex;
+        justify-content: end;
+        gap: 15px;
+        margin-top: 50px;
+    }
+  }
+}

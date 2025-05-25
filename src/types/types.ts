@@ -46,3 +46,7 @@ export interface Izdavac {
   id: number;
   name: string;
 }
+
+export interface Props {
+    onClose?: () => void;
+}
