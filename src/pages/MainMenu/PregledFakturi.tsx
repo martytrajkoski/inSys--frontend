@@ -8,38 +8,53 @@ import "../../styles/pages/mainmenu/mainmenu.scss";
 
 const PregledFakturi: React.FC = () => {
 
-    const [faktura, setFaktura] = useState<FakturaType[]>([]);
-        const [search, setSearch] = useState("");
-        const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
+  const [role, setRole] = useState<string>("");
+  const [faktura, setFaktura] = useState<FakturaType[]>([]);
+  const [search, setSearch] = useState("");
+  const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
 
-    const fetchAllFakturas = async () => {
-        try {
-            const response = await axiosClient.get("/faktura/");
+  const fetchAllFakturas = async () => {
+      try {
+          const response = await axiosClient.get("/faktura/");
 
-            if (response.status === 201) {
-                setFaktura(response.data.documents);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        fetchAllFakturas();
-    }, []);
-
-const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
-    if (value.trim() === "") {
-      setFilteredFaktura(faktura);
-    } else {
-      const filtered = faktura.filter((item) =>
-        item.br_faktura.toString().startsWith(value)
-      );
-      setFilteredFaktura(filtered);
-    }
+          if (response.status === 201) {
+              setFaktura(response.data.documents);
+          }
+      } catch (error) {
+          console.error(error);
+      }
   };
+
+  const fetchUser = async() => {
+    try {
+      const response = await axiosClient.get('/auth/user');
+
+      if(response.status === 201){
+        setRole(response.data.role.name);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllFakturas();
+    fetchUser();
+  }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setSearch(value);
+      if (value.trim() === "") {
+        setFilteredFaktura(faktura);
+      } else {
+        const filtered = faktura.filter((item) =>
+          item.br_faktura.toString().startsWith(value)
+        );
+        setFilteredFaktura(filtered);
+      }
+    };
 
     return (
       <div className="mainmenu-content">
@@ -60,8 +75,8 @@ const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           )}
         </div>
         <div className="mainmenu-invoices">
-          <InvoiceCard title="Нови фактури" items={faktura} />
-          <InvoiceCard title="Прегледани фактури" items={faktura} />
+          <InvoiceCard title="Нови фактури" items={faktura} role={role}/>
+          <InvoiceCard title="Прегледани фактури" items={faktura} role={role}/>
         </div>
       </div>
   );

@@ -14,17 +14,40 @@
 
         .invoice-card-items {
             overflow-y: auto;
-
+    
+            
             .invoice-card-item {
                 display: flex;
                 justify-content: space-between;
                 box-sizing: border-box;
-                padding: 9px 10px;
-
+                padding: 9px 30px;
+                cursor: pointer;
+                
+                p{
+                    width: 33%;
+                    text-align: left;
+                }
+                
+                
                 .invoice-flag {
-                    background-color: #FF8989;
-                    padding: 3px 5px;
-                    border-radius: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    p{
+                        border-radius: 10px;
+                        margin: 5px 40px;
+                        text-align: center;
+                        background-color: #FF8989;
+
+                    }
+                }
+                
+                div{
+                    width: 33%;
+                }
+
+                &:hover{
+                    background-color: #D9D9D9;
                 }
             }
         }
