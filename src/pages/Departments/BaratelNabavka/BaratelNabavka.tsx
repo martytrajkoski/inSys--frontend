@@ -16,16 +16,42 @@ const BaratelNabavka: React.FC = () => {
   const [created, setCreated] = useState<boolean>();
 
   useEffect(() => {
-    const fetchBarateli = async () => {
-      try {
-        const response = await axiosClient.get("/barateli/");
-        setBarateli(response.data);
-      } catch (error) {
-        console.error("Failed to fetch barateli", error);
-      }
-    };
     fetchBarateli();
+    showBaratel();
   }, []);
+  
+  const fetchBarateli = async () => {
+    try {
+      const response = await axiosClient.get("/barateli/");
+      setBarateli(response.data);
+    } catch (error) {
+      console.error("Failed to fetch barateli", error);
+    }
+  };
+
+  const showBaratel = async() => {
+    try {
+      const response = await axiosClient.get(`/baratelnabavka/show/${br_faktura}`)
+
+      if(response.status === 201){
+        setBrKarton(response.data.document.br_karton);
+        setNazivProekt(response.data.document.naziv_proekt);
+        setPoteklo(response.data.document.poteklo);
+        setDatum(response.data.document.datum);
+        setBaratelId(response.data.document.baratel_id);
+      }
+      else if(response.status === 404){
+        setBrKarton(undefined);
+        setNazivProekt("");
+        setPoteklo("");
+        setDatum("response.data.document.datum");
+        setBaratelId(undefined);
+      }
+      console.log('response.data.document.poteklo', response.data.document.poteklo)
+    } catch (error) {
+      console.error(error);
+    }
+  }  
 
   const storeBaratelNabavka = async (e: any) => {
     e.preventDefault();
@@ -94,6 +120,8 @@ const BaratelNabavka: React.FC = () => {
     }
   }
 
+  console.log('first', )
+
   return (
     <>
       <form onSubmit={storeBaratelNabavka}>
@@ -139,7 +167,7 @@ const BaratelNabavka: React.FC = () => {
                   type="radio"
                   name="poteklo"
                   value="МФС"
-                  checked={poteklo === "МФС"}
+                  checked={poteklo === "Средства на МФС"}
                   onChange={(e) => setPoteklo(e.target.value)}
                 />
                 Средства на МФС
