@@ -44,10 +44,10 @@ const BaratelNabavka: React.FC = () => {
         setBrKarton(undefined);
         setNazivProekt("");
         setPoteklo("");
-        setDatum("response.data.document.datum");
+        setDatum("");
         setBaratelId(undefined);
       }
-      console.log('response.data.document.poteklo', response.data.document.poteklo)
+
     } catch (error) {
       console.error(error);
     }

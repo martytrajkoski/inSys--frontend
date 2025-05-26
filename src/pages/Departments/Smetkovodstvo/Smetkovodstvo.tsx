@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 
-const Smetkovodstvo:React.FC = () => {
+const Smetkovodstvo: React.FC = () => {
     const { br_faktura } = useParams<string>();
     const [brKarton, setBrKarton] = useState<number>();
     const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
-    const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<boolean>();
-    const [formular, setFormular] = useState<boolean>();
-    const [vneseniSredstva, setVneseniSredstva] = useState<boolean>();
+    const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
+    const [formular, setFormular] = useState<number>();
+    const [vneseniSredstva, setVneseniSredstva] = useState<number>();
     const [smetka, setSmetka] = useState<string>("");
     const [konto, setKonto] = useState<string>("");
     const [datum, setDatum] = useState<string>("");
@@ -16,11 +16,46 @@ const Smetkovodstvo:React.FC = () => {
     const [documentId, setDocumentId] = useState<number>();
     const [created, setCreated] = useState<boolean>();
 
-    const storeSmetkovodstvo = async(e:any) => {
+    useEffect(() => {
+        showSmetkovodstvo();
+    }, []);
+
+    const showSmetkovodstvo = async () => {
+        try {
+            const response = await axiosClient.get(
+                `/smetkovodstvo/show/${br_faktura}`
+            );
+
+            if (response.status === 201) {
+                setBrKarton(response.data.document.br_karton);
+                setSostojbaKarton(response.data.document.sostojba_karton);
+                setOsnovaEvidentiranje(response.data.document.osnova_evidentiranje);
+                setFormular(response.data.document.formular);
+                setVneseniSredstva(response.data.document.vneseni_sredstva);
+                setSmetka(response.data.document.smetka);
+                setKonto(response.data.document.konto);
+                setDatum(response.data.document.datum);
+            } else if (response.status === 404) {
+                setBrKarton(undefined);
+                setSostojbaKarton("");
+                setOsnovaEvidentiranje(undefined);
+                setFormular(undefined);
+                setVneseniSredstva(undefined);
+                setSmetka("");
+                setKonto("");
+                setDatum("");
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const storeSmetkovodstvo = async (e: any) => {
         e.preventDefault();
 
         try {
-            const response = await axiosClient.post('/smetkovodstvo/addDocument',{
+            const response = await axiosClient.post("/smetkovodstvo/addDocument", {
                 br_karton: brKarton,
                 br_faktura: parseInt(br_faktura || "0", 10),
                 sostojba_karton: sostojbaKarton,
@@ -30,69 +65,73 @@ const Smetkovodstvo:React.FC = () => {
                 smetka: smetka,
                 konto: konto,
                 datum: datum,
-                read: true
-            })
+                read: true,
+            });
 
-            if(response.status === 201){
-                console.log('Smetkovodstvo stored');
+            if (response.status === 201) {
+                console.log("Smetkovodstvo stored");
                 setCreated(true);
                 setDocumentId(response.data.document.id);
             }
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
-    const updateSmetkovodstvo = async(e:any) => {
-        e.preventDefault()
+    const updateSmetkovodstvo = async (e: any) => {
+        e.preventDefault();
 
         try {
-            const response = await axiosClient.patch(`/smetkovodstvo/updateDocument/${documentId}`,{
-                br_karton: brKarton,
-                br_faktura: parseInt(br_faktura || "0", 10),
-                sostojba_karton: sostojbaKarton,
-                osnova_evidentiranje: osnovaEvidentiranje,
-                formular: formular,
-                vneseni_sredstva: vneseniSredstva,
-                smetka: smetka,
-                konto: konto,
-                datum: datum
-            });
+            const response = await axiosClient.patch(
+                `/smetkovodstvo/updateDocument/${documentId}`,
+                {
+                    br_karton: brKarton,
+                    br_faktura: parseInt(br_faktura || "0", 10),
+                    sostojba_karton: sostojbaKarton,
+                    osnova_evidentiranje: osnovaEvidentiranje,
+                    formular: formular,
+                    vneseni_sredstva: vneseniSredstva,
+                    smetka: smetka,
+                    konto: konto,
+                    datum: datum,
+                }
+            );
 
-            if(response.status === 201){
-                console.log('Smetkovodstvo updated');
+            if (response.status === 201) {
+                console.log("Smetkovodstvo updated");
             }
-
         } catch (error) {
-            console.error(error);   
+            console.error(error);
         }
-    }
+    };
 
-    const deleteSmetkovodstvo = async(e:any) =>{
-        e.preventDefault()
-        
+    const deleteSmetkovodstvo = async (e: any) => {
+        e.preventDefault();
+
         try {
-            const response = await axiosClient.delete(`/smetkovodstvo/destroy/${documentId}`)
+            const response = await axiosClient.delete(
+                `/smetkovodstvo/destroy/${documentId}`
+            );
 
-            if(response.status === 201){
-                console.log('Smetkovodstvo deleted');
-                
+            if (response.status === 201) {
+                console.log("Smetkovodstvo deleted");
+
                 setBrKarton(0);
-                setSostojbaKarton('');
+                setSostojbaKarton("");
                 setOsnovaEvidentiranje(undefined);
                 setFormular(undefined);
                 setVneseniSredstva(undefined);
-                setSmetka('');
-                setKonto('');
-                setDatum('');
+                setSmetka("");
+                setKonto("");
+                setDatum("");
                 setCreated(false);
             }
         } catch (error) {
-            console.error(error);   
+            console.error(error);
         }
-    }
+    };
 
-    return(
+    return (
         <>
             <form onSubmit={storeSmetkovodstvo}>
                 <div className="form-item">
@@ -118,11 +157,21 @@ const Smetkovodstvo:React.FC = () => {
                         <p>Основa за евидентирање:</p>
                         <div className="form-radio">
                             <label>
-                                <input type="radio" name="osnova" onChange={() => setOsnovaEvidentiranje(true)} />
+                                <input
+                                    type="radio"
+                                    name="osnova"
+                                    checked={osnovaEvidentiranje === 1}
+                                    onChange={() => setOsnovaEvidentiranje(1)}
+                                />
                                 Да
                             </label>
                             <label>
-                                <input type="radio" name="osnova" onChange={() => setOsnovaEvidentiranje(false)} />
+                                <input
+                                    type="radio"
+                                    name="osnova"
+                                    checked={osnovaEvidentiranje === 0}
+                                    onChange={() => setOsnovaEvidentiranje(0)}
+                                />
                                 Не
                             </label>
                         </div>
@@ -132,11 +181,21 @@ const Smetkovodstvo:React.FC = () => {
                         <p>Пополнет формулар:</p>
                         <div className="form-radio">
                             <label>
-                                <input type="radio" name="formular" onChange={() => setFormular(true)} />
+                                <input
+                                    type="radio"
+                                    name="formular"
+                                    checked={formular === 1}
+                                    onChange={() => setFormular(1)}
+                                />
                                 Да
                             </label>
                             <label>
-                                <input type="radio" name="formular" onChange={() => setFormular(false)} />
+                                <input
+                                    type="radio"
+                                    name="formular"
+                                    checked={formular === 0}
+                                    onChange={() => setFormular(0)}
+                                />
                                 Не
                             </label>
                         </div>
@@ -146,11 +205,21 @@ const Smetkovodstvo:React.FC = () => {
                         <p>Средства внесени:</p>
                         <div className="form-radio">
                             <label>
-                                <input type="radio" name="sredstva" onChange={() => setVneseniSredstva(true)} />
+                                <input
+                                    type="radio"
+                                    name="sredstva"
+                                    checked={vneseniSredstva === 1}
+                                    onChange={() => setVneseniSredstva(1)}
+                                />
                                 Да
                             </label>
                             <label>
-                                <input type="radio" name="sredstva" onChange={() => setVneseniSredstva(false)} />
+                                <input
+                                    type="radio"
+                                    name="sredstva"
+                                    checked={vneseniSredstva === 0}
+                                    onChange={() => setVneseniSredstva(0)}
+                                />
                                 Не
                             </label>
                         </div>
@@ -160,11 +229,21 @@ const Smetkovodstvo:React.FC = () => {
                         <p>Предлог сметка за наплата од:</p>
                         <div className="form-radio">
                             <label>
-                                <input type="radio" name="smetka" onChange={() => setSmetka("603")} />
+                                <input
+                                    type="radio"
+                                    name="smetka"
+                                    checked={smetka === "603"}
+                                    onChange={() => setSmetka("603")}
+                                />
                                 603
                             </label>
                             <label>
-                                <input type="radio" name="smetka" onChange={() => setSmetka("788")} />
+                                <input
+                                    type="radio"
+                                    name="smetka"
+                                    checked={smetka === "788"}
+                                    onChange={() => setSmetka("788")}
+                                />
                                 788
                             </label>
                         </div>
@@ -189,21 +268,19 @@ const Smetkovodstvo:React.FC = () => {
 
                     <div className="form-buttons">
                         <div></div>
-                       <div className="form-buttons-edit">
+                        <div className="form-buttons-edit">
                             {!created ? (
                                 <button type="submit">Save</button>
                             ) : (
                                 <button onClick={updateSmetkovodstvo}>Edit</button>
                             )}
-                            {created && (
-                                <button onClick={deleteSmetkovodstvo}>Delete</button>
-                            )}
+                            {created && <button onClick={deleteSmetkovodstvo}>Delete</button>}
                         </div>
                     </div>
                 </div>
             </form>
         </>
-    )   
-}
+    );
+};
 
 export default Smetkovodstvo;

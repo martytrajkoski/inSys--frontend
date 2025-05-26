@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 
@@ -9,14 +9,55 @@ const TipNabavka: React.FC = () => {
 
     const [brDogovor, setBrDogovor] = useState<number>();
     const [vaznostDo, setVaznostDo] = useState<string>();
-    const [soglasnoDogovor, setSoglasnoDogovor] = useState<boolean>();
+    const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
     const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
     
-    const [istTip, setIstTip] = useState<boolean>();
+    const [istTip, setIstTip] = useState<number>();
     const [vkPotroseno, setVkPotroseno] = useState<number>();
 
     const [created, setCreated] = useState<boolean>();
     const [documentId, setDocumentId] = useState<number>();
+
+    useEffect(() => {
+        showTipNabavka();
+    }, []);
+
+    const showTipNabavka = async () => {
+        try {
+            const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
+
+            console.log('response.data', response.data.document)
+
+            if (response.status === 201) {
+                const doc = response.data.document;
+                setTip(doc.tip);
+                setDatum(doc.datum);
+
+                if (doc.tip === "javna") {
+                    setBrDogovor(doc.javna_nabavka.br_dogovor);
+                    setVaznostDo(doc.javna_nabavka.vaznost_do);
+                    setSoglasnoDogovor(doc.javna_nabavka.soglasno_dogovor);
+                    setOstanatiRaspSredstva(doc.javna_nabavka.ostanati_rasp_sredstva);
+                } else if (doc.tip === "tender") {
+                    setIstTip(doc.tender.ist_tip);
+                    setVkPotroseno(doc.tender.vk_potroseno);
+                }
+            }
+            else if (response.status === 404) {
+                setTip("javna");
+                setDatum(undefined);
+                setBrDogovor(undefined);
+                setVaznostDo(undefined);
+                setSoglasnoDogovor(undefined);
+                setOstanatiRaspSredstva(undefined);
+                setIstTip(undefined);
+                setVkPotroseno(undefined);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const storeTipNabavka = async (e:any) => {
         e.preventDefault();
@@ -144,8 +185,8 @@ const TipNabavka: React.FC = () => {
                                     <input
                                         type="radio"
                                         name="edinecna_cena"
-                                        checked={soglasnoDogovor === true}
-                                        onChange={() => setSoglasnoDogovor(true)}
+                                        checked={soglasnoDogovor === 1}
+                                        onChange={() => setSoglasnoDogovor(1)}
                                     />
                                     <label>Да</label>
                                 </div>
@@ -153,8 +194,8 @@ const TipNabavka: React.FC = () => {
                                     <input
                                         type="radio"
                                         name="edinecna_cena"
-                                        checked={soglasnoDogovor === false}
-                                        onChange={() => setSoglasnoDogovor(false)}
+                                        checked={soglasnoDogovor === 0}
+                                        onChange={() => setSoglasnoDogovor(0)}
                                     />
                                     <label>Не</label>
                                 </div>
@@ -181,8 +222,8 @@ const TipNabavka: React.FC = () => {
                                     <input
                                         type="radio"
                                         name="isti_tip_stoka"
-                                        checked={istTip === true}
-                                        onChange={() => setIstTip(true)}
+                                        checked={istTip === 1}
+                                        onChange={() => setIstTip(1)}
                                     />
                                     <label>Да</label>
                                 </div>
@@ -190,8 +231,8 @@ const TipNabavka: React.FC = () => {
                                     <input
                                         type="radio"
                                         name="isti_tip_stoka"
-                                        checked={istTip === false}
-                                        onChange={() => setIstTip(false)}
+                                        checked={istTip === 0}
+                                        onChange={() => setIstTip(0)}
                                     />
                                     <label>Не</label>
                                 </div>
