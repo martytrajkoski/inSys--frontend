@@ -1,19 +1,13 @@
 import React from "react";
-import type { FakturaType } from "../../types/types";
 import { Link } from "react-router-dom";
-
-interface Props {
-  title: string;
-  items: FakturaType[];
-  role: string;
-}
+import type { InvoiceType } from "../../types/types";
 
 const getRouteByRole = (role: string, br_faktura: number): string => {
   switch (role) {
     case "Продекан за финансии":
-      return "/prodekan";
+      return `/prodekan/${br_faktura}`;
     case "Технички секретар":
-      return "/tehnickisekretar";
+      return `/tehnickisekretar/${br_faktura}`;
     case "Јавна набавка":
       return `/tipnabavka/${br_faktura}`;
     case "Барател на набавка":
@@ -25,7 +19,8 @@ const getRouteByRole = (role: string, br_faktura: number): string => {
   }
 };
 
-const InvoiceCard: React.FC<Props> = ({ title, items, role }) => {
+const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
+  
   return (
     <div className="invoice-component">
       <h1>{title}</h1>

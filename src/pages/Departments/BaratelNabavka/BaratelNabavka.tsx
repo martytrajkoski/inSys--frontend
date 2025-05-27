@@ -120,7 +120,6 @@ const BaratelNabavka: React.FC = () => {
     }
   }
 
-  console.log('first', )
 
   return (
     <>

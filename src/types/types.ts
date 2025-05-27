@@ -47,6 +47,12 @@ export interface Izdavac {
   name: string;
 }
 
-export interface Props {
+export interface PropsModal {
   onClose?: () => void;
+}
+
+export interface InvoiceType {
+  title: string;
+  items: FakturaType[];
+  role: string;
 }

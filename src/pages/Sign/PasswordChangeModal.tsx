@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
-import type { Props } from "../../types/types";
+import type { PropsModal } from "../../types/types";
 
-const PasswordChangeModal: React.FC<Props> = ({ onClose }) => {
+const PasswordChangeModal: React.FC<PropsModal> = ({ onClose }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
