@@ -140,3 +140,10 @@ export interface InvoiceType {
   items: FakturaType[];
   role: string;
 }
+
+export type CommentProp = {
+  brFaktura: string;
+  endpoint: string;
+  initialStatus?: string;
+  initialComment?: string;
+};

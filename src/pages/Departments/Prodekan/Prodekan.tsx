@@ -3,6 +3,7 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import type { FakturaType } from "../../../types/types";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import CommentSection from '../../../components/Comment-Section/Comment-Section';
 
 const Prodekan: React.FC = () => {
   const [faktura, setFaktura] = useState<FakturaType[]>([]);
@@ -43,6 +44,18 @@ const Prodekan: React.FC = () => {
   const [konto, setKonto] = useState<string>("");
   const [datumSmetkovodstvo, setDatumSmetkovodstvo] = useState<string>("");
 
+  // COMMENTS
+
+  const [commentTehnicki, setCommentTehnicki] = useState<string>("");
+  const [commentTipNabavka, setCommentTipNabavka] = useState<string>("");
+  const [commentBaratel, setCommentBaratel] = useState<string>("");
+  const [commentSmetkovodstvo, setCommentSmetkovodstvo] = useState<string>("");
+
+  const [statusTehnicki, setStatusTehnicki] = useState<string>("");
+  const [statusTipNabavka, setStatusTipNabavka] = useState<string>("");
+  const [statusBaratel, setStatusBaratel] = useState<string>("");
+  const [statusSmetkovodstvo, setStatusSmetkovodstvo] = useState<string>("");
+
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
@@ -74,7 +87,6 @@ const Prodekan: React.FC = () => {
           setOstanatiRaspSredstva(
             data.tip_nabavka?.javna_nabavka?.ostanati_rasp_sredstva ?? undefined
           );
-          console.log(data.tip_nabavka?.tip);
         } else {
           setIstTip(data.tip_nabavka?.tender?.ist_tip ?? undefined);
           setVkPotroseno(data.tip_nabavka?.tender?.vk_potroseno ?? undefined);
@@ -90,14 +102,24 @@ const Prodekan: React.FC = () => {
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
-        setOsnovaEvidentiranje(
-          data.smetkovodstvo?.osnova_evidentiranje ?? undefined
-        );
+        setOsnovaEvidentiranje(data.smetkovodstvo?.osnova_evidentiranje ?? undefined);
         setFormular(data.smetkovodstvo?.formular ?? undefined);
         setVneseniSredstva(data.smetkovodstvo?.vneseni_sredstva ?? undefined);
         setSmetka(data.smetkovodstvo?.smetka ?? "");
         setKonto(data.smetkovodstvo?.konto ?? "");
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
+
+        // COMMENTS
+
+        setCommentTehnicki(data.tehnicki_sekretar?.comment ?? "");
+        setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
+        setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
+        setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
+        
+        setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
+        setStatusTipNabavka(data.tip_nabavka?.status ?? "");
+        setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
+        setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
@@ -157,6 +179,14 @@ const Prodekan: React.FC = () => {
           />
         </div>
       </div>
+
+      <CommentSection
+        brFaktura={br_faktura ?? ""}
+        endpoint="/prodekan/statustehnicki"
+        initialStatus={statusTehnicki}
+        initialComment={commentTehnicki}
+      />
+
       <div className="form-item">
         <h3>2. Информации за тип на набавка (одделение за јавна набавка)</h3>
         <div className="form-item-select">
@@ -236,6 +266,14 @@ const Prodekan: React.FC = () => {
           </div>
         </div>
       )}
+
+      <CommentSection
+        brFaktura={br_faktura ?? ""}
+        endpoint="/prodekan/statustipnabavka"
+        initialStatus={statusTipNabavka}
+        initialComment={commentTipNabavka}
+      />
+
       <div className="form-item">
         <h3>
           3. Информации за евиденција (одделение за јавна набавка или барател на
@@ -276,6 +314,14 @@ const Prodekan: React.FC = () => {
           />
         </div>
       </div>
+
+      <CommentSection
+        brFaktura={br_faktura ?? ""}
+        endpoint="/prodekan/statusbaratelnabavka"
+        initialStatus={statusBaratel}
+        initialComment={commentBaratel}
+      />
+
       <div className="form-item">
         <h3>4. Информации од сметководство</h3>
         <div className="form-item-inputs">
@@ -319,6 +365,14 @@ const Prodekan: React.FC = () => {
           />
         </div>
       </div>
+
+      <CommentSection
+        brFaktura={br_faktura ?? ""}
+        endpoint="/prodekan/statussmetkovodstvo"
+        initialStatus={statusSmetkovodstvo}
+        initialComment={commentSmetkovodstvo}
+      />
+
       <div className="form-item">
         <h3>5. Одобрување за плаќање на фактура (продекан за финансии)</h3>
         <p>

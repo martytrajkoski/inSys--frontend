@@ -1,0 +1,78 @@
+.comment-section {
+  border: 1px solid #23a5f0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.status-button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.2s ease;
+}
+
+.status-button:hover {
+  background-color: #f0f0f0;
+}
+
+.status-button.approved {
+  background-color: #d1fae5;
+  border-color: #10b981;
+}
+
+.status-button.rejected {
+  background-color: #fecaca;
+  border-color: #ef4444;
+}
+
+.comment-box textarea {
+  width: 98%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #1d4ed8;
+}
+
+.submit-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.feedback-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #374151;
+}
