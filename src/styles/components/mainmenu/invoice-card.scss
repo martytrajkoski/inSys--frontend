@@ -14,7 +14,6 @@
 
         .invoice-card-items {
             overflow-y: auto;
-    
             
             .invoice-card-item {
                 display: flex;
@@ -22,11 +21,13 @@
                 box-sizing: border-box;
                 padding: 9px 30px;
                 cursor: pointer;               
+                color: black;
                 
                 .invoice-flag {
                     padding: 4px 8px;
                     border-radius: 5px;
                     font-weight: bold;
+                    font-size: 16px;
 
                     &.read {
                         background-color: #d4edda;

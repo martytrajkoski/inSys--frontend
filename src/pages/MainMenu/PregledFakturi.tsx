@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import InvoiceCard from "../../components/MainMenu/InvoiceCard";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { FakturaType } from "../../types/types";
-import "../../styles/components/mainmenu/search-bar.scss";
-import "../../styles/pages/mainmenu/mainmenu.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const getRouteByRole = (role: string, br_faktura: number): string => {
   switch (role) {
@@ -126,7 +124,7 @@ const PregledFakturi: React.FC = () => {
       </div>
       {role == "Технички секретар" ? (
         <div className="mainmenu-invoices">
-          <Link to="/tehnickisekretar">Креирај фактура</Link>
+          <button onClick={()=>navigate("/tehnickisekretar")}>Креирај фактура</button>
           <InvoiceCard title="Креирани фактури" items={faktura} role={role} />
         </div>
       ) : (
