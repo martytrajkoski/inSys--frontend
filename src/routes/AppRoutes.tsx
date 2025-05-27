@@ -27,7 +27,7 @@ const AppRoutes: React.FC = () => {
             <Route path="lista-izdavaci" element={<Izdavaci />} />
           </Route>
           <Route element={<Department />}>
-            <Route path="tehnickisekretar" element={<TehnickiSekretar br_faktura={""} />} />
+            <Route path="tehnickisekretar" element={<TehnickiSekretar />} />
             <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />
             <Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />
             <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />

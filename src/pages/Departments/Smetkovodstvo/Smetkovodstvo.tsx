@@ -35,6 +35,7 @@ const Smetkovodstvo: React.FC = () => {
                 setSmetka(response.data.document.smetka);
                 setKonto(response.data.document.konto);
                 setDatum(response.data.document.datum);
+                setCreated(true);
             } else if (response.status === 404) {
                 setBrKarton(undefined);
                 setSostojbaKarton("");
@@ -44,6 +45,7 @@ const Smetkovodstvo: React.FC = () => {
                 setSmetka("");
                 setKonto("");
                 setDatum("");
+                setCreated(false);
             }
 
         } catch (error) {

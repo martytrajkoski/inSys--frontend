@@ -21,24 +21,22 @@
                 justify-content: space-between;
                 box-sizing: border-box;
                 padding: 9px 30px;
-                cursor: pointer;
-                
-                p{
-                    width: 33%;
-                    text-align: left;
-                }
-                
+                cursor: pointer;               
                 
                 .invoice-flag {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    p{
-                        border-radius: 10px;
-                        margin: 5px 40px;
-                        text-align: center;
-                        background-color: #FF8989;
+                    padding: 4px 8px;
+                    border-radius: 5px;
+                    font-weight: bold;
 
+
+                    &.read {
+                        background-color: #d4edda;
+                        color: #155724;
+                    }
+
+                    &.unread {
+                        background-color: #f8d7da;
+                        color: #721c24;
                     }
                 }
                 

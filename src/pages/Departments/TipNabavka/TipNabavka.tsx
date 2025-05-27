@@ -42,6 +42,7 @@ const TipNabavka: React.FC = () => {
                     setIstTip(doc.tender.ist_tip);
                     setVkPotroseno(doc.tender.vk_potroseno);
                 }
+                setCreated(true);
             }
             else if (response.status === 404) {
                 setTip("javna");
@@ -52,6 +53,7 @@ const TipNabavka: React.FC = () => {
                 setOstanatiRaspSredstva(undefined);
                 setIstTip(undefined);
                 setVkPotroseno(undefined);
+                setCreated(false);
             }
 
         } catch (error) {

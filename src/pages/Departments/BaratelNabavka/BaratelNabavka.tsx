@@ -39,6 +39,7 @@ const BaratelNabavka: React.FC = () => {
         setPoteklo(response.data.document.poteklo);
         setDatum(response.data.document.datum);
         setBaratelId(response.data.document.baratel_id);
+        setCreated(true);
       }
       else if(response.status === 404){
         setBrKarton(undefined);
@@ -46,6 +47,7 @@ const BaratelNabavka: React.FC = () => {
         setPoteklo("");
         setDatum("");
         setBaratelId(undefined);
+        setCreated(false);
       }
 
     } catch (error) {

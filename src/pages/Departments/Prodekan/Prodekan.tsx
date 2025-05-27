@@ -1,6 +1,6 @@
 import React from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import type { FakturaType, IzdavaciType } from "../../../types/types";
+import type { FakturaType } from "../../../types/types";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -115,6 +115,12 @@ const Prodekan: React.FC = () => {
         <div className="form-item-inputs">
           <input
             type="text"
+            placeholder="Архивски број на влезна фактура 05-12-"
+            value={arhivski_br ?? ""}
+            readOnly
+          />
+          <input
+            type="text"
             placeholder="Број на фактура"
             value={br_faktura ?? ""}
             readOnly
@@ -194,6 +200,12 @@ const Prodekan: React.FC = () => {
               value={ostanatiRaspSredstva ?? ""}
               readOnly
             />
+            <input
+              type="date"
+              placeholder="Датум"
+              value={datumTip ?? ""}
+              readOnly
+            />
           </div>
         </div>
       ) : (
@@ -214,6 +226,13 @@ const Prodekan: React.FC = () => {
               value={vkPotroseno ?? ""}
               readOnly
             />
+            <input
+              type="date"
+              placeholder="Датум"
+              value={datumTip ?? ""}
+              readOnly
+            />
+            
           </div>
         </div>
       )}
@@ -270,6 +289,24 @@ const Prodekan: React.FC = () => {
             type="text"
             placeholder="Состојба на картон"
             value={sostojbaKarton}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Предметот е формулар за задолжување на основно средство"
+            value={osnovaEvidentiranje ? ("Да") : ("Не")}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Пополнет е формулар за задолжување на основно средство"
+            value={formular ? ("Да") : ("Не")}
+            readOnly
+          />
+          <input
+            type="text"
+            placeholder="Средствата се внесени како новонабавени за тековната година"
+            value={vneseniSredstva ? ("Да") : ("Не")}
             readOnly
           />
           <input type="text" placeholder="Сметка" value={smetka} readOnly />
