@@ -34,6 +34,7 @@ const BaratelNabavka: React.FC = () => {
       const response = await axiosClient.get(`/baratelnabavka/show/${br_faktura}`)
 
       if(response.status === 201){
+        setDocumentId(response.data.document.id);
         setBrKarton(response.data.document.br_karton);
         setNazivProekt(response.data.document.naziv_proekt);
         setPoteklo(response.data.document.poteklo);

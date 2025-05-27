@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import ImportFile from "../../../components/ImportFile/ImportFile";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { IzdavaciType } from "../../../types/types";
+import { useNavigate, useParams } from "react-router-dom";
 
 const TehnickiSekretar: React.FC = () => {
+    const { br_faktura } = useParams<string>();
+
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
     const [arhivski_br, setArhivski_br] = useState<string>('');
-    const [br_faktura, setBr_faktura] = useState<number>();
+    const [br_fakturaa, setBr_fakturaa] = useState<number>();
     const [br_dogovor, setBr_dogovor] = useState<number>();
     const [izdavaci_id, setIzdavaci_id] = useState<number>();
     const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
@@ -18,8 +21,44 @@ const TehnickiSekretar: React.FC = () => {
     const [created, setCreated] = useState<boolean>();
     const [documentId, setDocumentId] = useState<number>();
 
+    const navigate = useNavigate();
+
     const handleImportModal = () => {
         setopenImportModal(!openImportModal);
+    }
+
+    const fetchTehnicki = async() => {
+        try {
+            const response = await axiosClient.get(`/tehnickisekretar/show/${br_faktura}`)
+
+            if(response.status === 201){
+                setDocumentId(response.data.document.id);
+                setArhivski_br(response.data.document.arhivski_br);
+                setBr_fakturaa(response.data.document.br_faktura);
+                setBr_dogovor(response.data.document.br_dogovor);
+                setIzdavaci_id(response.data.document.izdavaci_id);
+                setIznos_dogovor(response.data.document.iznos_dogovor);
+                setVk_vrednost(response.data.document.vk_vrednost);
+                setDatum(response.data.document.datum);
+                setScan_file(response.data.document.scan_file);
+                setCreated(true);
+            }
+            else if(response.status === 404){
+                setArhivski_br('');
+                setBr_fakturaa(undefined);
+                setBr_dogovor(undefined);
+                setIzdavaci_id(undefined);
+                setIznos_dogovor(undefined);
+                setVk_vrednost(undefined);
+                setDatum('');
+                setScan_file('');
+                setDocumentId(undefined);
+                setCreated(false);
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const storeTehnicki = async(e:any) =>{
@@ -28,7 +67,7 @@ const TehnickiSekretar: React.FC = () => {
         try {
             const response = await axiosClient.post('/tehnickisekretar/addDocument',{
                 "arhivski_br": arhivski_br,
-                "br_faktura": br_faktura,
+                "br_faktura": br_fakturaa,
                 "br_dogovor": br_dogovor,
                 "izdavaci_id": izdavaci_id, 
                 "iznos_dogovor": iznos_dogovor,
@@ -55,7 +94,7 @@ const TehnickiSekretar: React.FC = () => {
         try {
             const response = await axiosClient.patch(`/tehnickisekretar/updateDocument/${documentId}`,{
                 "arhivski_br": arhivski_br,
-                "br_faktura": br_faktura,
+                "br_faktura": br_fakturaa,
                 "br_dogovor": br_dogovor,
                 "izdavaci_id": izdavaci_id, 
                 "iznos_dogovor": iznos_dogovor,
@@ -82,7 +121,7 @@ const TehnickiSekretar: React.FC = () => {
                 console.log('Tehnicki Sekretar and Faktuta deleted')    
                 
                 setArhivski_br('');
-                setBr_faktura(0);
+                setBr_fakturaa(0);
                 setBr_dogovor(0);
                 setIzdavaci_id(0);
                 setIznos_dogovor(0);
@@ -91,6 +130,8 @@ const TehnickiSekretar: React.FC = () => {
                 setScan_file('');
                 setCreated(false);
                 setDocumentId(0);
+
+                navigate('/')
             }
 
 
@@ -114,6 +155,7 @@ const TehnickiSekretar: React.FC = () => {
 
     useEffect(()=>{
         fetchIzdavaci();
+        fetchTehnicki();
     }, [])
 
     return(
@@ -123,7 +165,7 @@ const TehnickiSekretar: React.FC = () => {
                 <div className="form-item">
                     <div className="form-item-inputs">
                         <input type="text" value={arhivski_br} placeholder="Архивски број на влезна фактура 05-12-" onChange={(e)=>setArhivski_br(e.target.value)}/>
-                        <input type="number" value={br_faktura} placeholder="Број на фактура" onChange={(e) => setBr_faktura(Number(e.target.value))}/>
+                        <input type="number" value={br_fakturaa} placeholder="Број на фактура" onChange={(e) => setBr_fakturaa(Number(e.target.value))}/>
                         <input type="number" value={br_dogovor} placeholder="Број на договор" onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
                         <input type="number" value={iznos_dogovor} placeholder="Износ на фактура" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
                         <input type="date" value={datum} placeholder="Датум" onChange={(e) => setDatum(e.target.value)}/>

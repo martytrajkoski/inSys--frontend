@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
+import BaratelNabavka from "../BaratelNabavka/BaratelNabavka";
 
 const TipNabavka: React.FC = () => {
     const { br_faktura } = useParams<string>();
@@ -25,8 +26,6 @@ const TipNabavka: React.FC = () => {
     const showTipNabavka = async () => {
         try {
             const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
-
-            console.log('response.data', response.data.document)
 
             if (response.status === 201) {
                 const doc = response.data.document;
@@ -274,6 +273,7 @@ const TipNabavka: React.FC = () => {
                     </div>
                 </div>
             </form>
+            <BaratelNabavka/>
         </>
     );
 };

@@ -27,6 +27,7 @@ const Smetkovodstvo: React.FC = () => {
             );
 
             if (response.status === 201) {
+                setDocumentId(response.data.document.id);
                 setBrKarton(response.data.document.br_karton);
                 setSostojbaKarton(response.data.document.sostojba_karton);
                 setOsnovaEvidentiranje(response.data.document.osnova_evidentiranje);
