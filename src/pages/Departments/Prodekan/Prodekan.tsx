@@ -43,6 +43,13 @@ const Prodekan: React.FC = () => {
   const [konto, setKonto] = useState<string>("");
   const [datumSmetkovodstvo, setDatumSmetkovodstvo] = useState<string>("");
 
+  // COMMENTS
+
+  const [commentTehnicki, setCommentTehnicki] = useState<string>("");
+  const [commentTipNabavka, setCommentTipNabavka] = useState<string>("");
+  const [commentBaratel, setCommentBaratel] = useState<string>("");
+  const [commentSmetkovodstvo, setCommentSmetkovodstvo] = useState<string>("");
+
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
@@ -90,14 +97,19 @@ const Prodekan: React.FC = () => {
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
-        setOsnovaEvidentiranje(
-          data.smetkovodstvo?.osnova_evidentiranje ?? undefined
-        );
+        setOsnovaEvidentiranje(data.smetkovodstvo?.osnova_evidentiranje ?? undefined);
         setFormular(data.smetkovodstvo?.formular ?? undefined);
         setVneseniSredstva(data.smetkovodstvo?.vneseni_sredstva ?? undefined);
         setSmetka(data.smetkovodstvo?.smetka ?? "");
         setKonto(data.smetkovodstvo?.konto ?? "");
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
+
+        // COMMENTS
+
+        setCommentTehnicki(data.tehnicki_sekretar?.comment ?? "");
+        setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
+        setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
+        setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
