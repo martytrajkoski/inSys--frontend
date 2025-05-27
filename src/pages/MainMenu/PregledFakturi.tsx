@@ -24,7 +24,6 @@ const getRouteByRole = (role: string, br_faktura: number): string => {
 };
 
 const PregledFakturi: React.FC = () => {
-
   const [role, setRole] = useState<string>("");
   const [faktura, setFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState("");
@@ -32,29 +31,28 @@ const PregledFakturi: React.FC = () => {
   const navigate = useNavigate();
 
   const fetchAllFakturas = async () => {
-      try {
-          const response = await axiosClient.get("/faktura/");
-
-          if (response.status === 201) {
-              setFaktura(response.data.documents);
-          }
-      } catch (error) {
-          console.error(error);
-      }
-  };
-
-  const fetchUser = async() => {
     try {
-      const response = await axiosClient.get('/auth/user');
+      const response = await axiosClient.get("/faktura/");
 
-      if(response.status === 201){
-        setRole(response.data.role.name);
+      if (response.status === 201) {
+        setFaktura(response.data.documents);
       }
-
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const response = await axiosClient.get("/auth/user");
+
+      if (response.status === 201) {
+        setRole(response.data.role.name);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetchAllFakturas();
@@ -62,74 +60,82 @@ const PregledFakturi: React.FC = () => {
   }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setSearch(value);
-      if (value.trim() === "") {
-        setFilteredFaktura(faktura);
-      } else {
-        const filtered = faktura.filter((item) =>
-          item.br_faktura.toString().startsWith(value)
-        );
-        setFilteredFaktura(filtered);
-      }
-    };
+    const value = e.target.value;
+    setSearch(value);
+    if (value.trim() === "") {
+      setFilteredFaktura(faktura);
+    } else {
+      const filtered = faktura.filter((item) =>
+        item.br_faktura.toString().startsWith(value)
+      );
+      setFilteredFaktura(filtered);
+    }
+  };
 
-    return (
-      <div className="mainmenu-content">
-        <div className="mainmenu-search">
-          <input
-            type="search"
-            placeholder="Пребарај фактура..."
-            value={search}
-            onChange={handleSearchChange}
-          />
-          {search.length > 0 && (
-            <ul className="dropdown">
-              {filteredFaktura.map((item) => {
-                let isRead = false;
+  return (
+    <div className="mainmenu-content">
+      <div className="mainmenu-search">
+        <input
+          type="search"
+          placeholder="Пребарај фактура..."
+          value={search}
+          onChange={handleSearchChange}
+        />
+        {search.length > 0 && (
+          <ul className="dropdown">
+            {filteredFaktura.map((item) => {
+              let isRead = false;
 
-                switch (role) {
-                  case "Јавна набавка":
-                    isRead = !!item.tip_nabavka?.read;
-                    break;
-                  case "Барател на набавка":
-                    isRead = !!item.baratel_javna_nabavka?.read;
-                    break;
-                  case "Сметководство":
-                    isRead = !!item.smetkovodstvo?.read;
-                    break;
-                  case "Продекан за финансии":
-                    isRead = item.approved_at !== null;
-                    break;
-                  default:
-                    isRead = false;
-                }
+              switch (role) {
+                case "Јавна набавка":
+                  isRead = !!item.tip_nabavka?.read;
+                  break;
+                case "Барател на набавка":
+                  isRead = !!item.baratel_javna_nabavka?.read;
+                  break;
+                case "Сметководство":
+                  isRead = !!item.smetkovodstvo?.read;
+                  break;
+                case "Продекан за финансии":
+                  isRead = item.approved_at !== null;
+                  break;
+                default:
+                  isRead = false;
+              }
 
-                return (
-                  <li onClick={()=>navigate(getRouteByRole(role, item.br_faktura))} key={item.id} className="dropdown-item">
-                    <span>{item.br_faktura}</span>
-                    <span className={`invoice-flag ${isRead ? "read" : "unread"}`}>
-                      {isRead ? "Прочитано" : "Непрочитано"}
-                    </span>
-                  </li>
-                );
-              })}
-              {filteredFaktura.length === 0 && <li>Нема резултати</li>}
-            </ul>
-          )}
-        </div>
-        {role == "Технички секретар" ? (
-          <div className="mainmenu-invoices">
-            <Link to='/tehnickisekretar'>Креирај фактура</Link>
-            <InvoiceCard title="Креирани фактури" items={faktura} role={role}/>
-          </div>
-        ) : (
-          <div className="mainmenu-invoices">
-            <InvoiceCard title="Нови фактури" items={faktura} role={role}/>
-            <InvoiceCard title="Прегледани фактури" items={faktura} role={role}/>
-          </div>
+              return (
+                <li
+                  onClick={() =>
+                    navigate(getRouteByRole(role, item.br_faktura))
+                  }
+                  key={item.id}
+                  className="dropdown-item"
+                >
+                  <span>{item.br_faktura}</span>
+                  <span
+                    className={`invoice-flag ${isRead ? "read" : "unread"}`}
+                  >
+                    {isRead ? "Прочитано" : "Непрочитано"}
+                  </span>
+                </li>
+              );
+            })}
+            {filteredFaktura.length === 0 && <li>Нема резултати</li>}
+          </ul>
         )}
       </div>
+      {role == "Технички секретар" ? (
+        <div className="mainmenu-invoices">
+          <Link to="/tehnickisekretar">Креирај фактура</Link>
+          <InvoiceCard title="Креирани фактури" items={faktura} role={role} />
+        </div>
+      ) : (
+        <div className="mainmenu-invoices">
+          <InvoiceCard title="Нови фактури" items={faktura} role={role} />
+          <InvoiceCard title="Прегледани фактури" items={faktura} role={role} />
+        </div>
+      )}
+    </div>
   );
 };
 

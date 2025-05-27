@@ -12,7 +12,11 @@ const Department: React.FC = () => {
             <div className="department-title">
                 <button onClick={()=>navigate(-1)}><FontAwesomeIcon icon={faArrowLeft}/> Назад</button>
                 <p>ЗАДОЛЖЕН ПРИЛОГ НА ВЛЕЗНА ФАКТУРА</p>
-                <div>Број на фактура: {br_faktura}</div>
+                {br_faktura ? (
+                    <div>Број на фактура: {br_faktura}</div>
+                ):(
+                    <div></div>
+                )}
             </div>
             <div className="department-container">
                 <Outlet/>

@@ -21,10 +21,15 @@ const getRouteByRole = (role: string, br_faktura: number): string => {
 
 const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
   const [fakturas, setFakturas] = useState<FakturaType[]>([]);
-  console.log('title', title)
+
   const invoiceReadFilter = () => {
-    const filtered: FakturaType[] = items.filter(item => {
-      if (title == "Нови фактури") {
+    if (role === "Технички секретар") {
+      setFakturas(items);
+      return;
+    }
+
+    const filtered: FakturaType[] = items.filter((item) => {
+      if (title === "Нови фактури") {
         switch (role) {
           case "Јавна набавка":
             return item.tip_nabavka === null;
@@ -34,12 +39,10 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
             return item.smetkovodstvo === null;
           case "Продекан за финансии":
             return item.approved_at === null;
-          // case "Технички секретар":
-          //   return item.tehnicki_sekretar?.read === 0;
           default:
             return false;
         }
-      } else {
+      } else if (title === "Прегледани фактури") {
         switch (role) {
           case "Јавна набавка":
             return item.tip_nabavka?.read === 1;
@@ -49,17 +52,17 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
             return item.smetkovodstvo?.read === 1;
           case "Продекан за финансии":
             return item.approved_at !== null;
-          // case "Технички секретар":
-          //   return item.tehnicki_sekretar?.read === 1;
           default:
             return false;
         }
       }
+
+      return false;
     });
 
     setFakturas(filtered);
   };
-  console.log('fakturas', fakturas)
+
   useEffect(() => {
     invoiceReadFilter();
   }, [items, role, title]);
@@ -75,24 +78,27 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
             <div>Статус</div>
           </div>
           {fakturas.map((item, index) => {
-            let isRead = false;
+            let statusLabel = "";
 
-            switch (role) {
-              case "Јавна набавка":
-                isRead = !!item.tip_nabavka?.read;
-                break;
-              case "Барател на набавка":
-                isRead = !!item.baratel_javna_nabavka?.read;
-                break;
-              case "Сметководство":
-                isRead = !!item.smetkovodstvo?.read;
-                break;
-              case "Продекан за финансии":
-                isRead = item.approved_at !== null;
-                break;
-              // Add for Технички секретар if needed
-              default:
-                isRead = false;
+            if (role === "Технички секретар") {
+              statusLabel = "Креирано";
+            } else {
+              let isRead = false;
+              switch (role) {
+                case "Јавна набавка":
+                  isRead = !!item.tip_nabavka?.read;
+                  break;
+                case "Барател на набавка":
+                  isRead = !!item.baratel_javna_nabavka?.read;
+                  break;
+                case "Сметководство":
+                  isRead = !!item.smetkovodstvo?.read;
+                  break;
+                case "Продекан за финансии":
+                  isRead = item.approved_at !== null;
+                  break;
+              }
+              statusLabel = isRead ? "Прочитано" : "Непрочитано";
             }
 
             return (
@@ -105,8 +111,16 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                <div className={`invoice-flag ${isRead ? "read" : "unread"}`}>
-                  <p>{isRead ? "Прочитано" : "Непрочитано"}</p>
+                <div
+                  className={`invoice-flag ${
+                    role === "Технички секретар"
+                      ? "created"
+                      : statusLabel
+                      ? "read"
+                      : "unread"
+                  }`}
+                >
+                  <p>{statusLabel}</p>
                 </div>
               </Link>
             );
