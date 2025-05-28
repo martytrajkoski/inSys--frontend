@@ -26,12 +26,13 @@ const PregledFakturi: React.FC = () => {
   const [faktura, setFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState("");
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
+  const [filterType, setFilterType] = useState<"Нови фактури" | "Прегледани фактури">("Нови фактури");
+
   const navigate = useNavigate();
 
   const fetchAllFakturas = async () => {
     try {
       const response = await axiosClient.get("/faktura/");
-
       if (response.status === 201) {
         setFaktura(response.data.documents);
       }
@@ -43,7 +44,6 @@ const PregledFakturi: React.FC = () => {
   const fetchUser = async () => {
     try {
       const response = await axiosClient.get("/auth/user");
-
       if (response.status === 201) {
         setRole(response.data.role.name);
       }
@@ -110,9 +110,7 @@ const PregledFakturi: React.FC = () => {
                   className="dropdown-item"
                 >
                   <span>{item.br_faktura}</span>
-                  <span
-                    className={`invoice-flag ${isRead ? "read" : "unread"}`}
-                  >
+                  <span className={`invoice-flag ${isRead ? "read" : "unread"}`}>
                     {isRead ? "Прочитано" : "Непрочитано"}
                   </span>
                 </li>
@@ -122,15 +120,27 @@ const PregledFakturi: React.FC = () => {
           </ul>
         )}
       </div>
-      {role == "Технички секретар" ? (
+
+      {role === "Технички секретар" ? (
         <div className="mainmenu-invoices">
-          <button onClick={()=>navigate("/tehnickisekretar")}>Креирај фактура</button>
-          <InvoiceCard title="Креирани фактури" items={faktura} role={role} />
+          <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
+          <InvoiceCard title={filterType} items={faktura} role={role} />
         </div>
       ) : (
         <div className="mainmenu-invoices">
-          <InvoiceCard title="Нови фактури" items={faktura} role={role} />
-          <InvoiceCard title="Прегледани фактури" items={faktura} role={role} />
+          <div className="invoice-filter-dropdown">
+            <h1>{filterType}</h1>
+            <select
+              value={filterType}
+              onChange={(e) =>
+                setFilterType(e.target.value as "Нови фактури" | "Прегледани фактури")
+              }
+            >
+              <option value="Нови фактури">Нови фактури</option>
+              <option value="Прегледани фактури">Прегледани фактури</option>
+            </select>
+          </div>
+          <InvoiceCard title={filterType} items={faktura} role={role} />
         </div>
       )}
     </div>

@@ -69,7 +69,6 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
 
   return (
     <div className="invoice-component">
-      <h1>{title}</h1>
       <div className="invoice-card">
         <div className="invoice-card-items">
           <div className="invoice-card-item" style={{background:'#D9D9D9', cursor: "auto"}}>
