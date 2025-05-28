@@ -14,7 +14,7 @@
             display: flex;
             gap: 25px;
             justify-content: center;
-            margin-top: 50px;
+            margin-top: 70px;
 
             input {
                 width: 50%;
@@ -33,10 +33,41 @@
         }
 
         .mainmenu-invoices {
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
+            
+            .invoice-filter-dropdown {
+                border-top: 3px solid #dfd8d8;
+                padding-top: 50px;
+                display: flex;
+                width: 90%;
+                justify-content: space-between;
+
+                select {
+                    padding: 0.5rem 1rem;
+                    font-size: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    background-color: #f8f8f8;
+                    color: #333;
+                    cursor: pointer;
+                    outline: none;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                    border-color: #e45830;
+                    background-color: #f0f0f0;
+                    }
+
+                    &:focus {
+                    border-color: #e45830;
+                    box-shadow: 0 0 0 2px #e45830;
+                    }
+                }
+            }
         }
 
         .departments-container {
@@ -52,6 +83,7 @@
                 text-align: center;
                 color: #333;
                 margin-bottom: 30px;
+                
             }
 
             .add-section {
