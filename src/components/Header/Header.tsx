@@ -50,7 +50,10 @@ const Header: React.FC = () => {
           </div>
         </div>
         <div className="header-user">
-          <span onClick={() => setShowProfileModal(true)} style={{ cursor: "pointer" }}>
+          <span
+            onClick={() => setShowProfileModal(true)}
+            style={{ cursor: "pointer" }}
+          >
             {user?.name}
           </span>
           <button onClick={logout}>Одјави се</button>

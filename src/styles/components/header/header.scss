@@ -27,6 +27,14 @@
     gap: 10px;
     font-size: 20px;
 
+    span {
+      margin-right: 30px;
+      border-bottom: 3px solid #e45830;
+      font-size: 24px;
+      font-weight: bold;
+      color: rgb(85, 85, 82);
+    }
+
     button {
       border: none;
       background: none;
@@ -39,7 +47,7 @@
 
       &:hover {
         outline: none;
-        background-color:#e45830;
+        background-color: #e45830;
         color: white;
       }
     }
