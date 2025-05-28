@@ -1,12 +1,10 @@
 import React from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import type { FakturaType } from "../../../types/types";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import CommentSection from '../../../components/Comment-Section/Comment-Section';
+import CommentSection from "../../../components/Comment-Section/Comment-Section";
 
 const Prodekan: React.FC = () => {
-  const [faktura, setFaktura] = useState<FakturaType[]>([]);
   const { br_faktura } = useParams<{ br_faktura: string }>();
 
   // TEHNICKI SEKRETAR
@@ -44,8 +42,11 @@ const Prodekan: React.FC = () => {
   const [konto, setKonto] = useState<string>("");
   const [datumSmetkovodstvo, setDatumSmetkovodstvo] = useState<string>("");
 
-  // COMMENTS
+  //PRODEKAN
+  const [datumProdekan, setDatumProdekan] = useState<string>("");
+  const [isSealed, setIsSealed] = useState<boolean>();
 
+  // COMMENTS
   const [commentTehnicki, setCommentTehnicki] = useState<string>("");
   const [commentTipNabavka, setCommentTipNabavka] = useState<string>("");
   const [commentBaratel, setCommentBaratel] = useState<string>("");
@@ -62,8 +63,6 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         const data = response.data.faktura;
-
-        setFaktura(data);
 
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
@@ -102,20 +101,25 @@ const Prodekan: React.FC = () => {
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
-        setOsnovaEvidentiranje(data.smetkovodstvo?.osnova_evidentiranje ?? undefined);
+        setOsnovaEvidentiranje(
+          data.smetkovodstvo?.osnova_evidentiranje ?? undefined
+        );
         setFormular(data.smetkovodstvo?.formular ?? undefined);
         setVneseniSredstva(data.smetkovodstvo?.vneseni_sredstva ?? undefined);
         setSmetka(data.smetkovodstvo?.smetka ?? "");
         setKonto(data.smetkovodstvo?.konto ?? "");
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
 
-        // COMMENTS
+        //Prodekan
+        setDatumProdekan(data?.updated_at ? new Date(data.updated_at).toISOString().slice(0, 10) : "");
+        setIsSealed(data?.is_sealed ?? undefined);
 
+        // COMMENTS
         setCommentTehnicki(data.tehnicki_sekretar?.comment ?? "");
         setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
         setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
         setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
-        
+
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
         setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
@@ -126,12 +130,43 @@ const Prodekan: React.FC = () => {
     }
   };
 
+  const handleApproval = (e: any) => {
+    e.preventDefault();
+    const confirmed = window.confirm(
+      "Дали сте сигурни дека сакате да ја одобрите фактурата?"
+    );
+    if (confirmed) {
+      storeProdekan(e);
+      console.log("Фактурата е одобрена.");
+    }
+  };
+
+  const storeProdekan = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
+        br_faktura: Number(br_faktura),
+        status: "approved",
+        is_sealed: true,
+        review_comment: ''
+      });
+
+      if (response.status === 201) {
+        console.log("Faktura is sealed");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    fetchFakturas();
-  }, []);
+    if (br_faktura) {
+      fetchFakturas();
+    }
+  }, [br_faktura]);
 
   return (
-    <form action="">
+    <form>
       <div className="form-item">
         <h3>1. Основни информации (технички секретар)</h3>
         <div className="form-item-inputs">
@@ -262,7 +297,6 @@ const Prodekan: React.FC = () => {
               value={datumTip ?? ""}
               readOnly
             />
-            
           </div>
         </div>
       )}
@@ -340,19 +374,19 @@ const Prodekan: React.FC = () => {
           <input
             type="text"
             placeholder="Предметот е формулар за задолжување на основно средство"
-            value={osnovaEvidentiranje ? ("Да") : ("Не")}
+            value={osnovaEvidentiranje ? "Да" : "Не"}
             readOnly
           />
           <input
             type="text"
             placeholder="Пополнет е формулар за задолжување на основно средство"
-            value={formular ? ("Да") : ("Не")}
+            value={formular ? "Да" : "Не"}
             readOnly
           />
           <input
             type="text"
             placeholder="Средствата се внесени како новонабавени за тековната година"
-            value={vneseniSredstva ? ("Да") : ("Не")}
+            value={vneseniSredstva ? "Да" : "Не"}
             readOnly
           />
           <input type="text" placeholder="Сметка" value={smetka} readOnly />
@@ -380,16 +414,23 @@ const Prodekan: React.FC = () => {
           плаќањето на фактурата
         </p>
         <div className="form-item-inputs">
-          <input type="text" placeholder="Датум" />
-          <input type="text" placeholder="Потпис" />
+          <input
+            type="date"
+            placeholder="Датум"
+            value={datumProdekan}
+            onChange={(e) => setDatumProdekan(e.target.value)}
+            readOnly={isSealed}
+          />
         </div>
       </div>
       <div className="form-buttons">
         <div></div>
         <div className="form-buttons-edit">
-          <button>Save</button>
-          <button>Edit</button>
-          <button>Delete</button>
+          {!isSealed && (
+            <button onClick={(e) => handleApproval(e)}>
+              Одобри ја фактурата
+            </button>
+          )}
         </div>
       </div>
     </form>
