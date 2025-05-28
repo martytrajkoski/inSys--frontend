@@ -115,7 +115,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                   className={`invoice-flag ${
                     role === "Технички секретар"
                       ? "created"
-                      : statusLabel
+                      : statusLabel === "Прочитано"
                       ? "read"
                       : "unread"
                   }`}
