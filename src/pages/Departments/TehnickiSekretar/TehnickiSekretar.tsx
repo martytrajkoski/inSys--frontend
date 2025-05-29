@@ -7,7 +7,8 @@ import CommentSectionRead from "../../../components/Comment-Section/Comment-Sect
 
 const TehnickiSekretar: React.FC = () => {
     const { br_faktura } = useParams<string>();
-
+    const [is_sealed, setIs_sealed] = useState<number>();
+    
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
     const [arhivski_br, setArhivski_br] = useState<string>('');
     const [br_fakturaa, setBr_fakturaa] = useState<number>();
@@ -35,6 +36,7 @@ const TehnickiSekretar: React.FC = () => {
             const response = await axiosClient.get(`/tehnickisekretar/show/${br_faktura}`)
 
             if(response.status === 201){
+                setIs_sealed(response.data.is_sealed);
                 setDocumentId(response.data.document.id);
                 setArhivski_br(response.data.document.arhivski_br);
                 setBr_fakturaa(response.data.document.br_faktura);
@@ -193,13 +195,17 @@ const TehnickiSekretar: React.FC = () => {
                             <span>Document.txt</span>
                         </div>
                         <div className="form-buttons-edit">
-                            {!created ? (
+                          {is_sealed === 0 && (
+                            <>
+                                {!created ? (
                                 <button type="submit">Save</button>
-                            ) : (
-                                <button onClick={updateTehnicki}>Edit</button>
-                            )}
-                            {created && (
-                                <button onClick={deleteTehnicki}>Delete</button>
+                                ) : (
+                                <>
+                                    <button onClick={updateTehnicki}>Edit</button>
+                                    <button onClick={deleteTehnicki}>Delete</button>
+                                </>
+                                )}
+                            </>
                             )}
                         </div>
                     </div>
