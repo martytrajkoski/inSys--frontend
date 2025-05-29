@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
+import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 
 const Smetkovodstvo: React.FC = () => {
     const { br_faktura } = useParams<string>();
@@ -12,6 +13,8 @@ const Smetkovodstvo: React.FC = () => {
     const [smetka, setSmetka] = useState<string>("");
     const [konto, setKonto] = useState<string>("");
     const [datum, setDatum] = useState<string>("");
+    const [review_comment, setReview_comment] = useState<string>();
+    const [status, setStatus] = useState<string>("pending");
 
     const [documentId, setDocumentId] = useState<number>();
     const [created, setCreated] = useState<boolean>();
@@ -36,6 +39,8 @@ const Smetkovodstvo: React.FC = () => {
                 setSmetka(response.data.document.smetka);
                 setKonto(response.data.document.konto);
                 setDatum(response.data.document.datum);
+                setStatus(response.data.document.status);
+                setReview_comment(response.data.document.review_comment);
                 setCreated(true);
             } else if (response.status === 404) {
                 setBrKarton(undefined);
@@ -47,6 +52,7 @@ const Smetkovodstvo: React.FC = () => {
                 setKonto("");
                 setDatum("");
                 setCreated(false);
+                setReview_comment('');
             }
 
         } catch (error) {
@@ -101,6 +107,7 @@ const Smetkovodstvo: React.FC = () => {
             );
 
             if (response.status === 201) {
+                setStatus('pending');
                 console.log("Smetkovodstvo updated");
             }
         } catch (error) {
@@ -280,6 +287,12 @@ const Smetkovodstvo: React.FC = () => {
                             {created && <button onClick={deleteSmetkovodstvo}>Delete</button>}
                         </div>
                     </div>
+
+                    {status !== "pending" ? (
+                        <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
+                    ):(
+                        <div></div>
+                    )}
                 </div>
             </form>
         </>

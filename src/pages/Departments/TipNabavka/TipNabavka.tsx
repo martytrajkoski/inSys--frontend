@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import BaratelNabavka from "../BaratelNabavka/BaratelNabavka";
+import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 
 const TipNabavka: React.FC = () => {
     const { br_faktura } = useParams<string>();
     const [tip, setTip] = useState<string>("javna");
     const [datum, setDatum] = useState<string>();
+    const [review_comment, setReview_comment] = useState<string>();
+    const [status, setStatus] = useState<string>("pending");
 
     const [brDogovor, setBrDogovor] = useState<number>();
     const [vaznostDo, setVaznostDo] = useState<string>();
@@ -16,12 +19,13 @@ const TipNabavka: React.FC = () => {
     const [istTip, setIstTip] = useState<number>();
     const [vkPotroseno, setVkPotroseno] = useState<number>();
 
+
     const [created, setCreated] = useState<boolean>();
     const [documentId, setDocumentId] = useState<number>();
 
     useEffect(() => {
         showTipNabavka();
-    }, []);
+    }, [status]);
 
     const showTipNabavka = async () => {
         try {
@@ -31,6 +35,9 @@ const TipNabavka: React.FC = () => {
                 const doc = response.data.document;
                 setTip(doc.tip);
                 setDatum(doc.datum);
+                setReview_comment(doc.review_comment);
+                setStatus(doc.status);
+                setDocumentId(doc.id)
 
                 if (doc.tip === "javna") {
                     setBrDogovor(doc.javna_nabavka.br_dogovor);
@@ -53,6 +60,7 @@ const TipNabavka: React.FC = () => {
                 setIstTip(undefined);
                 setVkPotroseno(undefined);
                 setCreated(false);
+                setReview_comment("");
             }
 
         } catch (error) {
@@ -109,6 +117,7 @@ const TipNabavka: React.FC = () => {
             })
 
             if(response.status === 201){
+                setStatus("pending");
                 console.log('TipNabavka is updated successfully');
             }
 
@@ -272,6 +281,12 @@ const TipNabavka: React.FC = () => {
                         )}
                     </div>
                 </div>
+
+                {status !== "pending" ? (
+                    <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
+                ):(
+                    <div></div>
+                )}
             </form>
             <BaratelNabavka/>
         </>
