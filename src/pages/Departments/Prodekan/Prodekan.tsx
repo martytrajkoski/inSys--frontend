@@ -1,11 +1,15 @@
 import React from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CommentSection from "../../../components/Comment-Section/Comment-Section";
+import SweetAlert from '../../../components/Sweet-Alert/Sweet-Alert';
 
 const Prodekan: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
+  const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -130,34 +134,40 @@ const Prodekan: React.FC = () => {
     }
   };
 
-  const handleApproval = (e: any) => {
+  const handleApproval = (e: React.FormEvent) => {
     e.preventDefault();
-    const confirmed = window.confirm(
-      "Дали сте сигурни дека сакате да ја одобрите фактурата?"
-    );
-    if (confirmed) {
-      storeProdekan(e);
-      console.log("Фактурата е одобрена.");
-    }
+    setShowConfirmModal(true);
   };
 
-  const storeProdekan = async (e: any) => {
-    e.preventDefault();
-    try {
-      const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
-        br_faktura: Number(br_faktura),
-        status: "approved",
-        is_sealed: true,
-        review_comment: ''
-      });
-
-      if (response.status === 201) {
-        console.log("Faktura is sealed");
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const confirmApproval = async () => {
+    setShowConfirmModal(false);
+    await storeProdekan();
+    console.log("Фактурата е одобрена.");
   };
+
+  const cancelApproval = () => {
+    setShowConfirmModal(false);
+  };
+
+
+  const storeProdekan = async () => {
+  try {
+    const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
+      br_faktura: Number(br_faktura),
+      status: "approved",
+      is_sealed: true,
+      review_comment: ''
+    });
+
+    if (response.status === 201) {
+      console.log("Фактурата е успешно запечатена.");
+      navigate('/');
+    }
+  } catch (error) {
+    console.error("Грешка при ажурирање на статусот:", error);
+  }
+};
+
 
   useEffect(() => {
     if (br_faktura) {
@@ -215,12 +225,14 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
 
-      <CommentSection
-        brFaktura={br_faktura ?? ""}
-        endpoint="/prodekan/statustehnicki"
-        initialStatus={statusTehnicki}
-        initialComment={commentTehnicki}
-      />
+      {!isSealed && (
+        <CommentSection
+          brFaktura={br_faktura ?? ""}
+          endpoint="/prodekan/statustehnicki"
+          initialStatus={statusTehnicki}
+          initialComment={commentTehnicki}
+        />
+      )}
 
       <div className="form-item">
         <h3>2. Информации за тип на набавка (одделение за јавна набавка)</h3>
@@ -301,12 +313,14 @@ const Prodekan: React.FC = () => {
         </div>
       )}
 
-      <CommentSection
-        brFaktura={br_faktura ?? ""}
-        endpoint="/prodekan/statustipnabavka"
-        initialStatus={statusTipNabavka}
-        initialComment={commentTipNabavka}
-      />
+      {!isSealed && (
+        <CommentSection
+          brFaktura={br_faktura ?? ""}
+          endpoint="/prodekan/statustipnabavka"
+          initialStatus={statusTipNabavka}
+          initialComment={commentTipNabavka}
+        />
+      )}
 
       <div className="form-item">
         <h3>
@@ -349,15 +363,17 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
 
-      <CommentSection
-        brFaktura={br_faktura ?? ""}
-        endpoint="/prodekan/statusbaratelnabavka"
-        initialStatus={statusBaratel}
-        initialComment={commentBaratel}
-      />
+      {!isSealed && (
+        <CommentSection
+          brFaktura={br_faktura ?? ""}
+          endpoint="/prodekan/statusbaratelnabavka"
+          initialStatus={statusBaratel}
+          initialComment={commentBaratel}
+        />
+      )}
 
       <div className="form-item">
-        <h3>4. Информации од сметководство</h3>
+        <h3>4. Информации од сметководство (сметководство) </h3>
         <div className="form-item-inputs">
           <input
             type="text"
@@ -400,13 +416,14 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
 
-      <CommentSection
-        brFaktura={br_faktura ?? ""}
-        endpoint="/prodekan/statussmetkovodstvo"
-        initialStatus={statusSmetkovodstvo}
-        initialComment={commentSmetkovodstvo}
-      />
-
+      {!isSealed && (
+        <CommentSection
+          brFaktura={br_faktura ?? ""}
+          endpoint="/prodekan/statussmetkovodstvo"
+          initialStatus={statusSmetkovodstvo}
+          initialComment={commentSmetkovodstvo}
+        />
+      )}
       <div className="form-item">
         <h3>5. Одобрување за плаќање на фактура (продекан за финансии)</h3>
         <p>
@@ -426,13 +443,18 @@ const Prodekan: React.FC = () => {
       <div className="form-buttons">
         <div></div>
         <div className="form-buttons-edit">
-          {!isSealed && (
+          {!isSealed && (     
             <button onClick={(e) => handleApproval(e)}>
               Одобри ја фактурата
             </button>
           )}
         </div>
       </div>
+      <SweetAlert
+        visible={showConfirmModal}
+        onConfirm={confirmApproval}
+        onCancel={cancelApproval}
+      />
     </form>
   );
 };

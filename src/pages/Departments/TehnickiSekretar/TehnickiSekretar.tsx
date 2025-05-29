@@ -83,7 +83,8 @@ const TehnickiSekretar: React.FC = () => {
             })
 
             if(response.status === 201){
-                console.log('Tehnicki Sekretar and Faktuta created')  
+                console.log('Tehnicki Sekretar and Faktuta created')
+                navigate('/');  
                 setDocumentId(response.data.document.id)
                 setCreated(true);
             }
