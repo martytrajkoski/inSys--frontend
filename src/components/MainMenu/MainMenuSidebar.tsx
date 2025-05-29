@@ -26,6 +26,12 @@ const MainMenuSidebar: React.FC = () => {
           >
             Преглед на издавачи
           </NavLink>
+          <NavLink
+            to={"/archive"}
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Архива на фактури
+          </NavLink>
         </div>
         <div className="sidebar-user">
           <img src={logo} alt="Лого" />

@@ -13,6 +13,7 @@ import SignIn from "../pages/Sign/SignIn";
 import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
+import Arhiva from "../pages/MainMenu/Arhiva";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes: React.FC = () => {
             <Route index element={<PregledFakturi/>}/>
             <Route path="lista-barateli" element={<Barateli />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
+            <Route path="archive" element={<Arhiva/>}/>
           </Route>
           <Route element={<Department />}>
             <Route path="tehnickisekretar" element={<TehnickiSekretar />} />

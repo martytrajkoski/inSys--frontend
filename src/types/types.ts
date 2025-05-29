@@ -25,7 +25,7 @@ export interface FakturaType {
   status: string;
   review_comment: string;
   faktura_id: number;
-  is_sealed: boolean;
+  is_sealed: number;
   approved_by: number;
   approved_at: string;
   created_at: string;
