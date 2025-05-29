@@ -72,6 +72,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
       <div className="invoice-card">
         <div className="invoice-card-items">
           <div className="invoice-card-item" style={{background:'#D9D9D9', cursor: "auto"}}>
+            <div>Архивски број</div>
             <div>Број на фактура</div>
             <div>Датум</div>
             <div>Статус</div>
@@ -79,25 +80,16 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
           {fakturas.map((item, index) => {
             let statusLabel = "";
 
-            if (role === "Технички секретар") {
-              statusLabel = "Креирано";
-            } else {
-              let isRead = false;
-              switch (role) {
-                case "Јавна набавка":
-                  isRead = !!item.tip_nabavka?.read;
-                  break;
-                case "Барател на набавка":
-                  isRead = !!item.baratel_javna_nabavka?.read;
-                  break;
-                case "Сметководство":
-                  isRead = !!item.smetkovodstvo?.read;
-                  break;
-                case "Продекан за финансии":
-                  isRead = item.approved_at !== null;
-                  break;
-              }
-              statusLabel = isRead ? "Прочитано" : "Непрочитано";
+            switch (item.status) {
+              case "approved":
+                statusLabel = "Одобрена";
+                break;
+              case "rejected":
+                statusLabel = "Одбиена";
+                break;
+              default:
+                statusLabel = "Чекање";
+                break;
             }
 
             return (
@@ -106,20 +98,22 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                 className="invoice-card-item"
                 key={index}
               >
+                <div>{item.tehnicki_sekretar.arhivski_br}</div>                
                 <div>{item.br_faktura}</div>
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                <div
-                  className={`invoice-flag ${
-                    role === "Технички секретар"
-                      ? "created"
-                      : statusLabel === "Прочитано"
-                      ? "read"
-                      : "unread"
-                  }`}
-                >
-                  <p>{statusLabel}</p>
+                <div> {item.is_sealed ? (
+                  <p className="sealed">Запечатена</p>
+                ) : (  
+                  <p className={`invoice-flag ${
+                    statusLabel === "approved"
+                      ? "approved"
+                      : statusLabel === "rejected"
+                      ? "rejected"
+                      : "pending"
+                  }`}>{statusLabel}</p>
+                )}
                 </div>
               </Link>
             );
