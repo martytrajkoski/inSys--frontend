@@ -5,292 +5,310 @@ import BaratelNabavka from "../BaratelNabavka/BaratelNabavka";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 
 const TipNabavka: React.FC = () => {
-    const { br_faktura } = useParams<string>();
-    const [tip, setTip] = useState<string>("javna");
-    const [datum, setDatum] = useState<string>();
-    const [review_comment, setReview_comment] = useState<string>();
-    const [status, setStatus] = useState<string>("pending");
+  const { br_faktura } = useParams<string>();
+  const [is_sealed, setIs_sealed] = useState<number>();
 
-    const [brDogovor, setBrDogovor] = useState<number>();
-    const [vaznostDo, setVaznostDo] = useState<string>();
-    const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
-    const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
-    
-    const [istTip, setIstTip] = useState<number>();
-    const [vkPotroseno, setVkPotroseno] = useState<number>();
+  const [tip, setTip] = useState<string>("javna");
+  const [datum, setDatum] = useState<string>();
+  const [review_comment, setReview_comment] = useState<string>();
+  const [status, setStatus] = useState<string>("pending");
 
+  const [brDogovor, setBrDogovor] = useState<number>();
+  const [vaznostDo, setVaznostDo] = useState<string>();
+  const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
+  const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
 
-    const [created, setCreated] = useState<boolean>();
-    const [documentId, setDocumentId] = useState<number>();
+  const [istTip, setIstTip] = useState<number>();
+  const [vkPotroseno, setVkPotroseno] = useState<number>();
 
-    useEffect(() => {
-        showTipNabavka();
-    }, [status]);
+  const [created, setCreated] = useState<boolean>();
+  const [documentId, setDocumentId] = useState<number>();
 
-    const showTipNabavka = async () => {
-        try {
-            const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
+  useEffect(() => {
+    showTipNabavka();
+  }, [status]);
 
-            if (response.status === 201) {
-                const doc = response.data.document;
-                setTip(doc.tip);
-                setDatum(doc.datum);
-                setReview_comment(doc.review_comment);
-                setStatus(doc.status);
-                setDocumentId(doc.id)
+  const showTipNabavka = async () => {
+    try {
+      const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
 
-                if (doc.tip === "javna") {
-                    setBrDogovor(doc.javna_nabavka.br_dogovor);
-                    setVaznostDo(doc.javna_nabavka.vaznost_do);
-                    setSoglasnoDogovor(doc.javna_nabavka.soglasno_dogovor);
-                    setOstanatiRaspSredstva(doc.javna_nabavka.ostanati_rasp_sredstva);
-                } else if (doc.tip === "tender") {
-                    setIstTip(doc.tender.ist_tip);
-                    setVkPotroseno(doc.tender.vk_potroseno);
+      if (response.status === 201) {
+        const doc = response.data.document;
+        setIs_sealed(response.data.is_sealed);
+        setTip(doc.tip);
+        setDatum(doc.datum);
+        setReview_comment(doc.review_comment);
+        setStatus(doc.status);
+        setDocumentId(doc.id);
+
+        if (doc.tip === "javna") {
+          setBrDogovor(doc.javna_nabavka.br_dogovor);
+          setVaznostDo(doc.javna_nabavka.vaznost_do);
+          setSoglasnoDogovor(doc.javna_nabavka.soglasno_dogovor);
+          setOstanatiRaspSredstva(doc.javna_nabavka.ostanati_rasp_sredstva);
+        } else if (doc.tip === "tender") {
+          setIstTip(doc.tender.ist_tip);
+          setVkPotroseno(doc.tender.vk_potroseno);
+        }
+        setCreated(true);
+      } else if (response.status === 404) {
+        setTip("javna");
+        setDatum(undefined);
+        setBrDogovor(undefined);
+        setVaznostDo(undefined);
+        setSoglasnoDogovor(undefined);
+        setOstanatiRaspSredstva(undefined);
+        setIstTip(undefined);
+        setVkPotroseno(undefined);
+        setCreated(false);
+        setReview_comment("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const storeTipNabavka = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.post("/tipnabavka/addDocument", {
+        br_faktura: parseInt(br_faktura || "0", 10),
+        tip: tip,
+        read: true,
+        datum: datum,
+
+        br_dogovor: brDogovor,
+        vaznost_do: vaznostDo,
+        ostanati_rasp_sredstva: ostanatiRaspSredstva,
+        soglasno_dogovor: soglasnoDogovor,
+
+        ist_tip: istTip,
+        vk_potroseno: vkPotroseno,
+      });
+
+      if (response.status === 201) {
+        console.log("Tip Nabavka created");
+        setCreated(true);
+        setDocumentId(response.data.document[0].id);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateTipNabavka = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.patch(
+        `/tipnabavka/updateTip/${documentId}`,
+        {
+          br_faktura: parseInt(br_faktura || "0", 10),
+          tip: tip,
+          read: true,
+          datum: datum,
+
+          br_dogovor: brDogovor,
+          vaznost_do: vaznostDo,
+          ostanati_rasp_sredstva: ostanatiRaspSredstva,
+          soglasno_dogovor: soglasnoDogovor,
+
+          ist_tip: istTip,
+          vk_potroseno: vkPotroseno,
+        }
+      );
+
+      if (response.status === 201) {
+        setStatus("pending");
+        console.log("TipNabavka is updated successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteTipNabavka = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.delete(
+        `/tipnabavka/destroy/${documentId}`
+      );
+
+      if (response.status === 201) {
+        console.log("Tip nabavka is deleted");
+
+        setCreated(false);
+        setTip("");
+        setDatum("");
+        setBrDogovor(undefined);
+        setVaznostDo("");
+        setSoglasnoDogovor(undefined);
+        setOstanatiRaspSredstva(undefined);
+        setIstTip(undefined);
+        setVkPotroseno(undefined);
+        setDocumentId(undefined);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <>
+      <form onSubmit={storeTipNabavka}>
+        <div className="form-item">
+          <h3>Информации за тип на набавка </h3>
+          <div className="form-item-select">
+            <p>Содржината на фактурата, предметот на наплата е согласно:</p>
+            <select value={tip} onChange={(e) => setTip(e.target.value)}>
+              <option value="javna">Јавна набавка</option>
+              <option value="tender">Набавка без тендер</option>
+            </select>
+          </div>
+        </div>
+        {tip === "javna" && (
+          <div className="form-item">
+            <h3>
+              <i>(За јавна набавка)</i>
+            </h3>
+            <div className="form-item-inputs">
+              <input
+                type="number"
+                placeholder="Број на договор"
+                value={brDogovor}
+                onChange={(e) => setBrDogovor(Number(e.target.value))}
+              />
+              <input
+                type="date"
+                placeholder="Важност на договор до"
+                value={vaznostDo}
+                onChange={(e) => setVaznostDo(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Останати расположливи средства"
+                value={ostanatiRaspSredstva}
+                onChange={(e) =>
+                  setOstanatiRaspSredstva(Number(e.target.value))
                 }
-                setCreated(true);
-            }
-            else if (response.status === 404) {
-                setTip("javna");
-                setDatum(undefined);
-                setBrDogovor(undefined);
-                setVaznostDo(undefined);
-                setSoglasnoDogovor(undefined);
-                setOstanatiRaspSredstva(undefined);
-                setIstTip(undefined);
-                setVkPotroseno(undefined);
-                setCreated(false);
-                setReview_comment("");
-            }
-
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const storeTipNabavka = async (e:any) => {
-        e.preventDefault();
-
-        try {
-            const response = await axiosClient.post("/tipnabavka/addDocument", {
-                br_faktura: parseInt(br_faktura || "0", 10),
-                tip: tip,
-                read: true,
-                datum: datum,
-
-                br_dogovor: brDogovor,
-                vaznost_do: vaznostDo,
-                ostanati_rasp_sredstva: ostanatiRaspSredstva,
-                soglasno_dogovor: soglasnoDogovor,
-
-                ist_tip: istTip,
-                vk_potroseno: vkPotroseno,
-            });
-
-            if (response.status === 201) {
-                console.log("Tip Nabavka created");
-                setCreated(true);
-                setDocumentId(response.data.document[0].id);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const updateTipNabavka = async(e: any) => {
-        e.preventDefault();
-
-        try {
-            const response = await axiosClient.patch(`/tipnabavka/updateTip/${documentId}`,{
-                br_faktura: parseInt(br_faktura || "0", 10),
-                tip: tip,
-                read: true,
-                datum: datum,
-
-                br_dogovor: brDogovor,
-                vaznost_do: vaznostDo,
-                ostanati_rasp_sredstva: ostanatiRaspSredstva,
-                soglasno_dogovor: soglasnoDogovor,
-
-                ist_tip: istTip,
-                vk_potroseno: vkPotroseno,
-            })
-
-            if(response.status === 201){
-                setStatus("pending");
-                console.log('TipNabavka is updated successfully');
-            }
-
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    const deleteTipNabavka = async(e:any) => {
-        e.preventDefault();
-
-        try {
-            const response = await axiosClient.delete(`/tipnabavka/destroy/${documentId}`)
-
-            if(response.status===201){
-                console.log('Tip nabavka is deleted');
-
-                setCreated(false);
-                setTip('');
-                setDatum('');
-                setBrDogovor(undefined);
-                setVaznostDo('');
-                setSoglasnoDogovor(undefined);
-                setOstanatiRaspSredstva(undefined);
-                setIstTip(undefined);
-                setVkPotroseno(undefined);
-                setDocumentId(undefined);
-
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    return (
-        <>
-            <form onSubmit={storeTipNabavka}>
-                <div className="form-item">
-                    <h3>Информации за тип на набавка </h3>
-                    <div className="form-item-select">
-                        <p>Содржината на фактурата, предметот на наплата е согласно:</p>
-                        <select value={tip} onChange={(e) => setTip(e.target.value)}>
-                            <option value="javna">Јавна набавка</option>
-                            <option value="tender">Набавка без тендер</option>
-                        </select>
-                    </div>
+              />
+            </div>
+            <div className="form-item-radio">
+              <p>
+                Описот на сите ставки и единечната цена во фактурата е согласно
+                договорот:
+              </p>
+              <div className="form-radio">
+                <div>
+                  <input
+                    type="radio"
+                    name="edinecna_cena"
+                    checked={soglasnoDogovor === 1}
+                    onChange={() => setSoglasnoDogovor(1)}
+                  />
+                  <label>Да</label>
                 </div>
-                {tip === "javna" && (
-                    <div className="form-item">
-                        <h3><i>(За јавна набавка)</i></h3>
-                        <div className="form-item-inputs">
-                            <input
-                                type="number"
-                                placeholder="Број на договор"
-                                value={brDogovor}
-                                onChange={(e) => setBrDogovor(Number(e.target.value))}
-                            />
-                            <input
-                                type="date"
-                                placeholder="Важност на договор до"
-                                value={vaznostDo}
-                                onChange={(e) => setVaznostDo(e.target.value)}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Останати расположливи средства"
-                                value={ostanatiRaspSredstva}
-                                onChange={(e) => setOstanatiRaspSredstva(Number(e.target.value))}
-                            />
-                        </div>
-                        <div className="form-item-radio">
-                            <p>Описот на сите ставки и единечната цена во фактурата е согласно договорот:</p>
-                            <div className="form-radio">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        name="edinecna_cena"
-                                        checked={soglasnoDogovor === 1}
-                                        onChange={() => setSoglasnoDogovor(1)}
-                                    />
-                                    <label>Да</label>
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        name="edinecna_cena"
-                                        checked={soglasnoDogovor === 0}
-                                        onChange={() => setSoglasnoDogovor(0)}
-                                    />
-                                    <label>Не</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-item-inputs">
-                            <input
-                                type="date"
-                                placeholder="Датум..."
-                                value={datum}
-                                onChange={(e) => setDatum(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                )}
-
-                {tip === "tender" && (
-                    <div className="form-item">
-                        <h3><i>(За јавна набавка без тендер)</i></h3>
-                        <div className="form-item-radio">
-                            <p>Дали до сега е набавувана стока или услуга од ист тип:</p>
-                            <div className="form-radio">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        name="isti_tip_stoka"
-                                        checked={istTip === 1}
-                                        onChange={() => setIstTip(1)}
-                                    />
-                                    <label>Да</label>
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        name="isti_tip_stoka"
-                                        checked={istTip === 0}
-                                        onChange={() => setIstTip(0)}
-                                    />
-                                    <label>Не</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-item-inputs">
-                            <input
-                                type="number"
-                                placeholder="Вкупно потрошени средства по основ на набавка од тој тип"
-                                value={vkPotroseno}
-                                onChange={(e) => setVkPotroseno(Number(e.target.value))}
-                            />
-                        </div>
-                         <div className="form-item-inputs">
-                            <input
-                                type="date"
-                                placeholder="Датум..."
-                                value={datum}
-                                onChange={(e) => setDatum(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                )}
-
-
-                <div className="form-buttons">
-                    <div></div>
-                    <div className="form-buttons-edit">
-                       {!created ? (
-                            <button type="submit">Save</button>
-                        ) : (
-                            <button onClick={updateTipNabavka}>Edit</button>
-                        )}
-                        {created && (
-                            <button onClick={deleteTipNabavka}>Delete</button>
-                        )}
-                    </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="edinecna_cena"
+                    checked={soglasnoDogovor === 0}
+                    onChange={() => setSoglasnoDogovor(0)}
+                  />
+                  <label>Не</label>
                 </div>
+              </div>
+            </div>
+            <div className="form-item-inputs">
+              <input
+                type="date"
+                placeholder="Датум..."
+                value={datum}
+                onChange={(e) => setDatum(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
 
-                {status !== "pending" ? (
-                    <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
-                ):(
-                    <div></div>
+        {tip === "tender" && (
+          <div className="form-item">
+            <h3>
+              <i>(За јавна набавка без тендер)</i>
+            </h3>
+            <div className="form-item-radio">
+              <p>Дали до сега е набавувана стока или услуга од ист тип:</p>
+              <div className="form-radio">
+                <div>
+                  <input
+                    type="radio"
+                    name="isti_tip_stoka"
+                    checked={istTip === 1}
+                    onChange={() => setIstTip(1)}
+                  />
+                  <label>Да</label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="isti_tip_stoka"
+                    checked={istTip === 0}
+                    onChange={() => setIstTip(0)}
+                  />
+                  <label>Не</label>
+                </div>
+              </div>
+            </div>
+            <div className="form-item-inputs">
+              <input
+                type="number"
+                placeholder="Вкупно потрошени средства по основ на набавка од тој тип"
+                value={vkPotroseno}
+                onChange={(e) => setVkPotroseno(Number(e.target.value))}
+              />
+            </div>
+            <div className="form-item-inputs">
+              <input
+                type="date"
+                placeholder="Датум..."
+                value={datum}
+                onChange={(e) => setDatum(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="form-buttons">
+          <div></div>
+          <div className="form-buttons-edit">
+            {is_sealed === 0 && (
+              <>
+                {!created ? (
+                  <button type="submit">Save</button>
+                ) : (
+                  <>
+                    <button onClick={updateTipNabavka}>Edit</button>
+                    <button onClick={deleteTipNabavka}>Delete</button>
+                  </>
                 )}
-            </form>
-            <BaratelNabavka/>
-        </>
-    );
+              </>
+            )}
+          </div>
+        </div>
+
+        {status !== "pending" ? (
+          <CommentSectionRead
+            review_comment={review_comment || ""}
+            status={status || "pending"}
+          />
+        ) : (
+          <div></div>
+        )}
+      </form>
+      <BaratelNabavka />
+    </>
+  );
 };
 
 export default TipNabavka;

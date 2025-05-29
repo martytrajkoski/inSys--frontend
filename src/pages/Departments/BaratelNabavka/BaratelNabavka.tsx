@@ -6,6 +6,8 @@ import CommentSectionRead from "../../../components/Comment-Section/Comment-Sect
 
 const BaratelNabavka: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
+  const [is_sealed, setIs_sealed] = useState<number>();
+
   const [brKarton, setBrKarton] = useState<number>();
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
@@ -22,7 +24,7 @@ const BaratelNabavka: React.FC = () => {
     fetchBarateli();
     showBaratel();
   }, [status]);
-  
+
   const fetchBarateli = async () => {
     try {
       const response = await axiosClient.get("/barateli/");
@@ -32,11 +34,14 @@ const BaratelNabavka: React.FC = () => {
     }
   };
 
-  const showBaratel = async() => {
+  const showBaratel = async () => {
     try {
-      const response = await axiosClient.get(`/baratelnabavka/show/${br_faktura}`)
+      const response = await axiosClient.get(
+        `/baratelnabavka/show/${br_faktura}`
+      );
 
-      if(response.status === 201){
+      if (response.status === 201) {
+        setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
         setBrKarton(response.data.document.br_karton);
         setNazivProekt(response.data.document.naziv_proekt);
@@ -46,21 +51,19 @@ const BaratelNabavka: React.FC = () => {
         setReview_comment(response.data.document.review_comment);
         setStatus(response.data.document.status);
         setCreated(true);
-      }
-      else if(response.status === 404){
+      } else if (response.status === 404) {
         setBrKarton(undefined);
         setNazivProekt("");
         setPoteklo("");
         setDatum("");
         setBaratelId(undefined);
         setCreated(false);
-        setReview_comment('');
+        setReview_comment("");
       }
-
     } catch (error) {
       console.error(error);
     }
-  }  
+  };
 
   const storeBaratelNabavka = async (e: any) => {
     e.preventDefault();
@@ -102,7 +105,7 @@ const BaratelNabavka: React.FC = () => {
       );
 
       if (response.status == 201) {
-        setStatus('pending');
+        setStatus("pending");
         console.log("BaratelNabavka is updated successfully");
       }
     } catch (error) {
@@ -110,26 +113,27 @@ const BaratelNabavka: React.FC = () => {
     }
   };
 
-  const deleteBaratelNabavka = async(e:any) => {
+  const deleteBaratelNabavka = async (e: any) => {
     e.preventDefault();
 
     try {
-      const response = await axiosClient.delete(`/baratelnabavka/destroy/${documentId}`);
+      const response = await axiosClient.delete(
+        `/baratelnabavka/destroy/${documentId}`
+      );
 
-      if(response.status === 201){
+      if (response.status === 201) {
         setDocumentId(undefined);
         setCreated(false);
         setBaratelId(undefined);
         setBrKarton(0);
-        setNazivProekt('');
-        setPoteklo('');
-        setDatum('');
+        setNazivProekt("");
+        setPoteklo("");
+        setDatum("");
       }
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   return (
     <>
@@ -209,21 +213,28 @@ const BaratelNabavka: React.FC = () => {
             <div className="form-buttons">
               <div></div>
               <div className="form-buttons-edit">
-                {!created ? (
-                  <button type="submit">Save</button>
-                ) : (
-                  <button onClick={updateBaratelNabavka}>Edit</button>
-                )}
-                {created && (
-                  <button onClick={deleteBaratelNabavka}>Delete</button>
+                {is_sealed === 0 && (
+                  <>
+                    {!created ? (
+                      <button type="submit">Save</button>
+                    ) : (
+                      <>
+                        <button onClick={updateBaratelNabavka}>Edit</button>
+                        <button onClick={deleteBaratelNabavka}>Delete</button>
+                      </>
+                    )}
+                  </>
                 )}
               </div>
             </div>
           </div>
           {status !== "pending" ? (
-              <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
-          ):(
-              <div></div>
+            <CommentSectionRead
+              review_comment={review_comment || ""}
+              status={status || "pending"}
+            />
+          ) : (
+            <div></div>
           )}
         </div>
       </form>

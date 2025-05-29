@@ -57,7 +57,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
         }
       }
 
-      return false;
+      return true;
     });
 
     setFakturas(filtered);
