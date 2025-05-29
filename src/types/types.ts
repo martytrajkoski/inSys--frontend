@@ -17,6 +17,7 @@ export interface RoleType {
 
 export interface FakturaType {
   id: number;
+  arhivski_br: string;
   br_faktura: number;
   basic_info_id: number;
   smetkovodstvo_id: number;
