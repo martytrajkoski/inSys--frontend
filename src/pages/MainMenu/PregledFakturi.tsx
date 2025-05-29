@@ -85,6 +85,9 @@ const PregledFakturi: React.FC = () => {
               let isRead = false;
 
               switch (role) {
+                case "Технички секретар":
+                  isRead = true;
+                  break;
                 case "Јавна набавка":
                   isRead = !!item.tip_nabavka?.read;
                   break;

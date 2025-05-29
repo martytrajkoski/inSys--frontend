@@ -71,7 +71,10 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
     <div className="invoice-component">
       <div className="invoice-card">
         <div className="invoice-card-items">
-          <div className="invoice-card-item" style={{background:'#D9D9D9', cursor: "auto"}}>
+          <div
+            className="invoice-card-item"
+            style={{ background: "#D9D9D9", cursor: "auto" }}
+          >
             <div>Архивски број</div>
             <div>Број на фактура</div>
             <div>Датум</div>
@@ -98,22 +101,28 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                 className="invoice-card-item"
                 key={index}
               >
-                <div>{item.tehnicki_sekretar.arhivski_br}</div>                
+                <div>{item.tehnicki_sekretar.arhivski_br}</div>
                 <div>{item.br_faktura}</div>
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                <div> {item.is_sealed ? (
-                  <p className="sealed">Запечатена</p>
-                ) : (  
-                  <p className={`invoice-flag ${
-                    statusLabel === "approved"
-                      ? "approved"
-                      : statusLabel === "rejected"
-                      ? "rejected"
-                      : "pending"
-                  }`}>{statusLabel}</p>
-                )}
+                <div>
+                  {" "}
+                  {item.is_sealed ? (
+                    <p className="sealed">Запечатена</p>
+                  ) : (
+                    <p
+                      className={`invoice-flag ${
+                        statusLabel === "approved"
+                          ? "approved"
+                          : statusLabel === "rejected"
+                          ? "rejected"
+                          : "pending"
+                      }`}
+                    >
+                      {statusLabel}
+                    </p>
+                  )}
                 </div>
               </Link>
             );
