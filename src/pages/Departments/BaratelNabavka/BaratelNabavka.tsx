@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import type { Baratel } from "../../../types/types";
+import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 
 const BaratelNabavka: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
@@ -11,6 +12,8 @@ const BaratelNabavka: React.FC = () => {
   const [datum, setDatum] = useState<string>("");
   const [baratelId, setBaratelId] = useState<number>();
   const [barateli, setBarateli] = useState<Baratel[]>([]);
+  const [review_comment, setReview_comment] = useState<string>();
+  const [status, setStatus] = useState<string>("pending");
 
   const [documentId, setDocumentId] = useState<number>();
   const [created, setCreated] = useState<boolean>();
@@ -18,7 +21,7 @@ const BaratelNabavka: React.FC = () => {
   useEffect(() => {
     fetchBarateli();
     showBaratel();
-  }, []);
+  }, [status]);
   
   const fetchBarateli = async () => {
     try {
@@ -40,6 +43,8 @@ const BaratelNabavka: React.FC = () => {
         setPoteklo(response.data.document.poteklo);
         setDatum(response.data.document.datum);
         setBaratelId(response.data.document.baratel_id);
+        setReview_comment(response.data.document.review_comment);
+        setStatus(response.data.document.status);
         setCreated(true);
       }
       else if(response.status === 404){
@@ -49,6 +54,7 @@ const BaratelNabavka: React.FC = () => {
         setDatum("");
         setBaratelId(undefined);
         setCreated(false);
+        setReview_comment('');
       }
 
     } catch (error) {
@@ -96,6 +102,7 @@ const BaratelNabavka: React.FC = () => {
       );
 
       if (response.status == 201) {
+        setStatus('pending');
         console.log("BaratelNabavka is updated successfully");
       }
     } catch (error) {
@@ -168,7 +175,7 @@ const BaratelNabavka: React.FC = () => {
                 <input
                   type="radio"
                   name="poteklo"
-                  value="МФС"
+                  value="Средства на МФС"
                   checked={poteklo === "Средства на МФС"}
                   onChange={(e) => setPoteklo(e.target.value)}
                 />
@@ -213,6 +220,11 @@ const BaratelNabavka: React.FC = () => {
               </div>
             </div>
           </div>
+          {status !== "pending" ? (
+              <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
+          ):(
+              <div></div>
+          )}
         </div>
       </form>
     </>

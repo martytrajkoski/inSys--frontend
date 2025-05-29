@@ -3,6 +3,7 @@ import ImportFile from "../../../components/ImportFile/ImportFile";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { IzdavaciType } from "../../../types/types";
 import { useNavigate, useParams } from "react-router-dom";
+import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 
 const TehnickiSekretar: React.FC = () => {
     const { br_faktura } = useParams<string>();
@@ -16,6 +17,8 @@ const TehnickiSekretar: React.FC = () => {
     const [iznos_dogovor, setIznos_dogovor] = useState<number>();
     const [vk_vrednost, setVk_vrednost] = useState<number>();
     const [datum, setDatum] = useState<string>('');
+    const [review_comment, setReview_comment] = useState<string>();
+    const [status, setStatus] = useState<string>("pending");
     const [scan_file, setScan_file] = useState<string>('dqwdq');
 
     const [created, setCreated] = useState<boolean>();
@@ -41,6 +44,8 @@ const TehnickiSekretar: React.FC = () => {
                 setVk_vrednost(response.data.document.vk_vrednost);
                 setDatum(response.data.document.datum);
                 setScan_file(response.data.document.scan_file);
+                setReview_comment(response.data.document.review_comment);
+                setStatus(response.data.document.status)
                 setCreated(true);
             }
             else if(response.status === 404){
@@ -54,6 +59,7 @@ const TehnickiSekretar: React.FC = () => {
                 setScan_file('');
                 setDocumentId(undefined);
                 setCreated(false);
+                setReview_comment('');
             }
 
         } catch (error) {
@@ -100,10 +106,11 @@ const TehnickiSekretar: React.FC = () => {
                 "iznos_dogovor": iznos_dogovor,
                 "vk_vrednost": vk_vrednost,
                 "datum": datum,
-                "scan_file": scan_file
+                "scan_file": scan_file,
             });
 
             if(response.status === 201){
+                setStatus('pending');
                 console.log('Tehnicki Sekretar and Faktura updated successfully');
             }
 
@@ -156,7 +163,7 @@ const TehnickiSekretar: React.FC = () => {
     useEffect(()=>{
         fetchIzdavaci();
         fetchTehnicki();
-    }, [])
+    }, [status])
 
     return(
         <>
@@ -195,6 +202,11 @@ const TehnickiSekretar: React.FC = () => {
                             )}
                         </div>
                     </div>
+                    {status !== "pending" ? (
+                        <CommentSectionRead review_comment={review_comment || ''} status={status || 'pending'}/>
+                    ):(
+                        <div></div>
+                    )}
                 </div>
             </form>
             {openImportModal && (
