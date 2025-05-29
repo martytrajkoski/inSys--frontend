@@ -36,29 +36,54 @@
                 &:not(:last-child) {
                     border-bottom: 1px solid #D9D9D9;
                 }
-
+                
                 .sealed {
                     padding: 4px 8px;
                     border-radius: 5px;
+                    margin: 0 15px;
                     font-weight: bold;
                     font-size: 16px;
-                    background-color: #fafc85;
-                    color: #878a00;
+                    background-color: #d4edda;
+                    color: #155724;
                 }
-            
                 
-                .invoice-flag {
+                
+                .invoice-status-department-flag {
                     padding: 4px 8px;
+                    margin: 0 15px;
                     border-radius: 5px;
                     font-weight: bold;
                     font-size: 16px;
-
+                    
                     &.approved {
                         background-color: #d4edda;
                         color: #155724;
                     }
-
+                    
                     &.rejected {
+                        background-color: #f8d7da;
+                        color: #721c24;
+                    }
+                    
+                    &.pending {
+                        background-color: #cce5ff;
+                        color: #004085;
+                    }
+                }
+                
+                .invoice-status-faktura-flag {
+                    padding: 4px 8px;
+                    margin: 0 15px;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 16px;
+                    
+                    &.approved {
+                        background-color: #fafc85;
+                        color: #4b4d00;
+                    }
+
+                    &.ready {
                         background-color: #f8d7da;
                         color: #721c24;
                     }
