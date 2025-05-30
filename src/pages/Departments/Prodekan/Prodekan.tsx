@@ -142,7 +142,6 @@ const Prodekan: React.FC = () => {
   const confirmApproval = async () => {
     setShowConfirmModal(false);
     await storeProdekan();
-    console.log("Фактурата е одобрена.");
   };
 
   const cancelApproval = () => {

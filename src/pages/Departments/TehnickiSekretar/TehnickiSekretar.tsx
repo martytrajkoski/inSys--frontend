@@ -7,7 +7,7 @@ import CommentSectionRead from "../../../components/Comment-Section/Comment-Sect
 
 const TehnickiSekretar: React.FC = () => {
     const { br_faktura } = useParams<string>();
-    const [is_sealed, setIs_sealed] = useState<number>();
+    const [is_sealed, setIs_sealed] = useState<number>(0);
     
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
     const [arhivski_br, setArhivski_br] = useState<string>('');
@@ -37,7 +37,7 @@ const TehnickiSekretar: React.FC = () => {
 
             if(response.status === 201){
                 setIs_sealed(response.data.is_sealed);
-                setDocumentId(response.data.document.id);
+                setDocumentId(response.data.document.id || undefined);
                 setArhivski_br(response.data.document.arhivski_br);
                 setBr_fakturaa(response.data.document.br_faktura);
                 setBr_dogovor(response.data.document.br_dogovor);
@@ -51,6 +51,8 @@ const TehnickiSekretar: React.FC = () => {
                 setCreated(true);
             }
             else if(response.status === 404){
+                setIs_sealed(0);
+                setDocumentId(undefined);
                 setArhivski_br('');
                 setBr_fakturaa(undefined);
                 setBr_dogovor(undefined);
