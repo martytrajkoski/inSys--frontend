@@ -93,6 +93,7 @@ const Arhiva: React.FC = () => {
         )}
       </div> */}
     <div className="mainmenu-invoices">
+      <h1>Архива</h1>
         <InvoiceCard title={""} items={archiveFaktura} role={role} />   
     </div>
     </div>

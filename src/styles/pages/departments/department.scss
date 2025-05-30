@@ -34,7 +34,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 80px auto;
+    margin: 50px auto;
     gap: 20px;
 
     form {
@@ -48,14 +48,29 @@
         flex-direction: column;
         gap: 30px;
 
+        label {
+          margin-bottom: -5px;
+          font-weight: 500;
+          font-size: 20px;
+        }
+
         input,
         select {
           padding: 5px 16px;
+          margin-bottom: 15px;
           border-radius: 8px;
           border: 1px solid rgb(168, 168, 168);
           box-sizing: border-box;
           font-size: 18px;
           cursor: pointer;
+
+
+
+          &:focus {
+                outline: none;
+                transition: 0.3s ease-in-out;
+                border: 2px solid #e45830;
+              }
 
           option {
             font-size: 15px;

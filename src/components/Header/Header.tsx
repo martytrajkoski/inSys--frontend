@@ -27,6 +27,7 @@ const Header: React.FC = () => {
       const response = await axiosClient.post("/auth/logout");
       if (response.status === 200) {
         console.log("logout", response.data.message);
+        localStorage.removeItem("inSys");
       }
 
       navigate("/signin");

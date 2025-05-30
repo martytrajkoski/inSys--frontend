@@ -1,10 +1,10 @@
-// import React from "react";
-// import { Navigate } from "react-router-dom";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-// const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-//   const isAuthenticated = !!localStorage.getItem("inSys");
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = !!localStorage.getItem("inSys");
 
-//   return isAuthenticated ? <>{children}</> : <Navigate to="/signin" replace />;
-// };
+  return isAuthenticated ? <>{children}</> : <Navigate to="/signin" replace />;
+};
 
-// export default ProtectedRoute;
+export default ProtectedRoute;

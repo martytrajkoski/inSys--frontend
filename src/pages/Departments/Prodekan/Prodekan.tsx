@@ -3,13 +3,12 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CommentSection from "../../../components/Comment-Section/Comment-Section";
-import SweetAlert from '../../../components/Sweet-Alert/Sweet-Alert';
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const Prodekan: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
   const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -115,7 +114,11 @@ const Prodekan: React.FC = () => {
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
 
         //Prodekan
-        setDatumProdekan(data?.updated_at ? new Date(data.updated_at).toISOString().slice(0, 10) : "");
+        setDatumProdekan(
+          data?.updated_at
+            ? new Date(data.updated_at).toISOString().slice(0, 10)
+            : ""
+        );
         setIsSealed(data?.is_sealed ?? undefined);
 
         // COMMENTS
@@ -148,25 +151,23 @@ const Prodekan: React.FC = () => {
     setShowConfirmModal(false);
   };
 
-
   const storeProdekan = async () => {
-  try {
-    const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
-      br_faktura: Number(br_faktura),
-      status: "approved",
-      is_sealed: true,
-      review_comment: ''
-    });
+    try {
+      const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
+        br_faktura: Number(br_faktura),
+        status: "approved",
+        is_sealed: true,
+        review_comment: "",
+      });
 
-    if (response.status === 201) {
-      console.log("Фактурата е успешно запечатена.");
-      navigate('/');
+      if (response.status === 201) {
+        console.log("Фактурата е успешно запечатена.");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Грешка при ажурирање на статусот:", error);
     }
-  } catch (error) {
-    console.error("Грешка при ажурирање на статусот:", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     if (br_faktura) {
@@ -179,48 +180,26 @@ const Prodekan: React.FC = () => {
       <div className="form-item">
         <h3>1. Основни информации (технички секретар)</h3>
         <div className="form-item-inputs">
-          <input
-            type="text"
-            placeholder="Архивски број на влезна фактура 05-12-"
-            value={arhivski_br ?? ""}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Број на фактура"
-            value={br_faktura ?? ""}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Број на договор"
-            value={br_dogovor}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Износ на фактура"
-            value={iznos_dogovor}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Датум"
-            value={datumTehnicki}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Издавач на фактура"
-            value={String(izdavaci_id ?? "")}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Вкупна вредност на фактура (со ДДВ)"
-            value={String(vk_vrednost ?? "")}
-            readOnly
-          />
+          <label>Архивски број на влезна фактура 05-12-</label>
+          <input type="text" value={arhivski_br ?? ""} readOnly />
+
+          <label>Број на фактура</label>
+          <input type="text" value={br_faktura ?? ""} readOnly />
+
+          <label>Број на договор</label>
+          <input type="text" value={br_dogovor} readOnly />
+
+          <label>Износ на фактура</label>
+          <input type="text" value={iznos_dogovor} readOnly />
+
+          <label>Датум</label>
+          <input type="text" value={datumTehnicki} readOnly />
+
+          <label>Издавач на фактура</label>
+          <input type="text" value={String(izdavaci_id ?? "")} readOnly />
+
+          <label>Вкупна вредност на фактура (со ДДВ)</label>
+          <input type="text" value={String(vk_vrednost ?? "")} readOnly />
         </div>
       </div>
 
@@ -236,10 +215,9 @@ const Prodekan: React.FC = () => {
       <div className="form-item">
         <h3>2. Информации за тип на набавка (одделение за јавна набавка)</h3>
         <div className="form-item-select">
-          <p>Содржината на фактурата, предметот на наплата е согласно:</p>
+          <label>Содржината на фактурата, предметот на наплата е согласно:</label>
           <input
             type="text"
-            placeholder="Тип на набавка"
             value={tip ? "Јавна Набавка" : "Набавка без тендер"}
             readOnly
             className="form-item-input"
@@ -248,66 +226,37 @@ const Prodekan: React.FC = () => {
       </div>
       {tip === "javna" ? (
         <div className="form-item">
-          <h3>
-            <i>(За јавна набавка)</i>
-          </h3>
           <div className="form-item-inputs">
-            <input
-              type="text"
-              placeholder="Број на договор"
-              value={String(brDogovor) ?? ""}
-              readOnly
-            />
-            <input
-              type="text"
-              placeholder="Важност на договор до"
-              value={vaznostDo}
-              readOnly
-            />
-            <input
-              type="text"
-              placeholder="Описот на сите ставки и единечната цена во фактурата е согласно договорот:"
-              value={soglasnoDogovor ? "Да" : "Не"}
-              readOnly
-            />
-            <input
-              type="text"
-              placeholder="Останати расположливи средства бпо договорот (без вред. на факт.)"
-              value={ostanatiRaspSredstva ?? ""}
-              readOnly
-            />
-            <input
-              type="date"
-              placeholder="Датум"
-              value={datumTip ?? ""}
-              readOnly
-            />
+            <label>Број на договор</label>
+            <input type="text" value={String(brDogovor) ?? ""} readOnly />
+            <label>Важност на договор до</label>
+            <input type="text" value={vaznostDo} readOnly />
+            <label>
+              Описот на сите ставки и единечната цена во фактурата е согласно
+              договорот:
+            </label>
+            <input type="text" value={soglasnoDogovor ? "Да" : "Не"} readOnly />
+            <label>
+              Останати расположливи средства бпо договорот (без вред. на факт.)
+            </label>
+            <input type="text" value={ostanatiRaspSredstva ?? ""} readOnly />
+            <label>Датум</label>
+            <input type="date" value={datumTip ?? ""} readOnly />
           </div>
         </div>
       ) : (
         <div className="form-item">
-          <h3>
-            <i>(За јавна набавка без тендер)</i>
-          </h3>
           <div className="form-item-inputs">
-            <input
-              type="text"
-              placeholder="Дали до сега е набавувана стока или услуга од исти тип:"
-              value={istTip ?? ""}
-              readOnly
-            />
-            <input
-              type="text"
-              placeholder="Вкупно потрошени средства по основ на набавка од тој тип"
-              value={vkPotroseno ?? ""}
-              readOnly
-            />
-            <input
-              type="date"
-              placeholder="Датум"
-              value={datumTip ?? ""}
-              readOnly
-            />
+            <label>
+              Дали до сега е набавувана стока или услуга од исти тип:
+            </label>
+            <input type="text" value={istTip ?? ""} readOnly />
+            <label>
+              Вкупно потрошени средства по основ на набавка од тој тип
+            </label>
+            <input type="text" value={vkPotroseno ?? ""} readOnly />
+            <label>Датум</label>
+            <input type="date" value={datumTip ?? ""} readOnly />
           </div>
         </div>
       )}
@@ -327,38 +276,18 @@ const Prodekan: React.FC = () => {
           набавка)
         </h3>
         <div className="form-item-inputs">
-          <input
-            type="text"
-            placeholder="Барател на набавката"
-            value={String(baratelId ?? "")}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Број на картон"
-            value={brKartonBaratel ?? ""}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Назив на проектот/работата"
-            value={nazivProekt}
-            readOnly
-          />
+          <label>Барател на набавката</label>
+          <input type="text" value={String(baratelId ?? "")} readOnly />
+          <label>Број на картон</label>
+          <input type="text" value={brKartonBaratel ?? ""} readOnly />
+          <label>Назив на проектот/работата</label>
+          <input type="text" value={nazivProekt} readOnly />
         </div>
         <div className="form-item-inputs">
-          <input
-            type="text"
-            placeholder="Потекло на финансиите"
-            value={poteklo}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Датум"
-            value={datumBaratel}
-            readOnly
-          />
+          <label>Потекло на финансиите</label>
+          <input type="text" value={poteklo} readOnly />
+          <label>Датум</label>
+          <input type="text" value={datumBaratel} readOnly />
         </div>
       </div>
 
@@ -374,44 +303,28 @@ const Prodekan: React.FC = () => {
       <div className="form-item">
         <h3>4. Информации од сметководство (сметководство) </h3>
         <div className="form-item-inputs">
+          <label>Број на картон</label>
+          <input type="text" value={brKartonSmetkovodstvo ?? ""} readOnly />
+          <label>Состојба на картон</label>
+          <input type="text" value={sostojbaKarton} readOnly />
+          <label>Предметот е формулар за задолжување на основно средство</label>
           <input
             type="text"
-            placeholder="Број на картон"
-            value={brKartonSmetkovodstvo ?? ""}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Состојба на картон"
-            value={sostojbaKarton}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Предметот е формулар за задолжување на основно средство"
             value={osnovaEvidentiranje ? "Да" : "Не"}
             readOnly
           />
-          <input
-            type="text"
-            placeholder="Пополнет е формулар за задолжување на основно средство"
-            value={formular ? "Да" : "Не"}
-            readOnly
-          />
-          <input
-            type="text"
-            placeholder="Средствата се внесени како новонабавени за тековната година"
-            value={vneseniSredstva ? "Да" : "Не"}
-            readOnly
-          />
-          <input type="text" placeholder="Сметка" value={smetka} readOnly />
-          <input type="text" placeholder="Конто" value={konto} readOnly />
-          <input
-            type="text"
-            placeholder="Датум"
-            value={datumSmetkovodstvo}
-            readOnly
-          />
+          <label>Пополнет е формулар за задолжување на основно средство</label>
+          <input type="text" value={formular ? "Да" : "Не"} readOnly />
+          <label>
+            Средствата се внесени како новонабавени за тековната година
+          </label>
+          <input type="text" value={vneseniSredstva ? "Да" : "Не"} readOnly />
+          <label>Сметка</label>
+          <input type="text" value={smetka} readOnly />
+          <label>Конто</label>
+          <input type="text" value={konto} readOnly />
+          <label>Датум</label>
+          <input type="text" value={datumSmetkovodstvo} readOnly />
         </div>
       </div>
 
@@ -423,16 +336,17 @@ const Prodekan: React.FC = () => {
           initialComment={commentSmetkovodstvo}
         />
       )}
+
       <div className="form-item">
         <h3>5. Одобрување за плаќање на фактура (продекан за финансии)</h3>
-        <p>
+        <label>
           Согласно информациите наведени во точките 1, 2, 3 и 4 го одобрувам
-          плаќањето на фактурата
-        </p>
+          плаќањето на фактурата.
+        </label>
         <div className="form-item-inputs">
+          <label>Датум</label>
           <input
             type="date"
-            placeholder="Датум"
             value={datumProdekan}
             onChange={(e) => setDatumProdekan(e.target.value)}
             readOnly={isSealed}
@@ -442,7 +356,7 @@ const Prodekan: React.FC = () => {
       <div className="form-buttons">
         <div></div>
         <div className="form-buttons-edit">
-          {!isSealed && (     
+          {!isSealed && (
             <button onClick={(e) => handleApproval(e)}>
               Одобри ја фактурата
             </button>

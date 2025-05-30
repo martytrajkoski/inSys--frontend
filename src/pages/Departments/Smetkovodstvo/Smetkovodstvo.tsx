@@ -147,18 +147,18 @@ const Smetkovodstvo: React.FC = () => {
     <>
       <form onSubmit={storeSmetkovodstvo}>
         <div className="form-item">
-          <h3>Информации од сметководство</h3>
+          <h1>Информации од сметководство</h1>
           <div className="form-item-inputs">
+            <label>Број на картон (Конто)</label>
             <input
               type="number"
-              placeholder="Број на картон (Конто)"
               value={brKarton}
               onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
+            <label>Состојба на картон</label>
             <input
               type="text"
-              placeholder="Состојба на картон"
               value={sostojbaKarton}
               onChange={(e) => setSostojbaKarton(e.target.value)}
               required
@@ -166,7 +166,7 @@ const Smetkovodstvo: React.FC = () => {
           </div>
 
           <div className="form-item-radio">
-            <p>Основa за евидентирање:</p>
+            <label>Основa за евидентирање:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -174,7 +174,7 @@ const Smetkovodstvo: React.FC = () => {
                   name="osnova"
                   checked={osnovaEvidentiranje === 1}
                   onChange={() => setOsnovaEvidentiranje(1)}
-                />
+                />&nbsp;
                 Да
               </label>
               <label>
@@ -183,14 +183,14 @@ const Smetkovodstvo: React.FC = () => {
                   name="osnova"
                   checked={osnovaEvidentiranje === 0}
                   onChange={() => setOsnovaEvidentiranje(0)}
-                />
+                />&nbsp;
                 Не
               </label>
             </div>
           </div>
 
           <div className="form-item-radio">
-            <p>Пополнет формулар:</p>
+            <label>Пополнет формулар:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -198,7 +198,7 @@ const Smetkovodstvo: React.FC = () => {
                   name="formular"
                   checked={formular === 1}
                   onChange={() => setFormular(1)}
-                />
+                />&nbsp;
                 Да
               </label>
               <label>
@@ -207,14 +207,14 @@ const Smetkovodstvo: React.FC = () => {
                   name="formular"
                   checked={formular === 0}
                   onChange={() => setFormular(0)}
-                />
+                />&nbsp;
                 Не
               </label>
             </div>
           </div>
 
           <div className="form-item-radio">
-            <p>Средства внесени:</p>
+            <label>Средства внесени:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -222,7 +222,7 @@ const Smetkovodstvo: React.FC = () => {
                   name="sredstva"
                   checked={vneseniSredstva === 1}
                   onChange={() => setVneseniSredstva(1)}
-                />
+                />&nbsp;
                 Да
               </label>
               <label>
@@ -231,14 +231,14 @@ const Smetkovodstvo: React.FC = () => {
                   name="sredstva"
                   checked={vneseniSredstva === 0}
                   onChange={() => setVneseniSredstva(0)}
-                />
+                />&nbsp;
                 Не
               </label>
             </div>
           </div>
 
           <div className="form-item-radio">
-            <p>Предлог сметка за наплата од:</p>
+            <label>Предлог сметка за наплата од:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -246,7 +246,7 @@ const Smetkovodstvo: React.FC = () => {
                   name="smetka"
                   checked={smetka === "603"}
                   onChange={() => setSmetka("603")}
-                />
+                />&nbsp;
                 603
               </label>
               <label>
@@ -255,20 +255,21 @@ const Smetkovodstvo: React.FC = () => {
                   name="smetka"
                   checked={smetka === "788"}
                   onChange={() => setSmetka("788")}
-                />
+                />&nbsp;
                 788
               </label>
             </div>
           </div>
 
           <div className="form-item-inputs">
+            <label>Предлог конто за наплата до:</label>
             <input
               type="text"
-              placeholder="Предлог конто за наплата до:"
               value={konto}
               onChange={(e) => setKonto(e.target.value)}
               required
             />
+            <label>Датум:</label>
             <input
               type="date"
               placeholder="Датум"

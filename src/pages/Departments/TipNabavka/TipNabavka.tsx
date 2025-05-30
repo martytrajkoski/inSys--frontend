@@ -159,9 +159,9 @@ const TipNabavka: React.FC = () => {
     <>
       <form onSubmit={storeTipNabavka}>
         <div className="form-item">
-          <h3>Информации за тип на набавка </h3>
+          <h1>Информации за тип на набавка </h1>
           <div className="form-item-select">
-            <p>Содржината на фактурата, предметот на наплата е согласно:</p>
+            <label>Содржината на фактурата, предметот на наплата е согласно:</label>
             <select value={tip} onChange={(e) => setTip(e.target.value)}>
               <option value="javna">Јавна набавка</option>
               <option value="tender">Набавка без тендер</option>
@@ -170,25 +170,23 @@ const TipNabavka: React.FC = () => {
         </div>
         {tip === "javna" && (
           <div className="form-item">
-            <h3>
-              <i>(За јавна набавка)</i>
-            </h3>
             <div className="form-item-inputs">
+              <label>Број на договор</label>
               <input
                 type="number"
-                placeholder="Број на договор"
                 value={brDogovor}
                 onChange={(e) => setBrDogovor(Number(e.target.value))}
               />
+              <label>Важност на договор до</label>
               <input
                 type="date"
-                placeholder="Важност на договор до"
                 value={vaznostDo}
                 onChange={(e) => setVaznostDo(e.target.value)}
               />
+              <label>Останати расположливи средства</label>
               <input
                 type="number"
-                placeholder="Останати расположливи средства"
+                placeholder="0"
                 value={ostanatiRaspSredstva}
                 onChange={(e) =>
                   setOstanatiRaspSredstva(Number(e.target.value))
@@ -196,10 +194,11 @@ const TipNabavka: React.FC = () => {
               />
             </div>
             <div className="form-item-radio">
-              <p>
+              <label>
                 Описот на сите ставки и единечната цена во фактурата е согласно
                 договорот:
-              </p>
+              </label>
+
               <div className="form-radio">
                 <div>
                   <input
@@ -222,9 +221,9 @@ const TipNabavka: React.FC = () => {
               </div>
             </div>
             <div className="form-item-inputs">
+              <label>Датум</label>
               <input
                 type="date"
-                placeholder="Датум..."
                 value={datum}
                 onChange={(e) => setDatum(e.target.value)}
               />
@@ -234,11 +233,8 @@ const TipNabavka: React.FC = () => {
 
         {tip === "tender" && (
           <div className="form-item">
-            <h3>
-              <i>(За јавна набавка без тендер)</i>
-            </h3>
             <div className="form-item-radio">
-              <p>Дали до сега е набавувана стока или услуга од ист тип:</p>
+              <label>Дали до сега е набавувана стока или услуга од ист тип:</label>
               <div className="form-radio">
                 <div>
                   <input
@@ -261,17 +257,18 @@ const TipNabavka: React.FC = () => {
               </div>
             </div>
             <div className="form-item-inputs">
+              <label>Вкупно потрошени средства по основ на набавка од тој тип</label>
               <input
                 type="number"
-                placeholder="Вкупно потрошени средства по основ на набавка од тој тип"
+                placeholder="0"
                 value={vkPotroseno}
                 onChange={(e) => setVkPotroseno(Number(e.target.value))}
               />
             </div>
             <div className="form-item-inputs">
+              <label>Датум</label>
               <input
                 type="date"
-                placeholder="Датум..."
                 value={datum}
                 onChange={(e) => setDatum(e.target.value)}
               />

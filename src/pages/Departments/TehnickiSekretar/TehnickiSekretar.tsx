@@ -172,24 +172,31 @@ const TehnickiSekretar: React.FC = () => {
 
     return(
         <>
-            <h3>Основни информации</h3>
+            <h1>Основни информации</h1>
             <form onSubmit={storeTehnicki}>
                 <div className="form-item">
                     <div className="form-item-inputs">
-                        <input type="text" value={arhivski_br} placeholder="Архивски број на влезна фактура 05-12-" onChange={(e)=>setArhivski_br(e.target.value)}/>
-                        <input type="number" value={br_fakturaa} placeholder="Број на фактура" onChange={(e) => setBr_fakturaa(Number(e.target.value))}/>
-                        <input type="number" value={br_dogovor} placeholder="Број на договор" onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
-                        <input type="number" value={iznos_dogovor} placeholder="Износ на фактура" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
-                        <input type="date" value={datum} placeholder="Датум" onChange={(e) => setDatum(e.target.value)}/>
+                        <label >Aрхивски број</label>
+                        <input type="text" value={arhivski_br} onChange={(e)=>setArhivski_br(e.target.value)}/>
+                        <label>Број на фактура</label>
+                        <input type="number" value={br_fakturaa} onChange={(e) => setBr_fakturaa(Number(e.target.value))}/>
+                        <label>Број на договор</label>
+                        <input type="number" value={br_dogovor} onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
+                        <label>Износ на фактура</label>
+                        <input type="number" value={iznos_dogovor} placeholder="0" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
+                        <label>Датум</label>
+                        <input type="date" value={datum} onChange={(e) => setDatum(e.target.value)}/>
+                        <label>Издавач:</label>
                         <select value={izdavaci_id ?? ''} onChange={(e) => setIzdavaci_id(Number(e.target.value))}>
-                            <option value="">Избери издавач</option>
+                            <option value="">-- Избери издавач --</option>
                             {izdavaci.map((item) => (
                                 <option key={item.id} value={item.id}>
                                 {item.name}
                                 </option>
                             ))}
                         </select>
-                        <input type="number" value={vk_vrednost} placeholder="Вкупна вредност на фактура (со ДДВ)" onChange={(e) => setVk_vrednost(Number(e.target.value))}/>
+                        <label>Вкупна вредност на фактура (со ДДВ)</label>
+                        <input type="number" value={vk_vrednost}  placeholder="0" onChange={(e) => setVk_vrednost(Number(e.target.value))}/>
                     </div>
                     <div className="form-buttons">
                         <div className="form-button-scan">

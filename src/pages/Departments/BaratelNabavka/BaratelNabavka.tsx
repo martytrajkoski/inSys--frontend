@@ -139,9 +139,10 @@ const BaratelNabavka: React.FC = () => {
     <>
       <form onSubmit={storeBaratelNabavka}>
         <div className="form-item">
-          <h3>Информации за евиденција</h3>
+          <h1>Информации за евиденција</h1>
 
           <div className="form-item-inputs">
+            <label>Избери барател</label>
             <select
               value={baratelId}
               onChange={(e) => setBaratelId(Number(e.target.value))}
@@ -155,17 +156,17 @@ const BaratelNabavka: React.FC = () => {
               ))}
             </select>
 
+            <label>Број на картон (Конто)</label>
             <input
               type="number"
-              placeholder="Број на картон (Конто)"
               value={brKarton}
               onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
 
+            <label>Назив на проектот</label>
             <input
               type="text"
-              placeholder="Назив на проектот/работата"
               value={nazivProekt}
               onChange={(e) => setNazivProekt(e.target.value)}
               required
@@ -173,7 +174,7 @@ const BaratelNabavka: React.FC = () => {
           </div>
 
           <div className="form-item-radio">
-            <p>Потекло на финансиите:</p>
+            <label>Потекло на финансиите:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -182,7 +183,7 @@ const BaratelNabavka: React.FC = () => {
                   value="Средства на МФС"
                   checked={poteklo === "Средства на МФС"}
                   onChange={(e) => setPoteklo(e.target.value)}
-                />
+                />&nbsp;
                 Средства на МФС
               </label>
               <label>
@@ -192,16 +193,16 @@ const BaratelNabavka: React.FC = () => {
                   value="Буџет"
                   checked={poteklo === "Буџет"}
                   onChange={(e) => setPoteklo(e.target.value)}
-                />
+                />&nbsp;
                 Буџет
               </label>
             </div>
           </div>
 
           <div className="form-item-inputs">
+            <label>Датум</label>
             <input
               type="date"
-              placeholder="Датум"
               value={datum}
               onChange={(e) => setDatum(e.target.value)}
               required
