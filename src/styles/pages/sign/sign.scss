@@ -2,103 +2,161 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center; // Vertically center
   align-items: center;
-  gap: 85px;
-  padding-top: 5%;
+  gap: 40px; // Reduced gap
+  padding: 0 20px; // Smaller horizontal padding
   box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.7);
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: "";
+    background: center repeat;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    filter: blur(2px) brightness(0.5);
+  }
 
   .app-name {
-    font-size: 64px;
+    font-size: 48px;
     font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    letter-spacing: 1.5px;
   }
 
   .sign-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(60px);
+    border-radius: 12px;
+    padding: 30px 20px; // Reduced padding
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
-    gap: 24px;
-
-    .password-input-wrapper {
-      position: relative;
-
-      svg {
-        color: black;
-      }
-
-      input {
-        width: 100%;
-      }
-
-      .toggle-password-btn {
-        position: absolute;
-        top: 50%;
-        right: 16px;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        font-size: 14px;
-        color: #007bff;
-        cursor: pointer;
-        padding: 0;
-      }
-    }
+    gap: 20px; // Reduced gap
+    width: 100%;
+    max-width: 350px; // Smaller max width
+    box-sizing: border-box;
 
     .sign-info {
       display: flex;
       flex-direction: column;
       gap: 4px;
       text-align: center;
+      color: #ffffff;
 
       h2 {
-        font-size: 38px;
-        padding-bottom: 20px;
+        font-size: 28px; // Smaller size
+        padding-bottom: 10px;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       }
 
       p {
-        font-size: 16px;
+        font-size: 14px; // Smaller size
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       }
-    }
-
-    button {
-      background-color: black;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      letter-spacing: 0.2px;
-      padding: 8px 171px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
     }
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
 
-      input,
-      select {
-        padding: 8px 16px;
-        border-radius: 8px;
-        border-color: darkgray;
-        font-size: 20px;
-        transition: 0.3s ease-in-out;
-        cursor: pointer;
+      .password-input-wrapper {
+        position: relative;
 
-        option {
-          font-size: 15px;
-          padding: 10px 3px;
+        input {
+          width: 100%;
+          padding: 8px 40px 8px 12px; // space for the button
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          font-size: 16px;
+          background: rgba(255, 255, 255, 0.3);
+          color: #fff;
+          box-sizing: border-box;
+          transition: border-color 0.3s ease-in-out;
 
-          &:hover {
-            background-color: rgb(199, 199, 199);
+          &::placeholder {
+            color: rgba(255, 255, 255, 0.8);
           }
+
+          &:focus {
+            outline: none;
+            border-color: #e45830;
+            background: rgba(255, 255, 255, 0.5);
+          }
+        }
+
+        .toggle-password-btn {
+          position: absolute;
+          top: 50%;
+          right: 12px;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          font-size: 16px;
+          color: #fff;
+          cursor: pointer;
+          padding: 0;
         }
       }
 
-      input:focus {
-        outline: none;
-        transition: 0.3s ease-in-out;
-        border: 2px solid #e45830;
+      input,
+      select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.3);
+        color: #fff;
+        transition: border-color 0.3s ease-in-out;
+
+        option {
+          color: rgb(63, 63, 63);
+        }
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        &:focus {
+          outline: none;
+          border-color: #e45830;
+          background: rgba(255, 255, 255, 0.5);
+        }
       }
+    }
+
+    button {
+      background-color: #e45830;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+
+      &:hover {
+        background-color: darken(#e45830, 10%);
+      }
+    }
+  }
+
+  // Additional text link styling
+  a {
+    color: #e45830;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: lighten(#e45830, 10%);
     }
   }
 }

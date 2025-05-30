@@ -3,11 +3,12 @@ import axiosClient from "../../axiosClient/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import bgImage from '../../components/Logo/Asset_2.png';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false); // 👈 Password visibility state
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [resetEmail, setResetEmail] = useState<string>("");
@@ -50,7 +51,10 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="sign">
+    <div className="sign"
+    style={{
+    backgroundImage: `url(${bgImage})`,
+  }}>
       <div className="app-name">inSys</div>
 
       <div className="sign-container">
@@ -93,7 +97,7 @@ const SignIn: React.FC = () => {
 
         <p>
           Don't have an account?{" "}
-          <a href="/signup" style={{ color: "blue" }}>
+          <a href="/signup" style={{ color: "#e45830" }}>
             Sign Up
           </a>
         </p>
