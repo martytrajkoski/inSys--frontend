@@ -19,7 +19,7 @@ const getRouteByRole = (role: string, br_faktura: number): string => {
   }
 };
 
-const getFakturaFlag = (item: string) => {
+const getFakturaFlag = (item: string): string | null => {
   switch (item) {
     case "ready":
       return "Спремна";
@@ -28,22 +28,31 @@ const getFakturaFlag = (item: string) => {
     case "approved":
       return "Прифатена";
     case "rejected":
-      return "Одбиена"
+      return "Одбиена";
+    default:
+      return null;
   }
-}
+};
 
-const getStatusDepartment = (role: string, item: FakturaType) => {
+const getStatusDepartment = (
+  role: string,
+  item: FakturaType
+): string | null => {
   switch (role) {
     case "Сметководство":
-      return getFakturaFlag(item.smetkovodstvo.status);
+      return item.smetkovodstvo
+        ? getFakturaFlag(item.smetkovodstvo.status)
+        : null;
     case "Јавна набавка":
-      return getFakturaFlag(item.tip_nabavka.status);
+      return item.tip_nabavka ? getFakturaFlag(item.tip_nabavka.status) : null;
     case "Барател на набавка":
-      return getFakturaFlag(item.baratel_javna_nabavka.status);
+      return item.baratel_javna_nabavka
+        ? getFakturaFlag(item.baratel_javna_nabavka.status)
+        : null;
     default:
-      return false;
+      return null;
   }
-}
+};
 
 const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
   const [fakturas, setFakturas] = useState<FakturaType[]>([]);
@@ -123,24 +132,28 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
                 <div>
-                  <p
-                    className={`invoice-status-department-flag ${statusDepartment === "Прифатена"
-                      ? "approved"
-                      : statusDepartment === "Одбиена" 
-                      ? "rejected"
-                      : "pending"
-                    }`}
-                  >{statusDepartment}</p>
+                  {statusDepartment && (
+                    <p
+                      className={`invoice-status-department-flag ${
+                        statusDepartment === "Прифатена"
+                          ? "approved"
+                          : statusDepartment === "Одбиена"
+                          ? "rejected"
+                          : "pending"
+                      }`}
+                    >
+                      {statusDepartment}
+                    </p>
+                  )}
                 </div>
                 <div>
                   {item.is_sealed ? (
                     <p className="sealed">Запечатена</p>
                   ) : (
                     <p
-                      className={`invoice-status-faktura-flag ${statusLabel === "Спремна"
-                            ? "approved"
-                            : "pending"
-                        }`}
+                      className={`invoice-status-faktura-flag ${
+                        statusLabel === "Спремна" ? "approved" : "pending"
+                      }`}
                     >
                       {statusLabel}
                     </p>
