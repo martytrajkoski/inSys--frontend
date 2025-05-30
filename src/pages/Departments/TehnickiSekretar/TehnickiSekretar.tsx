@@ -35,19 +35,21 @@ const TehnickiSekretar: React.FC = () => {
         try {
             const response = await axiosClient.get(`/tehnickisekretar/show/${br_faktura}`)
 
-            if(response.status === 201){
+            if (response.status === 201 && response.data.document) {
+                const document = response.data.document;
+
                 setIs_sealed(response.data.is_sealed);
-                setDocumentId(response.data.document.id || undefined);
-                setArhivski_br(response.data.document.arhivski_br);
-                setBr_fakturaa(response.data.document.br_faktura);
-                setBr_dogovor(response.data.document.br_dogovor);
-                setIzdavaci_id(response.data.document.izdavaci_id);
-                setIznos_dogovor(response.data.document.iznos_dogovor);
-                setVk_vrednost(response.data.document.vk_vrednost);
-                setDatum(response.data.document.datum);
-                setScan_file(response.data.document.scan_file);
-                setReview_comment(response.data.document.review_comment);
-                setStatus(response.data.document.status)
+                setDocumentId(document.id ?? undefined);
+                setArhivski_br(document.arhivski_br ?? '');
+                setBr_fakturaa(document.br_faktura ?? undefined);
+                setBr_dogovor(document.br_dogovor ?? undefined);
+                setIzdavaci_id(document.izdavaci_id ?? undefined);
+                setIznos_dogovor(document.iznos_dogovor ?? undefined);
+                setVk_vrednost(document.vk_vrednost ?? undefined);
+                setDatum(document.datum ?? '');
+                setScan_file(document.scan_file ?? '');
+                setReview_comment(document.review_comment ?? '');
+                setStatus(document.status ?? 'pending');
                 setCreated(true);
             }
             else if(response.status === 404){
