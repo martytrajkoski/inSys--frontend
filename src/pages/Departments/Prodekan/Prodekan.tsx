@@ -160,14 +160,18 @@ const Prodekan: React.FC = () => {
         review_comment: "",
       });
 
-      if (response.status === 201) {
-        console.log("Фактурата е успешно запечатена.");
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Грешка при ажурирање на статусот:", error);
+    if (response.status === 201) {
+      console.log("Фактурата е успешно запечатена.");
+      navigate('/');
     }
-  };
+
+    if(response.status === 401){
+    }
+  } catch (error) {
+    console.error("Грешка при ажурирање на статусот:", error);
+  }
+};
+
 
   useEffect(() => {
     if (br_faktura) {

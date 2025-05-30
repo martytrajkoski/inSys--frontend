@@ -39,6 +39,10 @@ const getStatusDepartment = (
   item: FakturaType
 ): string | null => {
   switch (role) {
+    case "Технички Секретар":
+      return item.tehnicki_sekretar
+        ? getFakturaFlag(item.tehnicki_sekretar.status)
+        : null;
     case "Сметководство":
       return item.smetkovodstvo
         ? getFakturaFlag(item.smetkovodstvo.status)
@@ -113,7 +117,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
             <div>Архивски број</div>
             <div>Број на фактура</div>
             <div>Датум</div>
-            <div>Статус</div>
+            {role !== "Продекан за финансии" && <div>Статус</div>}
             <div>Статус на фактура</div>
           </div>
           {fakturas.map((item, index) => {
@@ -131,21 +135,25 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                <div>
-                  {statusDepartment && (
-                    <p
-                      className={`invoice-status-department-flag ${
-                        statusDepartment === "Прифатена"
-                          ? "approved"
-                          : statusDepartment === "Одбиена"
-                          ? "rejected"
-                          : "pending"
-                      }`}
-                    >
-                      {statusDepartment}
-                    </p>
+                  {role !== "Продекан за финансии" && (
+                    <div>
+                      {statusDepartment ? (
+                        <p
+                          className={`invoice-status-department-flag ${
+                            statusDepartment === "Прифатена"
+                              ? "approved"
+                              : statusDepartment === "Одбиена"
+                              ? "rejected"
+                              : "pending"
+                          }`}
+                        >
+                          {statusDepartment}
+                        </p>
+                      ) : (
+                        <p className="invoice-status-department-flag pending">Чекање</p>
+                      )}
+                    </div>
                   )}
-                </div>
                 <div>
                   {item.is_sealed ? (
                     <p className="sealed">Запечатена</p>
