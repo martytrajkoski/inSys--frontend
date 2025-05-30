@@ -14,6 +14,7 @@ import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 import Arhiva from "../pages/MainMenu/Arhiva";
+// import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -23,6 +24,14 @@ const AppRoutes: React.FC = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/" element={<Home />}>
           <Route element={<MainMenu />}>
+{/* 
+            <Route path="/" element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }>
+            </Route> */}
+
             <Route index element={<PregledFakturi/>}/>
             <Route path="lista-barateli" element={<Barateli />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
