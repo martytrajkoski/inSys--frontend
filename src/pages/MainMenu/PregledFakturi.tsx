@@ -26,7 +26,9 @@ const PregledFakturi: React.FC = () => {
   const [faktura, setFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState("");
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
-  const [filterType, setFilterType] = useState<"Нови фактури" | "Прегледани фактури">("Нови фактури");
+  const [filterType, setFilterType] = useState<
+    "Нови фактури" | "Прегледани фактури" | "Прифатени" | "Одбиени"
+  >("Нови фактури");
 
   const navigate = useNavigate();
 
@@ -136,11 +138,19 @@ const PregledFakturi: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) =>
-                setFilterType(e.target.value as "Нови фактури" | "Прегледани фактури")
+                setFilterType(
+                  e.target.value as
+                    | "Нови фактури"
+                    | "Прегледани фактури"
+                    | "Прифатени"
+                    | "Одбиени"
+                )
               }
             >
               <option value="Нови фактури">Нови фактури</option>
               <option value="Прегледани фактури">Прегледани фактури</option>
+              {role !== "Продекан за финансии" && <option value="Прифатени">Прифатени</option>}
+              {role !== "Продекан за финансии" && <option value="Одбиени">Одбиени</option>}
             </select>
           </div>
           <InvoiceCard title={filterType} items={faktura} role={role} />

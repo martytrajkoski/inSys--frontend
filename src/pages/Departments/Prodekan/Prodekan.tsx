@@ -243,7 +243,7 @@ const Prodekan: React.FC = () => {
             </label>
             <input type="text" value={soglasnoDogovor ? "Да" : "Не"} readOnly />
             <label>
-              Останати расположливи средства бпо договорот (без вред. на факт.)
+              Останати расположливи средства по договорот (без вред. на факт.)
             </label>
             <input type="text" value={ostanatiRaspSredstva ?? ""} readOnly />
             <label>Датум</label>

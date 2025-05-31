@@ -29,6 +29,7 @@ export interface FakturaType {
   is_sealed: number;
   approved_by: number;
   approved_at: string;
+  rejected_at: string;
   created_at: string;
   updated_at: string;
   tip_nabavka: TipNabavkaType;

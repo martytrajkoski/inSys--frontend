@@ -34,7 +34,7 @@ const TipNabavka: React.FC = () => {
 
       if (response.status === 201) {
         const doc = response.data.document;
-        setIs_sealed(response.data.is_sealed);
+        setIs_sealed(response.data.is_sealed ?? 0);
         setTip(doc.tip);
         setDatum(doc.datum);
         setReview_comment(doc.review_comment);
@@ -50,7 +50,9 @@ const TipNabavka: React.FC = () => {
           setIstTip(doc.tender.ist_tip);
           setVkPotroseno(doc.tender.vk_potroseno);
         }
+
         setCreated(true);
+
       } else if (response.status === 404) {
         setIs_sealed(0);
         setTip("javna");
@@ -61,11 +63,13 @@ const TipNabavka: React.FC = () => {
         setOstanatiRaspSredstva(undefined);
         setIstTip(undefined);
         setVkPotroseno(undefined);
-        setCreated(false);
         setReview_comment("");
+        setCreated(false);
       }
     } catch (error) {
       console.error(error);
+      setIs_sealed(0); 
+      setCreated(false);
     }
   };
 
@@ -158,7 +162,14 @@ const TipNabavka: React.FC = () => {
 
   return (
     <>
-      <form onSubmit={storeTipNabavka}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        if (!created) {
+          storeTipNabavka(e);
+        } else {
+          updateTipNabavka(e);
+        }
+      }}>
         <div className="form-item">
           <h1>Информации за тип на набавка </h1>
           <div className="form-item-select">

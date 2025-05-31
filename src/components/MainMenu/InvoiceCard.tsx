@@ -62,13 +62,15 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
   const [fakturas, setFakturas] = useState<FakturaType[]>([]);
 
   const invoiceReadFilter = () => {
-    if (role === "Технички секретар") {
-      setFakturas(items);
-      return;
-    }
+  if (role === "Технички секретар") {
+    setFakturas(items);
+    return;
+  }
 
-    const filtered: FakturaType[] = items.filter((item) => {
-      if (title === "Нови фактури") {
+  const filtered: FakturaType[] = items.filter((item) => {
+
+    switch (title) {
+      case "Нови фактури":
         switch (role) {
           case "Јавна набавка":
             return item.tip_nabavka === null;
@@ -81,7 +83,8 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
           default:
             return false;
         }
-      } else if (title === "Прегледани фактури") {
+
+      case "Прегледани фактури":
         switch (role) {
           case "Јавна набавка":
             return item.tip_nabavka?.read === 1;
@@ -94,13 +97,43 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
           default:
             return false;
         }
-      }
 
-      return true;
-    });
+      case "Прифатени":
+        switch (role) {
+          case "Јавна набавка":
+            return item.tip_nabavka?.status === "approved";
+          case "Барател на набавка":
+            return item.baratel_javna_nabavka?.status === "approved";
+          case "Сметководство":
+            return item.smetkovodstvo?.status === "approved";
+          case "Продекан за финансии":
+            return item.approved_at !== null;
+          default:
+            return false;
+        }
 
-    setFakturas(filtered);
-  };
+      case "Одбиени":
+        switch (role) {
+          case "Јавна набавка":
+            return item.tip_nabavka?.status === "rejected";
+          case "Барател на набавка":
+            return item.baratel_javna_nabavka?.status === "rejected";
+          case "Сметководство":
+            return item.smetkovodstvo?.status === "rejected";
+          case "Продекан за финансии":
+            return item.approved_at !== null;
+          default:
+            return false;
+        }
+        
+
+      default:
+        return true;
+    }
+  });
+
+  setFakturas(filtered);
+};
 
   useEffect(() => {
     invoiceReadFilter();

@@ -132,7 +132,7 @@ const TehnickiSekretar: React.FC = () => {
             const response = await axiosClient.delete(`/tehnickisekretar/destroy/${documentId}`);
 
             if(response.status === 201){
-                console.log('Tehnicki Sekretar and Faktuta deleted')    
+                console.log('Tehnicki Sekretar and Faktura deleted')    
                 
                 setArhivski_br('');
                 setBr_fakturaa(0);

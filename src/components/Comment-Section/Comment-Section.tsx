@@ -1,4 +1,3 @@
-// src/components/CommentSection.tsx
 import { useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { CommentProp } from "../../types/types";
