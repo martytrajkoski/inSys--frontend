@@ -39,7 +39,7 @@ const getStatusDepartment = (
   item: FakturaType
 ): string | null => {
   switch (role) {
-    case "Технички Секретар":
+    case "Технички секретар":
       return item.tehnicki_sekretar
         ? getFakturaFlag(item.tehnicki_sekretar.status)
         : null;
@@ -100,6 +100,8 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
 
       case "Прифатени":
         switch (role) {
+          case "Технички секретар":
+            return item.tehnicki_sekretar?.status === "approved";
           case "Јавна набавка":
             return item.tip_nabavka?.status === "approved";
           case "Барател на набавка":
@@ -114,6 +116,8 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
 
       case "Одбиени":
         switch (role) {
+          case "Технички секретар":
+            return item.tehnicki_sekretar?.status === "rejected";
           case "Јавна набавка":
             return item.tip_nabavka?.status === "rejected";
           case "Барател на набавка":
@@ -121,7 +125,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
           case "Сметководство":
             return item.smetkovodstvo?.status === "rejected";
           case "Продекан за финансии":
-            return item.approved_at !== null;
+            return false;
           default:
             return false;
         }
@@ -210,3 +214,4 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
 };
 
 export default InvoiceCard;
+
