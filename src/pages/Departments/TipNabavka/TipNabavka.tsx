@@ -52,6 +52,7 @@ const TipNabavka: React.FC = () => {
         }
         setCreated(true);
       } else if (response.status === 404) {
+        setIs_sealed(0);
         setTip("javna");
         setDatum(undefined);
         setBrDogovor(undefined);

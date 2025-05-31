@@ -74,7 +74,7 @@ const Prodekan: React.FC = () => {
         setIzdavaci_id(data.tehnicki_sekretar?.izdavaci_id ?? undefined);
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setVk_vrednost(data.tehnicki_sekretar?.vk_vrednost ?? undefined);
-
+        
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
         setDatumTip(data.tip_nabavka?.datum ?? "");
@@ -165,8 +165,10 @@ const Prodekan: React.FC = () => {
       navigate('/');
     }
 
-    if(response.status === 401){
+    if (response.status === 401) {
+      alert("Немате дозвола да ја потврдите оваа фактура.");
     }
+
   } catch (error) {
     console.error("Грешка при ажурирање на статусот:", error);
   }

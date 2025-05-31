@@ -3,7 +3,7 @@ import { useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { CommentProp } from "../../types/types";
 
-const CommentSection = ({  brFaktura, endpoint, initialStatus = "", initialComment = "" }: CommentProp) => {
+const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }: CommentProp) => {
   const [status, setStatus] = useState(initialStatus);
   const [comment, setComment] = useState(initialComment);
   const [loading, setLoading] = useState(false);
