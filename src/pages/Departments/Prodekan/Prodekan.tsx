@@ -139,6 +139,18 @@ const Prodekan: React.FC = () => {
 
   const handleApproval = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const hasRejectedSection =
+      statusTehnicki === "rejected" ||
+      statusTipNabavka === "rejected" ||
+      statusBaratel === "rejected" ||
+      statusSmetkovodstvo === "rejected";
+
+    if (hasRejectedSection) {
+      alert("Не можете да ја одобрите фактурата. Не се сите секции одобрени");
+      return;
+    }
+
     setShowConfirmModal(true);
   };
 
