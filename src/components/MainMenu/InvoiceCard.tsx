@@ -38,6 +38,7 @@ const getStatusDepartment = (
   role: string,
   item: FakturaType
 ): string | null => {
+  if (item.is_sealed) return "Прифатена";
   switch (role) {
     case "Технички секретар":
       return item.tehnicki_sekretar
@@ -62,22 +63,51 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
   const [fakturas, setFakturas] = useState<FakturaType[]>([]);
 
   const invoiceReadFilter = () => {
+  // Create a shallow copy to avoid mutating props directly
+    const updatedItems = items.map((item) => {
+      // Check if faktura is rejected for the current role's department
+      let isRejected = false;
+      switch (role) {
+        case "Јавна набавка":
+          isRejected = item.tip_nabavka?.status === "rejected";
+          if (isRejected) {
+            item.tip_nabavka.read = 0;
+          }
+          break;
+        case "Барател на набавка":
+          isRejected = item.baratel_javna_nabavka?.status === "rejected";
+          if (isRejected) {
+            item.baratel_javna_nabavka.read = 0;
+          }
+          break;
+        case "Сметководство":
+          isRejected = item.smetkovodstvo?.status === "rejected";
+          if (isRejected) {
+            item.smetkovodstvo.read = 0;
+          }
+          break;
+        default:
+          break;
+      }
+      return item;
+  });
+
   if (role === "Технички секретар") {
-    setFakturas(items);
+    setFakturas(updatedItems);
     return;
   }
 
-  const filtered: FakturaType[] = items.filter((item) => {
+  const filtered: FakturaType[] = updatedItems.filter((item) => {
 
     switch (title) {
       case "Нови фактури":
         switch (role) {
           case "Јавна набавка":
-            return item.tip_nabavka === null;
+            return item.tip_nabavka === null || item.tip_nabavka?.read === 0;
           case "Барател на набавка":
-            return item.baratel_javna_nabavka === null;
+            return item.baratel_javna_nabavka === null || item.baratel_javna_nabavka?.read === 0;
           case "Сметководство":
-            return item.smetkovodstvo === null;
+            return item.smetkovodstvo === null || item.smetkovodstvo?.read === 0;
           case "Продекан за финансии":
             return item.approved_at === null;
           default:
