@@ -9,18 +9,25 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
   const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
-    setLoading(true);
-    setMessage("");
+  setLoading(true);
+  setMessage("");
 
-    try {
-      const res = await axiosClient.patch(`${endpoint}/${brFaktura}`, {
-        br_faktura: brFaktura,
-        status,
-        review_comment: comment,
-      });
+  try {
+    await axiosClient.patch(`${endpoint}/${brFaktura}`, {
+      br_faktura: brFaktura,
+      status,
+      review_comment: comment,
+    });
 
-      setMessage(res.data.message || "Updated successfully.");
-    } catch (error: any) {
+    if (status === "approved") {
+      setMessage("Approved Successfully.");
+    } else if (status === "rejected") {
+      setMessage("Rejected Successfully.");
+    } else {
+      setMessage("Updated Successfully.");
+    }
+
+  } catch (error: any) {
       setMessage(error.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
