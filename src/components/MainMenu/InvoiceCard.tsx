@@ -63,51 +63,22 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
   const [fakturas, setFakturas] = useState<FakturaType[]>([]);
 
   const invoiceReadFilter = () => {
-  // Create a shallow copy to avoid mutating props directly
-    const updatedItems = items.map((item) => {
-      // Check if faktura is rejected for the current role's department
-      let isRejected = false;
-      switch (role) {
-        case "Јавна набавка":
-          isRejected = item.tip_nabavka?.status === "rejected";
-          if (isRejected) {
-            item.tip_nabavka.read = 0;
-          }
-          break;
-        case "Барател на набавка":
-          isRejected = item.baratel_javna_nabavka?.status === "rejected";
-          if (isRejected) {
-            item.baratel_javna_nabavka.read = 0;
-          }
-          break;
-        case "Сметководство":
-          isRejected = item.smetkovodstvo?.status === "rejected";
-          if (isRejected) {
-            item.smetkovodstvo.read = 0;
-          }
-          break;
-        default:
-          break;
-      }
-      return item;
-  });
-
   if (role === "Технички секретар") {
-    setFakturas(updatedItems);
+    setFakturas(items);
     return;
   }
 
-  const filtered: FakturaType[] = updatedItems.filter((item) => {
+  const filtered: FakturaType[] = items.filter((item) => {
 
     switch (title) {
       case "Нови фактури":
         switch (role) {
           case "Јавна набавка":
-            return item.tip_nabavka === null || item.tip_nabavka?.read === 0;
+            return item.tip_nabavka === null;
           case "Барател на набавка":
-            return item.baratel_javna_nabavka === null || item.baratel_javna_nabavka?.read === 0;
+            return item.baratel_javna_nabavka === null;
           case "Сметководство":
-            return item.smetkovodstvo === null || item.smetkovodstvo?.read === 0;
+            return item.smetkovodstvo === null;
           case "Продекан за финансии":
             return item.approved_at === null;
           default:
