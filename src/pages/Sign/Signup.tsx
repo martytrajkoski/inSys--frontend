@@ -4,6 +4,7 @@ import type { RoleType } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import bgImage from '../../components/Logo/Asset_2.png';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -55,8 +56,10 @@ const Signup: React.FC = () => {
   }, []);
 
   return (
-    <div className="sign">
-      <h1 className="app-name">App Name</h1>
+    <div className="sign" style={{
+    backgroundImage: `url(${bgImage})`,
+  }}>
+      <h1 className="app-name">inSys</h1>
       <div className="sign-container">
         <div className="sign-info">
           <h2>Create an account</h2>
