@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { CommentProp } from "../../types/types";
 
 const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }: CommentProp) => {
-  const [status, setStatus] = useState(initialStatus);
-  const [comment, setComment] = useState(initialComment);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (initialStatus) setStatus(initialStatus);
+    if (initialComment) setComment(initialComment);
+  }, [initialStatus, initialComment]);
+
 
   const handleSubmit = async () => {
   setLoading(true);
   setMessage("");
-
   try {
     await axiosClient.patch(`${endpoint}/${brFaktura}`, {
       br_faktura: brFaktura,
-      status,
+      status: status,
       review_comment: comment,
     });
 
@@ -61,15 +66,17 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
         />
       </div>
 
-      <button
-        className="submit-button"
-        onClick={handleSubmit}
-        disabled={loading || !status}
-      >
-        {loading ? "Submitting..." : "Submit"}
-      </button>
+      <div className="comment-button-submit">
+        <button
+          className="submit-button"
+          onClick={handleSubmit}
+          disabled={loading || !status}
+        >
+          {loading ? "Submitting..." : "Submit"}
+        </button>
 
-      {message && <div className="feedback-message">{message}</div>}
+        {message && <div className="feedback-message">{message}</div>}
+      </div>
     </div>
   );
 };

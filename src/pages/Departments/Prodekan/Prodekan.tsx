@@ -8,7 +8,9 @@ import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 const Prodekan: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
   const navigate = useNavigate();
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const [showUnauthorizedModal, setShowUnauthorizedModal] = useState<boolean>(false);
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -126,7 +128,7 @@ const Prodekan: React.FC = () => {
         setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
         setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
         setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
-
+        // STATUS
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
         setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
@@ -146,8 +148,10 @@ const Prodekan: React.FC = () => {
       statusBaratel === "rejected" ||
       statusSmetkovodstvo === "rejected";
 
+    console.log('hasRejectedSection', statusTehnicki, statusBaratel, statusSmetkovodstvo, statusTipNabavka);
+
     if (hasRejectedSection) {
-      alert("Не можете да ја одобрите фактурата. Не се сите секции одобрени");
+      setShowUnauthorizedModal(true);
       return;
     }
 
@@ -157,10 +161,6 @@ const Prodekan: React.FC = () => {
   const confirmApproval = async () => {
     setShowConfirmModal(false);
     await storeProdekan();
-  };
-
-  const cancelApproval = () => {
-    setShowConfirmModal(false);
   };
 
   const storeProdekan = async () => {
@@ -178,7 +178,7 @@ const Prodekan: React.FC = () => {
     }
 
     if (response.status === 401) {
-      alert("Немате дозвола да ја потврдите оваа фактура.");
+      setShowUnauthorizedModal(true);
     }
 
   } catch (error) {
@@ -382,10 +382,20 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
       <SweetAlert
-        visible={showConfirmModal}
+        visibility={showConfirmModal}
         onConfirm={confirmApproval}
-        onCancel={cancelApproval}
+        onCancel={() => setShowConfirmModal(false)}
+        confirmButton="Одобри"
+        message="Дали сте сигурни дека сакате да ја одобрите фактурата?"
       />
+      <SweetAlert
+        visibility={showUnauthorizedModal}
+        onConfirm={() => setShowUnauthorizedModal(false)}
+        onCancel={() => setShowUnauthorizedModal(false)}
+        confirmButton=""
+        message="Не можете да ја одобрите фактурата! Не се сите секции одобрени!"
+      />
+
     </form>
   );
 };

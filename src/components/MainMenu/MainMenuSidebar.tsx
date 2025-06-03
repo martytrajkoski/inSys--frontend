@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../Logo/Asset_3.png";
+import logo from "../../../public/Logo/Asset_3.png";
 
 const MainMenuSidebar: React.FC = () => {
   return (

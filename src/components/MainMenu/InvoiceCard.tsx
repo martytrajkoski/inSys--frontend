@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import type { FakturaType, InvoiceType } from "../../types/types";
 
@@ -59,90 +59,7 @@ const getStatusDepartment = (
   }
 };
 
-const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
-  const [fakturas, setFakturas] = useState<FakturaType[]>([]);
-
-  const invoiceReadFilter = () => {
-  if (role === "Технички секретар") {
-    setFakturas(items);
-    return;
-  }
-
-  const filtered: FakturaType[] = items.filter((item) => {
-
-    switch (title) {
-      case "Нови фактури":
-        switch (role) {
-          case "Јавна набавка":
-            return item.tip_nabavka === null;
-          case "Барател на набавка":
-            return item.baratel_javna_nabavka === null;
-          case "Сметководство":
-            return item.smetkovodstvo === null;
-          case "Продекан за финансии":
-            return item.approved_at === null;
-          default:
-            return false;
-        }
-
-      case "Прегледани фактури":
-        switch (role) {
-          case "Јавна набавка":
-            return item.tip_nabavka?.read === 1;
-          case "Барател на набавка":
-            return item.baratel_javna_nabavka?.read === 1;
-          case "Сметководство":
-            return item.smetkovodstvo?.read === 1;
-          case "Продекан за финансии":
-            return item.approved_at !== null;
-          default:
-            return false;
-        }
-
-      case "Прифатени":
-        switch (role) {
-          case "Технички секретар":
-            return item.tehnicki_sekretar?.status === "approved";
-          case "Јавна набавка":
-            return item.tip_nabavka?.status === "approved";
-          case "Барател на набавка":
-            return item.baratel_javna_nabavka?.status === "approved";
-          case "Сметководство":
-            return item.smetkovodstvo?.status === "approved";
-          case "Продекан за финансии":
-            return item.approved_at !== null;
-          default:
-            return false;
-        }
-
-      case "Одбиени":
-        switch (role) {
-          case "Технички секретар":
-            return item.tehnicki_sekretar?.status === "rejected";
-          case "Јавна набавка":
-            return item.tip_nabavka?.status === "rejected";
-          case "Барател на набавка":
-            return item.baratel_javna_nabavka?.status === "rejected";
-          case "Сметководство":
-            return item.smetkovodstvo?.status === "rejected";
-          case "Продекан за финансии":
-            return false;
-          default:
-            return false;
-        }
-        
-
-      default:
-        return true;
-    }
-  });
-
-  setFakturas(filtered);
-};
-
-  useEffect(() => {
-    invoiceReadFilter();
-  }, [items, role, title]);
+const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
 
   return (
     <div className="invoice-component">
@@ -158,7 +75,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
             {role !== "Продекан за финансии" && <div>Статус</div>}
             <div>Статус на фактура</div>
           </div>
-          {fakturas.map((item, index) => {
+          {items.map((item, index) => {
             let statusLabel = getFakturaFlag(item.status);
             let statusDepartment = getStatusDepartment(role, item);
 
@@ -173,25 +90,27 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                  {role !== "Продекан за финансии" && (
-                    <div>
-                      {statusDepartment ? (
-                        <p
-                          className={`invoice-status-department-flag ${
-                            statusDepartment === "Прифатена"
-                              ? "approved"
-                              : statusDepartment === "Одбиена"
-                              ? "rejected"
-                              : "pending"
-                          }`}
-                        >
-                          {statusDepartment}
-                        </p>
-                      ) : (
-                        <p className="invoice-status-department-flag pending">Чекање</p>
-                      )}
-                    </div>
-                  )}
+                {role !== "Продекан за финансии" && (
+                  <div>
+                    {statusDepartment ? (
+                      <p
+                        className={`invoice-status-department-flag ${
+                          statusDepartment === "Прифатена"
+                            ? "approved"
+                            : statusDepartment === "Одбиена"
+                            ? "rejected"
+                            : "pending"
+                        }`}
+                      >
+                        {statusDepartment}
+                      </p>
+                    ) : (
+                      <p className="invoice-status-department-flag pending">
+                        Чекање
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div>
                   {item.is_sealed ? (
                     <p className="sealed">Запечатена</p>
@@ -215,4 +134,3 @@ const InvoiceCard: React.FC<InvoiceType> = ({ title, items, role }) => {
 };
 
 export default InvoiceCard;
-

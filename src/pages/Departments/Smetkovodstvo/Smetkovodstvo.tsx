@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const Smetkovodstvo: React.FC = () => {
+  const navigate = useNavigate(); 
+
   const { br_faktura } = useParams<string>();
   const [is_sealed, setIs_sealed] = useState<number>();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   const [brKarton, setBrKarton] = useState<number>();
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
@@ -81,6 +86,7 @@ const Smetkovodstvo: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Smetkovodstvo stored");
+        navigate('/')
         setCreated(true);
         setDocumentId(response.data.document.id);
       }
@@ -110,6 +116,7 @@ const Smetkovodstvo: React.FC = () => {
 
       if (response.status === 201) {
         setStatus("pending");
+        setShowUpdateModal(true);
         console.log("Smetkovodstvo updated");
       }
     } catch (error) {
@@ -153,6 +160,7 @@ const Smetkovodstvo: React.FC = () => {
             <input
               type="number"
               value={brKarton}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
@@ -160,6 +168,7 @@ const Smetkovodstvo: React.FC = () => {
             <input
               type="text"
               value={sostojbaKarton}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setSostojbaKarton(e.target.value)}
               required
             />
@@ -173,6 +182,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="osnova"
                   checked={osnovaEvidentiranje === 1}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(1)}
                 />&nbsp;
                 Да
@@ -182,6 +192,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="osnova"
                   checked={osnovaEvidentiranje === 0}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(0)}
                 />&nbsp;
                 Не
@@ -197,6 +208,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="formular"
                   checked={formular === 1}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setFormular(1)}
                 />&nbsp;
                 Да
@@ -206,6 +218,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="formular"
                   checked={formular === 0}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setFormular(0)}
                 />&nbsp;
                 Не
@@ -221,6 +234,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="sredstva"
                   checked={vneseniSredstva === 1}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setVneseniSredstva(1)}
                 />&nbsp;
                 Да
@@ -230,6 +244,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="sredstva"
                   checked={vneseniSredstva === 0}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setVneseniSredstva(0)}
                 />&nbsp;
                 Не
@@ -245,6 +260,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="smetka"
                   checked={smetka === "603"}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("603")}
                 />&nbsp;
                 603
@@ -254,6 +270,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="smetka"
                   checked={smetka === "788"}
+                  disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("788")}
                 />&nbsp;
                 788
@@ -266,6 +283,7 @@ const Smetkovodstvo: React.FC = () => {
             <input
               type="text"
               value={konto}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setKonto(e.target.value)}
               required
             />
@@ -274,6 +292,7 @@ const Smetkovodstvo: React.FC = () => {
               type="date"
               placeholder="Датум"
               value={datum}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setDatum(e.target.value)}
               required
             />
@@ -285,11 +304,11 @@ const Smetkovodstvo: React.FC = () => {
               {is_sealed === 0 && (
                 <>
                   {!created ? (
-                    <button type="submit">Save</button>
+                    <button type="submit">Зачувај</button>
                   ) : (
                     <>
-                      <button onClick={updateSmetkovodstvo}>Edit</button>
-                      <button onClick={deleteSmetkovodstvo}>Delete</button>
+                      <button onClick={updateSmetkovodstvo}>Измени</button>
+                      <button onClick={()=>setShowDeleteModal(true)}>Избриши</button>
                     </>
                   )}
                 </>
@@ -307,6 +326,20 @@ const Smetkovodstvo: React.FC = () => {
           )}
         </div>
       </form>
+      <SweetAlert
+        visibility={showDeleteModal}
+        onConfirm={() => deleteSmetkovodstvo}
+        onCancel={() => setShowDeleteModal(false)}
+        confirmButton="Избриши"
+        message="Дали сте сигурни дека сакате да ја избришите оваа секција?"
+      />
+      <SweetAlert
+        visibility={showUpdateModal}
+        onConfirm={() => setShowUpdateModal(false)}
+        onCancel={() => setShowUpdateModal(false)}
+        confirmButton=""
+        message="Промените се успешно реализирани"
+      />
     </>
   );
 };

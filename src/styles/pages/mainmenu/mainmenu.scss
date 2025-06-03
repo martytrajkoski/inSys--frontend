@@ -7,14 +7,14 @@
         left: 20%;
         display: flex;
         flex-direction: column;
-        gap: 38px;
+        gap: 10px;
         width: 80%;
 
         .mainmenu-search {
             display: flex;
             gap: 25px;
             justify-content: center;
-            margin-top: 70px;
+            margin-top: 40px;
 
             input {
                 width: 50%;
@@ -36,8 +36,20 @@
             margin-top: 30px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 40px;
             align-items: center;
+
+            button{
+                background-color: #e45830;
+                border: 2px solid #e45830;
+                color: white;
+
+                &:hover {
+                    outline: none;
+                    background-color: white;
+                    color: #e45830;
+                }
+            }
             
             .invoice-filter-dropdown {
                 border-top: 3px solid #dfd8d8;

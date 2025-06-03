@@ -3,10 +3,13 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import type { Baratel } from "../../../types/types";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const BaratelNabavka: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
   const [is_sealed, setIs_sealed] = useState<number>();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   const [brKarton, setBrKarton] = useState<number>();
   const [nazivProekt, setNazivProekt] = useState<string>("");
@@ -106,6 +109,7 @@ const BaratelNabavka: React.FC = () => {
 
       if (response.status == 201) {
         setStatus("pending");
+        setShowUpdateModal(true);
         console.log("BaratelNabavka is updated successfully");
       }
     } catch (error) {
@@ -145,6 +149,7 @@ const BaratelNabavka: React.FC = () => {
             <label>Избери барател</label>
             <select
               value={baratelId}
+              disabled={Boolean(is_sealed)}
               onChange={(e) => setBaratelId(Number(e.target.value))}
               required
             >
@@ -160,6 +165,7 @@ const BaratelNabavka: React.FC = () => {
             <input
               type="number"
               value={brKarton}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
@@ -168,6 +174,7 @@ const BaratelNabavka: React.FC = () => {
             <input
               type="text"
               value={nazivProekt}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setNazivProekt(e.target.value)}
               required
             />
@@ -182,6 +189,7 @@ const BaratelNabavka: React.FC = () => {
                   name="poteklo"
                   value="Средства на МФС"
                   checked={poteklo === "Средства на МФС"}
+                  disabled={Boolean(is_sealed)}
                   onChange={(e) => setPoteklo(e.target.value)}
                 />&nbsp;
                 Средства на МФС
@@ -192,6 +200,7 @@ const BaratelNabavka: React.FC = () => {
                   name="poteklo"
                   value="Буџет"
                   checked={poteklo === "Буџет"}
+                  disabled={Boolean(is_sealed)}
                   onChange={(e) => setPoteklo(e.target.value)}
                 />&nbsp;
                 Буџет
@@ -204,6 +213,7 @@ const BaratelNabavka: React.FC = () => {
             <input
               type="date"
               value={datum}
+              readOnly={Boolean(is_sealed)}
               onChange={(e) => setDatum(e.target.value)}
               required
             />
@@ -217,11 +227,11 @@ const BaratelNabavka: React.FC = () => {
                 {is_sealed === 0 && (
                   <>
                     {!created ? (
-                      <button type="submit">Save</button>
+                      <button type="submit">Зачувај</button>
                     ) : (
                       <>
-                        <button onClick={updateBaratelNabavka}>Edit</button>
-                        <button onClick={deleteBaratelNabavka}>Delete</button>
+                        <button onClick={updateBaratelNabavka}>Измени</button>
+                        <button onClick={() => setShowDeleteModal(true)}>Избриши</button>
                       </>
                     )}
                   </>
@@ -239,6 +249,20 @@ const BaratelNabavka: React.FC = () => {
           )}
         </div>
       </form>
+      <SweetAlert
+          visibility={showDeleteModal}
+          onConfirm={() => deleteBaratelNabavka}
+          onCancel={() => setShowDeleteModal(false)}
+          confirmButton="Избриши"
+          message="Дали сте сигурни дека сакате да ја избришите оваа секција?"
+      />
+      <SweetAlert
+        visibility={showUpdateModal}
+        onConfirm={() => setShowUpdateModal(false)}
+        onCancel={() => setShowUpdateModal(false)}
+        confirmButton=""
+        message="Промените се успешно реализирани"
+      />
     </>
   );
 };

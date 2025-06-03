@@ -3,10 +3,13 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import BaratelNabavka from "../BaratelNabavka/BaratelNabavka";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const TipNabavka: React.FC = () => {
   const { br_faktura } = useParams<string>();
   const [is_sealed, setIs_sealed] = useState<number>();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   const [tip, setTip] = useState<string>("javna");
   const [datum, setDatum] = useState<string>();
@@ -126,6 +129,7 @@ const TipNabavka: React.FC = () => {
 
       if (response.status === 201) {
         setStatus("pending");
+        setShowUpdateModal(true);
         console.log("TipNabavka is updated successfully");
       }
     } catch (error) {
@@ -162,8 +166,7 @@ const TipNabavka: React.FC = () => {
 
   return (
     <>
-      <form onSubmit={(e) => {
-        e.preventDefault();
+      <form onSubmit={(e) => {e.preventDefault();
         if (!created) {
           storeTipNabavka(e);
         } else {
@@ -174,7 +177,7 @@ const TipNabavka: React.FC = () => {
           <h1>Информации за тип на набавка </h1>
           <div className="form-item-select">
             <label>Содржината на фактурата, предметот на наплата е согласно:</label>
-            <select value={tip} onChange={(e) => setTip(e.target.value)}>
+            <select value={tip} disabled={Boolean(is_sealed)} onChange={(e) => setTip(e.target.value)}>
               <option value="javna">Јавна набавка</option>
               <option value="tender">Набавка без тендер</option>
             </select>
@@ -187,12 +190,14 @@ const TipNabavka: React.FC = () => {
               <input
                 type="number"
                 value={brDogovor}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) => setBrDogovor(Number(e.target.value))}
               />
               <label>Важност на договор до</label>
               <input
                 type="date"
                 value={vaznostDo}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) => setVaznostDo(e.target.value)}
               />
               <label>Останати расположливи средства</label>
@@ -200,6 +205,7 @@ const TipNabavka: React.FC = () => {
                 type="number"
                 placeholder="0"
                 value={ostanatiRaspSredstva}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) =>
                   setOstanatiRaspSredstva(Number(e.target.value))
                 }
@@ -217,6 +223,7 @@ const TipNabavka: React.FC = () => {
                     type="radio"
                     name="edinecna_cena"
                     checked={soglasnoDogovor === 1}
+                    disabled={Boolean(is_sealed)}
                     onChange={() => setSoglasnoDogovor(1)}
                   />
                   <label>Да</label>
@@ -226,6 +233,7 @@ const TipNabavka: React.FC = () => {
                     type="radio"
                     name="edinecna_cena"
                     checked={soglasnoDogovor === 0}
+                    disabled={Boolean(is_sealed)}
                     onChange={() => setSoglasnoDogovor(0)}
                   />
                   <label>Не</label>
@@ -237,6 +245,7 @@ const TipNabavka: React.FC = () => {
               <input
                 type="date"
                 value={datum}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) => setDatum(e.target.value)}
               />
             </div>
@@ -253,6 +262,7 @@ const TipNabavka: React.FC = () => {
                     type="radio"
                     name="isti_tip_stoka"
                     checked={istTip === 1}
+                    readOnly={Boolean(is_sealed)}
                     onChange={() => setIstTip(1)}
                   />
                   <label>Да</label>
@@ -262,6 +272,7 @@ const TipNabavka: React.FC = () => {
                     type="radio"
                     name="isti_tip_stoka"
                     checked={istTip === 0}
+                    readOnly={Boolean(is_sealed)}
                     onChange={() => setIstTip(0)}
                   />
                   <label>Не</label>
@@ -274,6 +285,7 @@ const TipNabavka: React.FC = () => {
                 type="number"
                 placeholder="0"
                 value={vkPotroseno}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) => setVkPotroseno(Number(e.target.value))}
               />
             </div>
@@ -282,6 +294,7 @@ const TipNabavka: React.FC = () => {
               <input
                 type="date"
                 value={datum}
+                readOnly={Boolean(is_sealed)}
                 onChange={(e) => setDatum(e.target.value)}
               />
             </div>
@@ -294,11 +307,11 @@ const TipNabavka: React.FC = () => {
             {is_sealed === 0 && (
               <>
                 {!created ? (
-                  <button type="submit">Save</button>
+                  <button type="submit">Зачувај</button>
                 ) : (
                   <>
-                    <button onClick={updateTipNabavka}>Edit</button>
-                    <button onClick={deleteTipNabavka}>Delete</button>
+                    <button onClick={(e) => updateTipNabavka(e)}>Измени</button>
+                    <button type="button" onClick={() => {setShowDeleteModal(true)}}>Избриши</button>
                   </>
                 )}
               </>
@@ -315,7 +328,22 @@ const TipNabavka: React.FC = () => {
           <div></div>
         )}
       </form>
+      <SweetAlert
+        visibility={showDeleteModal}
+        onConfirm={() => deleteTipNabavka}
+        onCancel={() => setShowDeleteModal(false)}
+        confirmButton="Избриши"
+        message="Дали сте сигурни дека сакате да ја избришите оваа секција?"
+      />
+      <SweetAlert
+        visibility={showUpdateModal}
+        onConfirm={() => setShowUpdateModal(false)}
+        onCancel={() => setShowUpdateModal(false)}
+        confirmButton=""
+        message="Промените се успешно реализирани"
+      />
       <BaratelNabavka />
+      
     </>
   );
 };

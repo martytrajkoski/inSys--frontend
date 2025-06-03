@@ -12,8 +12,8 @@
     font-size: 25px;
 
     button {
-      background-color: #007bff;
-      border: none;
+      background-color: #e45830;
+      border: 2px solid #e45830;
       color: white;
       padding: 12px 28px;
       font-weight: 600;
@@ -24,7 +24,8 @@
 
       &:hover {
         outline: none;
-        background-color: darken(#007bff, 15%);
+        background-color: white;
+        color: #e45830;
       }
     }
   }
@@ -134,6 +135,32 @@
         .form-buttons-edit {
           display: flex;
           gap: 10px;
+          
+          button{
+            padding: 8px 20px;
+          
+            &:first-of-type{
+              border: 2px solid #e45830;
+              background-color: white;
+              color: #e45830;
+
+              &:hover{
+                background-color: #e457302c;
+                transition: 300ms;
+              }
+            }
+
+            &:nth-of-type(2){
+              border: 2px solid #e45830;
+              background-color: #e45830;
+              color: white;
+
+              &:hover{
+                background-color: #af4325;
+                transition: 300ms;
+              }
+            }
+          }          
         }
       }
     }

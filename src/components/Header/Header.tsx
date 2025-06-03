@@ -1,10 +1,9 @@
-// src/components/Header.tsx
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { UserType } from "../../types/types";
 import { useNavigate } from "react-router-dom";
-import logo from "../Logo/Asset_2.png";
-import ProfileModal from "../../pages/Sign/ProfileModal"; // adjust if your path is different
+import logo from "../../../public/Logo/Asset_2.png";
+import ProfileModal from "../../pages/Sign/ProfileModal";
 
 const Header: React.FC = () => {
   const [user, setUser] = useState<UserType>();

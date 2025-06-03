@@ -3,7 +3,7 @@ import axiosClient from "../../axiosClient/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import bgImage from '../../components/Logo/Asset_2.png';
+import bgImage from '../../../public/Logo/Asset_2.png';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");

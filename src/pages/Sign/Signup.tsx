@@ -4,7 +4,7 @@ import type { RoleType } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import bgImage from '../../components/Logo/Asset_2.png';
+import bgImage from '../../../public/Logo/Asset_2.png';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");

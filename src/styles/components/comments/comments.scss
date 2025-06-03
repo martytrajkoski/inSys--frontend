@@ -1,21 +1,21 @@
 .comment-section {
-  border: 1px solid #23a5f0;
+  border: 1px solid #e45830;
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .section-title {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 12px;
 }
 
 .status-buttons {
   display: flex;
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .status-button {
@@ -51,28 +51,33 @@
   font-size: 14px;
 }
 
-.submit-button {
-  padding: 10px 20px;
-  background-color: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+.comment-button-submit{
+  .submit-button {
+    padding: 10px 20px;
+    border: 2px solid #e45830;
+    background-color: white;
+    color: #e45830;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .submit-button:hover {
+    outline: none;
+    background-color: #e45830;
+    color: white;
+  }
+  
+  .submit-button:disabled {
+    background-color: #ffffff83;
+    cursor: not-allowed;
+  }
+  
+  .feedback-message {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #374151;
+  }
 }
 
-.submit-button:hover {
-  background-color: #1d4ed8;
-}
-
-.submit-button:disabled {
-  background-color: #93c5fd;
-  cursor: not-allowed;
-}
-
-.feedback-message {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #374151;
-}

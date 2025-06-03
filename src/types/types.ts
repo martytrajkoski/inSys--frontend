@@ -36,6 +36,7 @@ export interface FakturaType {
   smetkovodstvo: SmetkovodstvoType;
   baratel_javna_nabavka: BaratelNabavkaType;
   tehnicki_sekretar: TehnickiSekretarType;
+  read: boolean
 }
 
 export interface TipNabavkaType {
@@ -138,7 +139,6 @@ export interface PropsModal {
 }
 
 export interface InvoiceType {
-  title: string;
   items: FakturaType[];
   role: string;
 }
@@ -146,6 +146,6 @@ export interface InvoiceType {
 export type CommentProp = {
   brFaktura: string;
   endpoint: string;
-  initialStatus?: string;
-  initialComment?: string;
+  initialStatus?: string | "";
+  initialComment?: string | "";
 };

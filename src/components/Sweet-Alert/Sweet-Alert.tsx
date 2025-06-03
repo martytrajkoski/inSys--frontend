@@ -1,22 +1,29 @@
-import React from 'react';
-
 interface SweetAlertProps {
-  visible: boolean;
+  visibility: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  message: string;
+  confirmButton: string;
 }
 
-const SweetAlert: React.FC<SweetAlertProps> = ({ visible, onConfirm, onCancel }) => {
-  if (!visible) return null;
+const SweetAlert: React.FC<SweetAlertProps> = ({ onConfirm, onCancel, message, visibility, confirmButton }) => {
+  if (!visibility) return null;
 
   return (
     <div className="sweet-alert">
       <div className="alert-content">
-        <h2>Потврда</h2>
-        <p>Дали сте сигурни дека сакате да ја одобрите фактурата?</p>
+        <h2>Известување !</h2>
+        <p>{message}</p>
         <div className="buttons">
-          <button className="confirm" onClick={onConfirm}>Одобри</button>
-          <button className="cancel" onClick={onCancel}>Откажи</button>
+          {confirmButton.length > 1 ? (
+              <>
+                <button className="confirm" onClick={onConfirm}>{confirmButton}</button>
+                <button className="cancel" onClick={onCancel}>Откажи</button>
+              </>
+            ) : (
+              <button className="cancel" onClick={onCancel}>Во ред</button>
+            )
+          }
         </div>
       </div>
     </div>

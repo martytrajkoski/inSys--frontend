@@ -4,10 +4,13 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import type { IzdavaciType } from "../../../types/types";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const TehnickiSekretar: React.FC = () => {
     const { br_faktura } = useParams<string>();
     const [is_sealed, setIs_sealed] = useState<number>(0);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
     
     const [openImportModal, setopenImportModal] = useState<boolean>(false);
     const [arhivski_br, setArhivski_br] = useState<string>('');
@@ -118,6 +121,7 @@ const TehnickiSekretar: React.FC = () => {
 
             if(response.status === 201){
                 setStatus('pending');
+                setShowUpdateModal(true);
                 console.log('Tehnicki Sekretar and Faktura updated successfully');
             }
 
@@ -179,17 +183,17 @@ const TehnickiSekretar: React.FC = () => {
                 <div className="form-item">
                     <div className="form-item-inputs">
                         <label >Aрхивски број</label>
-                        <input type="text" value={arhivski_br} onChange={(e)=>setArhivski_br(e.target.value)}/>
+                        <input type="text" value={arhivski_br} readOnly={Boolean(is_sealed)} onChange={(e)=>setArhivski_br(e.target.value)}/>
                         <label>Број на фактура</label>
-                        <input type="number" value={br_fakturaa} onChange={(e) => setBr_fakturaa(Number(e.target.value))}/>
+                        <input type="number" value={br_fakturaa} readOnly={Boolean(is_sealed)} onChange={(e) => setBr_fakturaa(Number(e.target.value))}/>
                         <label>Број на договор</label>
-                        <input type="number" value={br_dogovor} onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
+                        <input type="number" value={br_dogovor} readOnly={Boolean(is_sealed)} onChange={(e) => setBr_dogovor(Number(e.target.value))}/>
                         <label>Износ на фактура</label>
-                        <input type="number" value={iznos_dogovor} placeholder="0" onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
+                        <input type="number" value={iznos_dogovor} placeholder="0" readOnly={Boolean(is_sealed)} onChange={(e) => setIznos_dogovor(Number(e.target.value))}/>
                         <label>Датум</label>
-                        <input type="date" value={datum} onChange={(e) => setDatum(e.target.value)}/>
+                        <input type="date" value={datum} readOnly={Boolean(is_sealed)} onChange={(e) => setDatum(e.target.value)}/>
                         <label>Издавач:</label>
-                        <select value={izdavaci_id ?? ''} onChange={(e) => setIzdavaci_id(Number(e.target.value))}>
+                        <select value={izdavaci_id ?? ''} disabled={Boolean(is_sealed)} onChange={(e) => setIzdavaci_id(Number(e.target.value))}>
                             <option value="">-- Избери издавач --</option>
                             {izdavaci.map((item) => (
                                 <option key={item.id} value={item.id}>
@@ -209,11 +213,11 @@ const TehnickiSekretar: React.FC = () => {
                           {is_sealed === 0 && (
                             <>
                                 {!created ? (
-                                <button type="submit">Save</button>
+                                <button type="submit">Зачувај</button>
                                 ) : (
                                 <>
-                                    <button onClick={updateTehnicki}>Edit</button>
-                                    <button onClick={deleteTehnicki}>Delete</button>
+                                    <button onClick={updateTehnicki}>Измени</button>
+                                    <button onClick={()=>setShowDeleteModal(true)}>Избриши</button>
                                 </>
                                 )}
                             </>
@@ -230,6 +234,20 @@ const TehnickiSekretar: React.FC = () => {
             {openImportModal && (
                 <ImportFile onClose={handleImportModal}/>
             )}
+            <SweetAlert
+                visibility={showDeleteModal}
+                onConfirm={() => deleteTehnicki}
+                onCancel={() => setShowDeleteModal(false)}
+                confirmButton="Избриши"
+                message="Дали сте сигурни дека сакате да ја избришите оваа фактура?"
+            />
+            <SweetAlert
+                visibility={showUpdateModal}
+                onConfirm={() => setShowUpdateModal(false)}
+                onCancel={() => setShowUpdateModal(false)}
+                confirmButton=""
+                message="Промените се успешно реализирани"
+            />
         </>
     )
 }
