@@ -224,7 +224,7 @@ const Prodekan: React.FC = () => {
       {!isSealed && (
         <CommentSection
           brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/statustehnicki"
+          endpoint="/prodekan/updatedepartmentstatus/tehnicki"
           initialStatus={statusTehnicki}
           initialComment={commentTehnicki}
         />
@@ -282,7 +282,7 @@ const Prodekan: React.FC = () => {
       {!isSealed && (
         <CommentSection
           brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/statustipnabavka"
+          endpoint="/prodekan/updatedepartmentstatus/tip"
           initialStatus={statusTipNabavka}
           initialComment={commentTipNabavka}
         />
@@ -312,7 +312,7 @@ const Prodekan: React.FC = () => {
       {!isSealed && (
         <CommentSection
           brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/statusbaratelnabavka"
+          endpoint="/prodekan/updatedepartmentstatus/baratel"
           initialStatus={statusBaratel}
           initialComment={commentBaratel}
         />
@@ -349,7 +349,7 @@ const Prodekan: React.FC = () => {
       {!isSealed && (
         <CommentSection
           brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/statussmetkovodstvo"
+          endpoint="/prodekan/updatedepartmentstatus/smetkovodstvo"
           initialStatus={statusSmetkovodstvo}
           initialComment={commentSmetkovodstvo}
         />

@@ -18,7 +18,7 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
   setLoading(true);
   setMessage("");
   try {
-    await axiosClient.patch(`${endpoint}/${brFaktura}`, {
+    await axiosClient.patch(`${endpoint}`, {
       br_faktura: brFaktura,
       status: status,
       review_comment: comment,
