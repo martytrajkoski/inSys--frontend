@@ -27,7 +27,7 @@ export interface FakturaType {
   review_comment: string;
   faktura_id: number;
   is_sealed: number;
-  approved_by: number;
+  approved_by: UserType;
   approved_at: string;
   rejected_at: string;
   created_at: string;
@@ -49,6 +49,8 @@ export interface TipNabavkaType {
   created_at: string;
   updated_at: string;
   read: number;
+  submited_by: UserType;
+  updated_by: UserType;
 
   javna_nabavka?: {
     id: number;
@@ -86,6 +88,9 @@ export interface SmetkovodstvoType {
   read: number;
   created_at: string;
   updated_at: string;
+  submited_by: UserType;
+  updated_by: UserType;
+
 }
 
 export interface BaratelNabavkaType {
@@ -101,6 +106,9 @@ export interface BaratelNabavkaType {
   created_at: string;
   updated_at: string;
   baratel_id: number;
+  submited_by: UserType;
+  updated_by: UserType;
+
 }
 
 export interface TehnickiSekretarType {
@@ -117,6 +125,9 @@ export interface TehnickiSekretarType {
   created_at: string;
   updated_at: string;
   izdavaci_id: number;
+  submited_by: UserType;
+  updated_by: UserType;
+
 }
 
 export interface Baratel {

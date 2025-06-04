@@ -19,7 +19,8 @@ const Prodekan: React.FC = () => {
   const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [datumTehnicki, setDatumTehnicki] = useState<string>("");
-
+  const [potpisTehnicki, setPotpisTehnicki] = useState<string>("");
+  
   // TIP NABAVKA
   const [tip, setTip] = useState<string>("javna");
   const [datumTip, setDatumTip] = useState<string>("");
@@ -29,14 +30,16 @@ const Prodekan: React.FC = () => {
   const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
   const [istTip, setIstTip] = useState<number>();
   const [vkPotroseno, setVkPotroseno] = useState<number>();
-
+  const [potpisTip, setPotpisTip] = useState<string>("");
+  
   // BARATEL NABAVKA
   const [brKartonBaratel, setBrKartonBaratel] = useState<number>();
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [datumBaratel, setDatumBaratel] = useState<string>("");
   const [baratelId, setBaratelId] = useState<number>();
-
+  const [potpisBaratel, setPotpisBaratel] = useState<string>("");
+  
   // SMETKOVODSTVO
   const [brKartonSmetkovodstvo, setBrKartonSmetkovodstvo] = useState<number>();
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
@@ -46,11 +49,13 @@ const Prodekan: React.FC = () => {
   const [smetka, setSmetka] = useState<string>("");
   const [konto, setKonto] = useState<string>("");
   const [datumSmetkovodstvo, setDatumSmetkovodstvo] = useState<string>("");
-
+  const [potpisSmetkovodstvo, setPotpisSmetkovodstvo] = useState<string>("");
+  
   //PRODEKAN
   const [datumProdekan, setDatumProdekan] = useState<string>("");
   const [isSealed, setIsSealed] = useState<boolean>();
-
+  const [potpisProdekan, setPotpisProdekan] = useState<string>("");
+  
   // COMMENTS
   const [commentTehnicki, setCommentTehnicki] = useState<string>("");
   const [commentTipNabavka, setCommentTipNabavka] = useState<string>("");
@@ -76,7 +81,8 @@ const Prodekan: React.FC = () => {
         setIzdavaci_id(data.tehnicki_sekretar?.izdavaci_id ?? undefined);
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setVk_vrednost(data.tehnicki_sekretar?.vk_vrednost ?? undefined);
-        
+        setPotpisTehnicki(data.tehnicki_sekretar.updated_by?.name ?? data.tehnicki_sekretar.submited_by?.name);
+
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
         setDatumTip(data.tip_nabavka?.datum ?? "");
@@ -95,6 +101,7 @@ const Prodekan: React.FC = () => {
           setIstTip(data.tip_nabavka?.tender?.ist_tip ?? undefined);
           setVkPotroseno(data.tip_nabavka?.tender?.vk_potroseno ?? undefined);
         }
+        setPotpisTip(data.tip_nabavka.updated_by?.name ?? data.tip_nabavka.submited_by?.name);
 
         // Baratel Nabavka
         setBaratelId(data.baratel_javna_nabavka?.baratel_id ?? undefined);
@@ -102,6 +109,7 @@ const Prodekan: React.FC = () => {
         setNazivProekt(data.baratel_javna_nabavka?.naziv_proekt ?? "");
         setPoteklo(data.baratel_javna_nabavka?.poteklo ?? "");
         setDatumBaratel(data.baratel_javna_nabavka?.datum ?? "");
+        setPotpisBaratel(data.baratel_javna_nabavka.updated_by?.name ?? data.baratel_javna_nabavka.submited_by?.name)
 
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
@@ -114,6 +122,7 @@ const Prodekan: React.FC = () => {
         setSmetka(data.smetkovodstvo?.smetka ?? "");
         setKonto(data.smetkovodstvo?.konto ?? "");
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
+        setPotpisSmetkovodstvo(data.smetkovodstvo.updated_by?.name ?? data.smetkovodstvo.submited_by?.name)
 
         //Prodekan
         setDatumProdekan(
@@ -122,17 +131,20 @@ const Prodekan: React.FC = () => {
             : ""
         );
         setIsSealed(data?.is_sealed ?? undefined);
+        setPotpisProdekan(data.approved_by.name)
 
         // COMMENTS
         setCommentTehnicki(data.tehnicki_sekretar?.comment ?? "");
         setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
         setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
         setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
+
         // STATUS
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
         setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
+
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
@@ -147,8 +159,6 @@ const Prodekan: React.FC = () => {
       statusTipNabavka === "rejected" ||
       statusBaratel === "rejected" ||
       statusSmetkovodstvo === "rejected";
-
-    console.log('hasRejectedSection', statusTehnicki, statusBaratel, statusSmetkovodstvo, statusTipNabavka);
 
     if (hasRejectedSection) {
       setShowUnauthorizedModal(true);
@@ -218,6 +228,9 @@ const Prodekan: React.FC = () => {
 
           <label>Вкупна вредност на фактура (со ДДВ)</label>
           <input type="text" value={String(vk_vrednost ?? "")} readOnly />
+
+          <label>Потпис</label>
+          <input type="text" value={potpisTehnicki} readOnly/>
         </div>
       </div>
 
@@ -260,6 +273,8 @@ const Prodekan: React.FC = () => {
             <input type="text" value={ostanatiRaspSredstva ?? ""} readOnly />
             <label>Датум</label>
             <input type="date" value={datumTip ?? ""} readOnly />
+            <label>Потпис</label>
+            <input type="text" value={potpisTip} readOnly/>
           </div>
         </div>
       ) : (
@@ -275,6 +290,8 @@ const Prodekan: React.FC = () => {
             <input type="text" value={vkPotroseno ?? ""} readOnly />
             <label>Датум</label>
             <input type="date" value={datumTip ?? ""} readOnly />
+            <label>Потпис</label>
+            <input type="text" value={potpisTip} readOnly/>
           </div>
         </div>
       )}
@@ -306,6 +323,8 @@ const Prodekan: React.FC = () => {
           <input type="text" value={poteklo} readOnly />
           <label>Датум</label>
           <input type="text" value={datumBaratel} readOnly />
+          <label>Потпис</label>
+          <input type="text" value={potpisBaratel} readOnly/>
         </div>
       </div>
 
@@ -343,6 +362,8 @@ const Prodekan: React.FC = () => {
           <input type="text" value={konto} readOnly />
           <label>Датум</label>
           <input type="text" value={datumSmetkovodstvo} readOnly />
+          <label>Потпис</label>
+          <input type="text" value={potpisSmetkovodstvo} readOnly/>
         </div>
       </div>
 
@@ -369,6 +390,8 @@ const Prodekan: React.FC = () => {
             onChange={(e) => setDatumProdekan(e.target.value)}
             readOnly={isSealed}
           />
+          <label>Потпис</label>
+          <input type="text" value={potpisProdekan} readOnly/>
         </div>
       </div>
       <div className="form-buttons">
