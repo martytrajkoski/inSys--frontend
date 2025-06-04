@@ -139,14 +139,14 @@
                 border-spacing: 0 10px;
 
                 thead tr {
-                    background-color: #007bff;
-                    color: #fff;
+                    background-color: #D9D9D9;
+                    color: black;
 
                     th {
                         padding: 14px 20px;
                         text-align: left;
                         font-weight: 600;
-                        font-size: 17px;
+                        font-size: 18px;
 
                         &:last-child {
                             width: 160px;
@@ -208,18 +208,24 @@
                     }
 
                     button:nth-child(1) {
-                        background-color: #007bff;
+                        border: 2px solid #e45830;
+                        background-color: white;
+                        color: #e45830;
 
-                        &:hover {
-                            background-color: darken(#007bff, 12%);
+                        &:hover{
+                            background-color: #e457302c;
+                            transition: 300ms;
                         }
                     }
 
                     button:nth-child(2) {
-                        background-color: #dc3545;
+                        border: 2px solid #e45830;
+                        background-color: #e45830;
+                        color: white;
 
-                        &:hover {
-                            background-color: darken(#dc3545, 10%);
+                        &:hover{
+                            background-color: #af4325;
+                            transition: 300ms;
                         }
                     }
                 }
