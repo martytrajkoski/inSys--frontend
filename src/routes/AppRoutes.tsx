@@ -17,6 +17,10 @@ import Arhiva from "../pages/MainMenu/Arhiva";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes: React.FC = () => {
+
+  const data = JSON.parse(localStorage.getItem("inSys") || '');
+  const role = data.role;
+
   return (
     <Router>
       <Routes>
@@ -35,12 +39,13 @@ const AppRoutes: React.FC = () => {
 
         {/* Department routes */}
           <Route element={<Department />}>
-            <Route path="tehnickisekretar" element={<TehnickiSekretar />} />
-            <Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />
-            <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />
-            <Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />
-            <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />
-            <Route path="prodekan/:br_faktura" element={<Prodekan />} />
+            {role == 1 && (<Route path="prodekan/:br_faktura" element={<Prodekan />} />)}
+            {role == 2 && (<Route path="tehnickisekretar" element={<TehnickiSekretar />} />)}
+            {role == 2 && (<Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />)}
+            {role == 3 && (<Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />)}
+            {(role == 3 || role == 4) && (<Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />)}
+            {role == 5 && (<Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />)}
+            
           </Route>
         </Route>
 
