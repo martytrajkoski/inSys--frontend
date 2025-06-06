@@ -117,9 +117,7 @@ const BaratelNabavka: React.FC = () => {
     }
   };
 
-  const deleteBaratelNabavka = async (e: any) => {
-    e.preventDefault();
-
+  const deleteBaratelNabavka = async () => {
     try {
       const response = await axiosClient.delete(
         `/baratelnabavka/destroy/${documentId}`
@@ -251,7 +249,7 @@ const BaratelNabavka: React.FC = () => {
       </form>
       <SweetAlert
           visibility={showDeleteModal}
-          onConfirm={() => deleteBaratelNabavka}
+          onConfirm={deleteBaratelNabavka}
           onCancel={() => setShowDeleteModal(false)}
           confirmButton="Избриши"
           message="Дали сте сигурни дека сакате да ја избришите оваа секција?"

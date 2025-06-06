@@ -137,9 +137,7 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  const deleteTipNabavka = async (e: any) => {
-    e.preventDefault();
-
+  const deleteTipNabavka = async () => {
     try {
       const response = await axiosClient.delete(
         `/tipnabavka/destroy/${documentId}`
@@ -330,7 +328,7 @@ const TipNabavka: React.FC = () => {
       </form>
       <SweetAlert
         visibility={showDeleteModal}
-        onConfirm={() => deleteTipNabavka}
+        onConfirm={deleteTipNabavka}
         onCancel={() => setShowDeleteModal(false)}
         confirmButton="Избриши"
         message="Дали сте сигурни дека сакате да ја избришите оваа секција?"

@@ -124,9 +124,7 @@ const Smetkovodstvo: React.FC = () => {
     }
   };
 
-  const deleteSmetkovodstvo = async (e: any) => {
-    e.preventDefault();
-
+  const deleteSmetkovodstvo = async () => {
     try {
       const response = await axiosClient.delete(
         `/smetkovodstvo/destroy/${documentId}`
@@ -328,7 +326,7 @@ const Smetkovodstvo: React.FC = () => {
       </form>
       <SweetAlert
         visibility={showDeleteModal}
-        onConfirm={() => deleteSmetkovodstvo}
+        onConfirm={deleteSmetkovodstvo}
         onCancel={() => setShowDeleteModal(false)}
         confirmButton="Избриши"
         message="Дали сте сигурни дека сакате да ја избришите оваа секција?"

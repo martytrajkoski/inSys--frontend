@@ -130,8 +130,8 @@ const TehnickiSekretar: React.FC = () => {
         }
     }
     
-    const deleteTehnicki = async(e: any) =>{
-        e.preventDefault();
+    const deleteTehnicki = async() =>{
+        
         try {
             const response = await axiosClient.delete(`/tehnickisekretar/destroy/${documentId}`);
 
@@ -236,7 +236,7 @@ const TehnickiSekretar: React.FC = () => {
             )}
             <SweetAlert
                 visibility={showDeleteModal}
-                onConfirm={() => deleteTehnicki}
+                onConfirm={deleteTehnicki}
                 onCancel={() => setShowDeleteModal(false)}
                 confirmButton="Избриши"
                 message="Дали сте сигурни дека сакате да ја избришите оваа фактура?"
