@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { Baratel } from "../../../types/types";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert"; 
 
 const BarateliPage: React.FC = () => {
   const [barateli, setBarateli] = useState<Baratel[]>([]);
@@ -8,6 +9,9 @@ const BarateliPage: React.FC = () => {
   const [editId, setEditId] = useState<number | null>(null);
   const [editName, setEditName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const filteredBarateli = barateli.filter((b) =>
     b.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -50,13 +54,26 @@ const BarateliPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const confirmDelete = (id: number) => {
+    setDeleteId(id);
+    setShowAlert(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteId === null) return;
     try {
-      await axiosClient.delete(`/barateli/${id}`);
+      await axiosClient.delete(`/barateli/${deleteId}`);
+      setShowAlert(false);
+      setDeleteId(null);
       fetchBarateli();
     } catch (error) {
       console.error("Error deleting baratel:", error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setShowAlert(false);
+    setDeleteId(null);
   };
 
   useEffect(() => {
@@ -120,13 +137,21 @@ const BarateliPage: React.FC = () => {
                       Измени
                     </button>
                   )}
-                  <button onClick={() => handleDelete(baratel.id)}>Избриши</button>
+                  <button onClick={() => confirmDelete(baratel.id)}>Избриши</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <SweetAlert
+        visibility={showAlert}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        message="Дали сте сигурни дека сакате да го избришете барателот?"
+        confirmButton="Избриши"
+      />
     </div>
   );
 };

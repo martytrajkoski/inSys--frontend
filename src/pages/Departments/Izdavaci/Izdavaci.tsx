@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { Izdavac } from "../../../types/types";
+import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert"; 
 
 const IzdavaciPage: React.FC = () => {
   const [izdavaci, setIzdavaci] = useState<Izdavac[]>([]);
@@ -9,9 +10,13 @@ const IzdavaciPage: React.FC = () => {
   const [editName, setEditName] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
   const filteredIzdavaci = izdavaci.filter((i) =>
     i.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   const fetchIzdavaci = async () => {
     try {
       const response = await axiosClient.get("/izdavaci");
@@ -49,20 +54,33 @@ const IzdavaciPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const confirmDelete = (id: number) => {
+    setDeleteId(id);
+    setShowAlert(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteId === null) return;
     try {
-      await axiosClient.delete(`/izdavaci/${id}`);
+      await axiosClient.delete(`/izdavaci/${deleteId}`);
+      setDeleteId(null);
+      setShowAlert(false);
       fetchIzdavaci();
     } catch (error) {
       console.error("Error deleting izdavac:", error);
     }
   };
 
+  const handleCancelDelete = () => {
+    setDeleteId(null);
+    setShowAlert(false);
+  };
+
   useEffect(() => {
     fetchIzdavaci();
   }, []);
 
-   return (
+  return (
     <div className="mainmenu-content">
       <div className="departments-container">
         <h1>Преглед на издавачи</h1>
@@ -102,6 +120,10 @@ const IzdavaciPage: React.FC = () => {
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleUpdate();
+                      }}
+                      autoFocus
                     />
                   ) : (
                     izdavac.name
@@ -115,13 +137,21 @@ const IzdavaciPage: React.FC = () => {
                       Измени
                     </button>
                   )}
-                  <button onClick={() => handleDelete(izdavac.id)}>Избриши</button>
+                  <button onClick={() => confirmDelete(izdavac.id)}>Избриши</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <SweetAlert
+        visibility={showAlert}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        message="Дали сте сигурни дека сакате да го избришете издавачот?"
+        confirmButton="Избриши"
+      />
     </div>
   );
 };
