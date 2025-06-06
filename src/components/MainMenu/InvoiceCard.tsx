@@ -74,6 +74,8 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
             <div>Датум</div>
             {role !== "Продекан за финансии" && <div>Статус</div>}
             <div>Статус на фактура</div>
+            {role === "Технички секретар" && <div>PDF</div>}
+            {role === "Продекан за финансии" && <div>PDF</div>}
           </div>
           {items.map((item, index) => {
             let statusLabel = getFakturaFlag(item.status);
@@ -124,6 +126,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
                     </p>
                   )}
                 </div>
+                <div>pdf</div>
               </Link>
             );
           })}
