@@ -39,6 +39,21 @@
             gap: 40px;
             align-items: center;
 
+            .archive-sort{
+                select{
+                    border-radius: 10px;
+                    font-size: 15px;
+                    padding: 5px;
+                    text-align: center;
+                    border: 2px solid #D9D9D9;
+                }
+            }
+
+            .mainmenu-tehnicki-buttons{
+                display: flex;
+                gap: 15px;
+            }
+
             button{
                 background-color: #e45830;
                 border: 2px solid #e45830;

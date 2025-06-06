@@ -31,10 +31,11 @@ const Arhiva: React.FC = () => {
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState<string>("")
   const [role, setRole] = useState<string>("");
+  const [sortYear, setSortYear] = useState<number>(1971);
 
   const fetchArhivedFakturas = async () => {
     try {
-      const response = await axiosClient.get(`/faktura/archive/?page=${fakturaCurrentPage}`);
+      const response = await axiosClient.get(`/faktura/archive/?year=${sortYear}&page=${fakturaCurrentPage}`);
 
       if (response.status === 201) {
         setArchiveFaktura(response.data.documents.data);
@@ -76,6 +77,9 @@ const Arhiva: React.FC = () => {
 
   useEffect(() => {
     fetchArhivedFakturas();
+  }, [sortYear]);
+  
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -109,6 +113,20 @@ const Arhiva: React.FC = () => {
       </div>
       <div className="mainmenu-invoices">
         <h1>Архива</h1>
+        <div className="archive-sort">
+          <label>Сортирај по година: </label>
+          <select
+            value={sortYear}
+            onChange={(e) => {
+              setSortYear(Number(e.target.value));
+            }}
+          >
+            <option value={1971}>1971</option>
+            <option value={2023}>2023</option>
+            <option value={2024}>2024</option>
+            <option value={2025}>2025</option>
+          </select>
+        </div>
         <InvoiceCard items={archiveFaktura} role={role} />
         {fakturaLastPage && fakturaLastPage > 1 && (
           <Pagination

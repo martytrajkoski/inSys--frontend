@@ -154,8 +154,10 @@ const PregledFakturi: React.FC = () => {
 
       {role === "Технички секретар" ? (
         <div className="mainmenu-invoices">
-          <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
-          <button onClick={(e) => {e.preventDefault(); handleImportModal();}}>Скенирај фактура</button>
+          <div className="mainmenu-tehnicki-buttons">
+            <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
+            <button onClick={(e) => {e.preventDefault(); handleImportModal();}}>Скенирај фактура</button>
+          </div>
           <InvoiceCard items={faktura} role={role} />
           {fakturaLastPage && fakturaLastPage > 1 && (
             <Pagination
@@ -203,8 +205,8 @@ const PregledFakturi: React.FC = () => {
       )}
 
       {openImportModal && (
-                <ImportFile onClose={handleImportModal}/>
-            )}
+        <ImportFile onClose={handleImportModal}/>
+      )}
     </div>
   );
 };
