@@ -31,19 +31,20 @@ const Arhiva: React.FC = () => {
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState<string>("")
   const [role, setRole] = useState<string>("");
-  const [sortYear, setSortYear] = useState<number>(1971);
+  const [sortYear, setSortYear] = useState<number>();
   const [selectSortYears, setSelectSortYears] = useState<number[]>([]);
-
+  
   const fetchArhivedFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/archive/?year=${sortYear}&page=${fakturaCurrentPage}`);
-
+      
       if (response.status === 201) {
         setSelectSortYears(response.data.years)
-        setArchiveFaktura(response.data.documents.data);
+        setArchiveFaktura(response.data.documents.data || []);
         setFakturaLastPage(response.data.documents.last_page);
         setFakturaCurrentPage(response.data.documents.current_page);
       }
+
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +80,8 @@ const Arhiva: React.FC = () => {
 
   useEffect(() => {
     fetchArhivedFakturas();
-  }, [sortYear]);
+    setFakturaCurrentPage(1);
+  }, [sortYear, fakturaCurrentPage]);
   
   useEffect(() => {
     fetchUser();
