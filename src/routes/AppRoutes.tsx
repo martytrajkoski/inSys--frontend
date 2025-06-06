@@ -14,8 +14,9 @@ import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 import Arhiva from "../pages/MainMenu/Arhiva";
-import ProtectedRoute from "./ProtectedRoute";
 import Pdf from "../pages/PDF/Pdf";
+import ProtectedRoute from "./ProtectedRoute";
+import RoleProtectedRoute from "./RoleProtectedRoute";
 
 const AppRoutes: React.FC = () => {
   let role: number | null = null;
@@ -47,18 +48,31 @@ const AppRoutes: React.FC = () => {
             <Route path="archive" element={<Arhiva />} />
           </Route>
 
-        {/* Department routes */}
+          {/* Department routes */}
           <Route element={<Department />}>
-            {role === 1 && (<Route path="prodekan/:br_faktura" element={<Prodekan />} />)}
-            {role === 2 && (<Route path="tehnickisekretar" element={<TehnickiSekretar />} />)}
-            {role === 2 && (<Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />)}
-            {role === 3 && (<Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />)}
-            {(role === 3 || role === 4) && (<Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />)}
-            {role === 5 && (<Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />)}
-            
+            <Route element={<RoleProtectedRoute allowedRoles={[1]} />}>
+              <Route path="prodekan/:br_faktura" element={<Prodekan />} />
+            </Route>
+
+            <Route element={<RoleProtectedRoute allowedRoles={[2]} />}>
+              <Route path="tehnickisekretar" element={<TehnickiSekretar />} />
+              <Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />
+            </Route>
+
+            <Route element={<RoleProtectedRoute allowedRoles={[3]} />}>
+              <Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />
+            </Route>
+
+            <Route element={<RoleProtectedRoute allowedRoles={[3, 4]} />}>
+              <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />
+            </Route>
+
+            <Route element={<RoleProtectedRoute allowedRoles={[5]} />}>
+              <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />
+            </Route>
           </Route>
         </Route>
-        <Route path="/pdf" element={<Pdf/>}></Route>
+        <Route path="/pdf/:br_faktura" element={<Pdf />} />
         {/* Default route */}
         <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>

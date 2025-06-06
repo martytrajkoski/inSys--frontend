@@ -414,7 +414,7 @@ const Prodekan: React.FC = () => {
               Одобри ја фактурата
             </button>
           ) : (
-            <button>Печати</button>
+            <button onClick={()=>navigate(`/pdf/${br_faktura}`)}>Печати</button>
           )}
         </div>
       </div>

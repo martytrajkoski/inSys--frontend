@@ -4,16 +4,19 @@ import jsPDF from 'jspdf';
 import axiosClient from '../../axiosClient/axiosClient';
 import type { FakturaType } from '../../types/types';
 import Logo from "../../../public/Logo/Asset_3.png";
+import { useParams } from 'react-router-dom';
 
 const Pdf: React.FC = () => {
+    const { br_faktura } = useParams<{ br_faktura: string }>();
     const [faktura, setFaktura] = useState<FakturaType>();
     const invoiceRef = useRef<HTMLDivElement>(null);
 
     const fetchFaktura = async () => {
         try {
-            const response = await axiosClient.get(`/faktura/show/1`);
+            const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
             if (response.status === 201) {
                 setFaktura(response.data.faktura);
+                handleDownloadPDF();
             }
         } catch (error) {
             console.error(error);
@@ -43,8 +46,6 @@ const Pdf: React.FC = () => {
 
     return (
         <div>
-            <button onClick={handleDownloadPDF}>Превземи како PDF</button>
-
             <div className="invoice-form" ref={invoiceRef}>
                 <section>
                     <img src={Logo} alt="Logo" />
