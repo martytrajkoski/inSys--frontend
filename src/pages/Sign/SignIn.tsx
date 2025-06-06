@@ -27,7 +27,7 @@ const SignIn: React.FC = () => {
       });
       const token = response.data.token;
       const role = response.data.user.role_id;
-      localStorage.setItem("inSys", JSON.stringify({ token,  role}));
+      localStorage.setItem("inSys", JSON.stringify({ 'token': token, 'role': role}));
       navigate("/");
     } catch (err: any) {
       if (err.response && err.response.status === 401) {

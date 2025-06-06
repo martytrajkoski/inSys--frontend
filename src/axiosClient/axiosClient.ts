@@ -10,7 +10,19 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const data = JSON.parse(localStorage.getItem("inSys") || '');
+    const raw = localStorage.getItem("inSys");
+    let data;
+
+    try {
+      data = JSON.parse(raw || '{}');
+
+      if (typeof data === 'string') {
+        data = { token: data };
+      }
+    } catch {
+      data = { token: raw };
+    }
+
     const token = data.token;
 
     if (token) {

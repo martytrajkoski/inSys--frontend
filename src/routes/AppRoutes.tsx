@@ -15,11 +15,21 @@ import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 import Arhiva from "../pages/MainMenu/Arhiva";
 import ProtectedRoute from "./ProtectedRoute";
+import Pdf from "../pages/PDF/Pdf";
 
 const AppRoutes: React.FC = () => {
+  let role: number | null = null;
 
-  const data = JSON.parse(localStorage.getItem("inSys") || '');
-  const role = data.role;
+  try {
+    const raw = localStorage.getItem("inSys");
+    const parsed = raw ? JSON.parse(raw) : null;
+
+    if (parsed && typeof parsed === "object") {
+      role = parsed.role ?? null;
+    }
+  } catch (e) {
+    console.error("Failed to parse localStorage item 'inSys'", e);
+  }
 
   return (
     <Router>
@@ -39,16 +49,16 @@ const AppRoutes: React.FC = () => {
 
         {/* Department routes */}
           <Route element={<Department />}>
-            {role == 1 && (<Route path="prodekan/:br_faktura" element={<Prodekan />} />)}
-            {role == 2 && (<Route path="tehnickisekretar" element={<TehnickiSekretar />} />)}
-            {role == 2 && (<Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />)}
-            {role == 3 && (<Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />)}
-            {(role == 3 || role == 4) && (<Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />)}
-            {role == 5 && (<Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />)}
+            {role === 1 && (<Route path="prodekan/:br_faktura" element={<Prodekan />} />)}
+            {role === 2 && (<Route path="tehnickisekretar" element={<TehnickiSekretar />} />)}
+            {role === 2 && (<Route path="tehnickisekretar/:br_faktura" element={<TehnickiSekretar />} />)}
+            {role === 3 && (<Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />)}
+            {(role === 3 || role === 4) && (<Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />)}
+            {role === 5 && (<Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />)}
             
           </Route>
         </Route>
-
+        <Route path="/pdf" element={<Pdf/>}></Route>
         {/* Default route */}
         <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>

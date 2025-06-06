@@ -1,0 +1,93 @@
+.invoice-form {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+
+  h1 {
+    text-align: left;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  section {
+    margin-bottom: 1rem;
+
+        table, th, tr, td{
+            border: 0.01rem solid black;
+            border-collapse: collapse;
+
+        }
+
+      table {
+      width: 100%;
+
+      td {
+        // padding: 0.5rem;
+        vertical-align: top;
+        font-size: 13px;
+
+        &:first-child {
+          font-weight: 500;
+          width: 40%;
+        }
+        padding: 0.2rem;
+    }
+}
+
+   img {
+        width: 100%;
+        max-width: 180px;
+        height: auto;
+          display: block;
+
+    }
+
+
+    h2 {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+      color: #333;
+    }
+
+//     input,
+//     textarea {
+//       margin-top: 0.25rem;
+//       padding: 0.3rem;
+//       border: 1px solid #ccc;
+//       border-radius: 4px;
+//     }
+
+//     input, textarea{
+//         border-bottom: 1px solid black;
+//         border-top: none;
+//         border-left: none;
+//         border-right: none;
+//         border-radius: 0px;
+//     }
+
+//     textarea {
+//       min-height: 60px;
+//     }
+//     .form-grid {
+//       display: grid;
+//       grid-template-columns: 1fr 1fr;
+//       gap: 0.7rem;
+      
+//       label {
+//           display: flex;
+//           flex-direction: column;
+//             font-weight: 500;
+//             font-size: 0.8rem;
+
+//       }
+//     }
+
+//     p {
+//       margin-bottom: 1rem;
+//       font-style: italic;
+//     }
+  }
+}

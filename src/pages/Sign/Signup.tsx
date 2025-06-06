@@ -31,7 +31,7 @@ const Signup: React.FC = () => {
       if (response.status === 201) {
         const token = response.data.token;
         const role = response.data.user.role_id;
-        localStorage.setItem("inSys", JSON.stringify({ token,  role}));
+        localStorage.setItem("inSys", JSON.stringify({ 'token': token, 'role': role}));
         console.log("User created and Logged in");
         navigate("/");
       }
