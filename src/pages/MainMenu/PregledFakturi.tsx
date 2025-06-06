@@ -4,6 +4,7 @@ import axiosClient from "../../axiosClient/axiosClient";
 import type { FakturaType } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination/Pagination";
+import ImportFile from "../../components/ImportFile/ImportFile";
 
 const getRouteByRole = (role: string, br_faktura: number): string => {
   switch (role) {
@@ -29,65 +30,77 @@ const PregledFakturi: React.FC = () => {
   const [fakturaLastPage, setFakturaLastPage] = useState<number>();
   const [fakturaCurrentPage, setFakturaCurrentPage] = useState<number>(1);
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
-  const [filterType, setFilterType] = useState<"Нови фактури" | "Прегледани фактури" | "Прифатени" | "Одбиени">("Нови фактури");
+  const [openImportModal, setopenImportModal] = useState<boolean>(false);
+  const [filterType, setFilterType] = useState<
+    "Нови фактури" | "Прегледани фактури" | "Прифатени" | "Одбиени"
+  >("Нови фактури");
 
   const navigate = useNavigate();
 
-  const fetchFakturas = async() => {
-    if(filterType == "Нови фактури" || filterType == "Прегледани фактури"){
-      console.log('filterType', filterType)
+  const fetchFakturas = async () => {
+    if (filterType == "Нови фактури" || filterType == "Прегледани фактури") {
+      console.log("filterType", filterType);
       try {
-        const response = await axiosClient.post(`/faktura/read?page=${fakturaCurrentPage}`, {
-          filter: filterType == "Нови фактури" ? ('not_read') : ('read')
-        });
-  
-        if(response.status === 201){
-          console.log('response.data.document.data', response.data.documents.data)
-          setFaktura(response.data.documents.data)
+        const response = await axiosClient.post(
+          `/faktura/read?page=${fakturaCurrentPage}`,
+          {
+            filter: filterType == "Нови фактури" ? "not_read" : "read",
+          }
+        );
+
+        if (response.status === 201) {
+          console.log(
+            "response.data.document.data",
+            response.data.documents.data
+          );
+          setFaktura(response.data.documents.data);
           setFakturaLastPage(response.data.documents.last_page);
           setFakturaCurrentPage(response.data.documents.current_page);
         }
-  
       } catch (error) {
         console.error(error);
       }
-
     } else {
-
       try {
-        const response = await axiosClient.post(`/faktura/status?page=${fakturaCurrentPage}`, {
-          status: filterType == "Одбиени" ? ('rejected') : ('approved')
-        });
-  
-        if(response.status === 201){
-          console.log('response.data.document.data', response.data.documents)
-          setFaktura(response.data.documents.data)
+        const response = await axiosClient.post(
+          `/faktura/status?page=${fakturaCurrentPage}`,
+          {
+            status: filterType == "Одбиени" ? "rejected" : "approved",
+          }
+        );
+
+        if (response.status === 201) {
+          console.log("response.data.document.data", response.data.documents);
+          setFaktura(response.data.documents.data);
           setFakturaLastPage(response.data.documents.last_page);
           setFakturaCurrentPage(response.data.documents.current_page);
         }
-  
       } catch (error) {
         console.error(error);
       }
     }
-  }
+  };
+
+  const handleImportModal = () => {
+    setopenImportModal(!openImportModal);
+  };
 
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setSearch(value);
 
     try {
-      const response = await axiosClient.post('/faktura/search',{
-        search: value
-      })
+      const response = await axiosClient.post("/faktura/search", {
+        search: value,
+      });
 
-      if(response.status === 201){
-        setFilteredFaktura(response.data.documents)
+      if (response.status === 201) {
+        setFilteredFaktura(response.data.documents);
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const fetchUser = async () => {
     try {
@@ -104,8 +117,6 @@ const PregledFakturi: React.FC = () => {
     fetchFakturas();
     fetchUser();
   }, [fakturaCurrentPage, filterType]);
-
-
 
   return (
     <div className="mainmenu-content">
@@ -128,7 +139,9 @@ const PregledFakturi: React.FC = () => {
                   className="dropdown-item"
                 >
                   <span>{item.br_faktura}</span>
-                  <span className={`invoice-flag ${item.read ? "read" : "unread"}`}>
+                  <span
+                    className={`invoice-flag ${item.read ? "read" : "unread"}`}
+                  >
                     {item.read ? "Прочитано" : "Непрочитано"}
                   </span>
                 </li>
@@ -142,24 +155,40 @@ const PregledFakturi: React.FC = () => {
       {role === "Технички секретар" ? (
         <div className="mainmenu-invoices">
           <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
+          <button onClick={(e) => {e.preventDefault(); handleImportModal();}}>Скенирај фактура</button>
           <InvoiceCard items={faktura} role={role} />
           {fakturaLastPage && fakturaLastPage > 1 && (
             <Pagination
               currentPage={fakturaCurrentPage}
               lastPage={fakturaLastPage ?? 1}
               onPageChange={(page) => setFakturaCurrentPage(page)}
-            />   
+            />
           )}
         </div>
       ) : (
         <div className="mainmenu-invoices">
           <div className="invoice-filter-dropdown">
             <h1>{filterType}</h1>
-            <select value={filterType} onChange={(e) => setFilterType(e.target.value as | "Нови фактури" | "Прегледани фактури" | "Прифатени" | "Одбиени")}>
+            <select
+              value={filterType}
+              onChange={(e) =>
+                setFilterType(
+                  e.target.value as
+                    | "Нови фактури"
+                    | "Прегледани фактури"
+                    | "Прифатени"
+                    | "Одбиени"
+                )
+              }
+            >
               <option value="Нови фактури">Нови фактури</option>
               <option value="Прегледани фактури">Прегледани фактури</option>
-              {role !== "Продекан за финансии" && <option value="Прифатени">Прифатени</option>}
-              {role !== "Продекан за финансии" && <option value="Одбиени">Одбиени</option>}
+              {role !== "Продекан за финансии" && (
+                <option value="Прифатени">Прифатени</option>
+              )}
+              {role !== "Продекан за финансии" && (
+                <option value="Одбиени">Одбиени</option>
+              )}
             </select>
           </div>
           <InvoiceCard items={faktura} role={role} />
@@ -168,10 +197,14 @@ const PregledFakturi: React.FC = () => {
               currentPage={fakturaCurrentPage}
               lastPage={fakturaLastPage ?? 1}
               onPageChange={(page) => setFakturaCurrentPage(page)}
-            />        
+            />
           )}
         </div>
       )}
+
+      {openImportModal && (
+                <ImportFile onClose={handleImportModal}/>
+            )}
     </div>
   );
 };
