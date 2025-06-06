@@ -11,7 +11,7 @@ const Pdf: React.FC = () => {
 
     const fetchFaktura = async () => {
         try {
-            const response = await axiosClient.get(`/faktura/show/100`);
+            const response = await axiosClient.get(`/faktura/show/1`);
             if (response.status === 201) {
                 setFaktura(response.data.faktura);
             }
