@@ -72,8 +72,6 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
             <div>Архивски број</div>
             <div>Број на фактура</div>
             <div>Датум</div>
-            {role === "Технички секретар" && <div>PDF</div>}
-            {role === "Продекан за финансии" && <div>PDF</div>}
             {role !== "Продекан за финансии" && <div>Статус</div>}
             <div>Статус на фактура</div>
           </div>
@@ -82,7 +80,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
             let statusDepartment = getStatusDepartment(role, item);
 
             return (
-              <Link
+              <Link 
                 to={getRouteByRole(role, item.br_faktura)}
                 className="invoice-card-item"
                 key={index}
@@ -92,7 +90,6 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
                 <div className="invoice-date">
                   {new Date(item.created_at).toISOString().slice(0, 10)}
                 </div>
-                <div>pdf</div>
                 {role !== "Продекан за финансии" && (
                   <div>
                     {statusDepartment ? (

@@ -30,7 +30,7 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
     const handleUpload = async () => {
         const formData = new FormData();
         formData.append('arhivski_br', 'AB-12');     
-        formData.append('br_faktura', '3');       
+        formData.append('br_faktura', '1234');       
         formData.append('datum', '2025-06-07');               
         formData.append('scan_file', file);              
 
