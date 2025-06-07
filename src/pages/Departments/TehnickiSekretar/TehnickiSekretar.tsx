@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ImportFile from "../../../components/ImportFile/ImportFile";
 import axiosClient from "../../../axiosClient/axiosClient";
 import type { IzdavaciType } from "../../../types/types";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,8 +10,7 @@ const TehnickiSekretar: React.FC = () => {
     const [is_sealed, setIs_sealed] = useState<number>(0);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-    
-    const [openImportModal, setopenImportModal] = useState<boolean>(false);
+
     const [arhivski_br, setArhivski_br] = useState<string>('');
     const [br_fakturaa, setBr_fakturaa] = useState<number>();
     const [br_dogovor, setBr_dogovor] = useState<number>();
@@ -29,10 +27,6 @@ const TehnickiSekretar: React.FC = () => {
     const [documentId, setDocumentId] = useState<number>();
 
     const navigate = useNavigate();
-
-    const handleImportModal = () => {
-        setopenImportModal(!openImportModal);
-    }
 
     const fetchTehnicki = async() => {
         try {
@@ -205,10 +199,7 @@ const TehnickiSekretar: React.FC = () => {
                         <input type="number" value={vk_vrednost}  placeholder="0" onChange={(e) => setVk_vrednost(Number(e.target.value))}/>
                     </div>
                     <div className="form-buttons">
-                        <div className="form-button-scan">
-                            <button onClick={(e) => {e.preventDefault(); handleImportModal();}}>Скенирај фактура</button>
-                            <span>Document.txt</span>
-                        </div>
+                            <div></div>
                         <div className="form-buttons-edit">
                           {is_sealed === 0 && (
                             <>
@@ -231,9 +222,6 @@ const TehnickiSekretar: React.FC = () => {
                     )}
                 </div>
             </form>
-            {openImportModal && (
-                <ImportFile onClose={handleImportModal}/>
-            )}
             <SweetAlert
                 visibility={showDeleteModal}
                 onConfirm={deleteTehnicki}

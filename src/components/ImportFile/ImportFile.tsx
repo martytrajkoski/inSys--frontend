@@ -1,6 +1,8 @@
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
+import axiosClient from "../../axiosClient/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 interface ScanInvoiceModalProps {
     onClose: () => void;
@@ -8,6 +10,7 @@ interface ScanInvoiceModalProps {
 
 const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
 
+    const navigate = useNavigate();
     const [file, setFile] = useState<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +27,34 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
       e.preventDefault();
     };
 
+    const handleUpload = async () => {
+        const formData = new FormData();
+        formData.append('arhivski_br', 'AB-12');     
+        formData.append('br_faktura', '3');       
+        formData.append('datum', '2025-06-07');               
+        formData.append('scan_file', file);              
+
+        try {
+            const response = await axiosClient.post('/tehnickisekretar/store_pdf', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            });
+
+            if (response.status === 201) {
+                console.log('Tehnicki Sekretar and Faktuta created');
+                navigate('/');  
+            }
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            if (error.response?.status === 422) {
+            console.error('Validation errors:', error.response.data.errors);
+            }
+        }
+        };
+
+    console.log("file", file);
+    
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
@@ -70,7 +101,9 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
                         onChange={handleFileChange}
                         accept="application/pdf"
                     />
+                    
                 </div>
+                    <button onClick={handleUpload}>submit</button>
                 {/* {file && <p>Selected file: {file.name}</p>} */}
             </div>
         </div>
