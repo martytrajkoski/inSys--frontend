@@ -8,7 +8,7 @@ const Smetkovodstvo: React.FC = () => {
   const navigate = useNavigate(); 
 
   const { br_faktura } = useParams<string>();
-  const [is_sealed, setIs_sealed] = useState<number>();
+  const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
@@ -51,6 +51,7 @@ const Smetkovodstvo: React.FC = () => {
         setReview_comment(response.data.document.review_comment);
         setCreated(true);
       } else if (response.status === 404) {
+        setIs_sealed(0);
         setBrKarton(undefined);
         setSostojbaKarton("");
         setOsnovaEvidentiranje(undefined);
@@ -147,7 +148,7 @@ const Smetkovodstvo: React.FC = () => {
       console.error(error);
     }
   };
-
+console.log('is_sealed', is_sealed)
   return (
     <>
       <form onSubmit={storeSmetkovodstvo}>

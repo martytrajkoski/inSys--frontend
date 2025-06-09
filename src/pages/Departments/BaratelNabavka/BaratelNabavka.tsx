@@ -7,10 +7,9 @@ import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const BaratelNabavka: React.FC = () => {
   const { br_faktura } = useParams<{ br_faktura: string }>();
-  const [is_sealed, setIs_sealed] = useState<number>();
+  const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-
   const [brKarton, setBrKarton] = useState<number>();
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
@@ -22,7 +21,7 @@ const BaratelNabavka: React.FC = () => {
 
   const [documentId, setDocumentId] = useState<number>();
   const [created, setCreated] = useState<boolean>();
-
+  
   useEffect(() => {
     fetchBarateli();
     showBaratel();
@@ -36,13 +35,13 @@ const BaratelNabavka: React.FC = () => {
       console.error("Failed to fetch barateli", error);
     }
   };
-
+  
   const showBaratel = async () => {
     try {
       const response = await axiosClient.get(
         `/baratelnabavka/show/${br_faktura}`
       );
-
+      
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
@@ -70,7 +69,7 @@ const BaratelNabavka: React.FC = () => {
 
   const storeBaratelNabavka = async (e: any) => {
     e.preventDefault();
-
+    
     try {
       const response = await axiosClient.post("/baratelnabavka/addDocument", {
         br_faktura: parseInt(br_faktura || "0", 10),
