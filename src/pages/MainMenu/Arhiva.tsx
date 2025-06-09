@@ -31,7 +31,7 @@ const Arhiva: React.FC = () => {
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
   const [search, setSearch] = useState<string>("")
   const [role, setRole] = useState<string>("");
-  const [sortYear, setSortYear] = useState<number>();
+  const [sortYear, setSortYear] = useState<number>(new Date().getFullYear());
   const [selectSortYears, setSelectSortYears] = useState<number[]>([]);
   
   const fetchArhivedFakturas = async () => {
