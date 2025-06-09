@@ -21,7 +21,7 @@ const TehnickiSekretar: React.FC = () => {
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
-  const [scan_file, setScan_file] = useState<string>("");
+  const [scan_file, setScan_file] = useState<string>();
 
   const [created, setCreated] = useState<boolean>();
   const [documentId, setDocumentId] = useState<number>();

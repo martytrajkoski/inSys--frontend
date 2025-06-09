@@ -78,6 +78,8 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
           {items.map((item, index) => {
             let statusLabel = getFakturaFlag(item.status);
             let statusDepartment = getStatusDepartment(role, item);
+
+
             return (
               <Link 
                 to={getRouteByRole(role, item.br_faktura)}
@@ -87,7 +89,7 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
                 <div>{item.tehnicki_sekretar.arhivski_br}</div>
                 <div>{item.br_faktura}</div>
                 <div className="invoice-date">
-                  {new Date(item.created_at).toISOString().slice(0, 10)}
+                  {new Date(item.tehnicki_sekretar.datum).toISOString().slice(0, 10)}
                 </div>
                 {role !== "Продекан за финансии" && (
                   <div>
