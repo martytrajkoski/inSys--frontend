@@ -10,8 +10,7 @@ const Prodekan: React.FC = () => {
   const navigate = useNavigate();
 
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
-  const [showUnauthorizedModal, setShowUnauthorizedModal] =
-    useState<boolean>(false);
+  const [showUnauthorizedModal, setShowUnauthorizedModal] =useState<boolean>(false);
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");

@@ -1,18 +1,21 @@
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
-import { useNavigate } from "react-router-dom";
 
 interface ScanInvoiceModalProps {
     onClose: () => void;
 }
 
 const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
-
-    const navigate = useNavigate();
     const [file, setFile] = useState<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const [br_faktura, setBr_faktura] = useState<string>();
+    const [arhivski_br, setArhivski_br] = useState<string>();
+    const [datum, setDatum] = useState<string>();
+
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleFileChange = (e:any) => {
       setFile(e.target.files[0]);
@@ -28,10 +31,15 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
     };
 
     const handleUpload = async () => {
+
+        if(!arhivski_br || !br_faktura || !datum || !file){
+            setShowAlert(true);
+        }
+
         const formData = new FormData();
-        formData.append('arhivski_br', 'AB-12');     
-        formData.append('br_faktura', '1234');       
-        formData.append('datum', '2025-06-07');               
+        formData.append('arhivski_br', arhivski_br || "");     
+        formData.append('br_faktura', br_faktura || "");       
+        formData.append('datum', datum || "");               
         formData.append('scan_file', file);              
 
         try {
@@ -43,7 +51,7 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
 
             if (response.status === 201) {
                 console.log('Tehnicki Sekretar and Faktuta created');
-                navigate('/');  
+                window.location.reload();  
             }
         } catch (error: any) {
             console.error('Upload error:', error);
@@ -52,8 +60,6 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
             }
         }
         };
-
-    console.log("file", file);
     
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -83,28 +89,45 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({onClose}) => {
 
     return(
         <div className="import-file-backdrop">
-            <div 
-                className="upload-container"
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                ref={containerRef}
-                >
-                <div className="upload-content">
-                    <div className="upload-icon">
-                        <FontAwesomeIcon icon={faUpload}/>
-                    </div>
-                    <p>Drag & drop or <span className="upload-choose">Choose file</span> to upload</p>
-                    <p className="upload-formats">PDF</p>
-                    <input 
-                        type="file" 
-                        className="upload-input" 
-                        onChange={handleFileChange}
-                        accept="application/pdf"
-                    />
-                    
+            <div className="import-file" ref={containerRef}>
+                <div className="import-file-header">
+                    <h1>Прикачи фактура</h1>
+                    <FontAwesomeIcon icon={faClose} className="close-button" onClick={() => onClose?.()}/>
                 </div>
-                    <button onClick={handleUpload}>submit</button>
-                {/* {file && <p>Selected file: {file.name}</p>} */}
+                <div className="import-file-container">
+                    <div className="import-file-inputs">
+                        <div className="inputs">
+                            <input type="text" placeholder="Број на фактура" value={br_faktura} onChange={(e)=>setBr_faktura(e.target.value)} onFocus={() => setShowAlert(false)}/>
+                            <input type="text" placeholder="Архивски број" value={arhivski_br} onChange={(e)=>setArhivski_br(e.target.value)} onFocus={() => setShowAlert(false)}/>
+                            <input type="date" value={datum} onChange={(e)=>setDatum(e.target.value)} onFocus={() => setShowAlert(false)}/>
+                        </div>
+                        {showAlert && (
+                            <p style={{color: 'red'}}>Пополнете ги сите полиња!</p>
+                        )}
+                        <button onClick={handleUpload}>Прикачи</button>
+                    </div>
+                    <div 
+                        className="upload-container"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        >
+                        <div className="upload-content">
+                            <div className="upload-icon">
+                                <FontAwesomeIcon icon={faUpload}/>
+                            </div>
+                            <p>Drag & drop or <span className="upload-choose">Choose file</span> to upload</p>
+                            <p className="upload-formats">PDF</p>
+                            <input 
+                                type="file" 
+                                className="upload-input" 
+                                onChange={handleFileChange}
+                                accept="application/pdf"
+                            />
+                            
+                        {file && <p>{file.name}</p>}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )

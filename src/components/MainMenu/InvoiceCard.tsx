@@ -78,7 +78,6 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
           {items.map((item, index) => {
             let statusLabel = getFakturaFlag(item.status);
             let statusDepartment = getStatusDepartment(role, item);
-
             return (
               <Link 
                 to={getRouteByRole(role, item.br_faktura)}
