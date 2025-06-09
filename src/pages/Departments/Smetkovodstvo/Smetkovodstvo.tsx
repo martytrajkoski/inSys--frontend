@@ -183,6 +183,7 @@ console.log('is_sealed', is_sealed)
                   checked={osnovaEvidentiranje === 1}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(1)}
+                  required
                 />&nbsp;
                 Да
               </label>
@@ -193,6 +194,7 @@ console.log('is_sealed', is_sealed)
                   checked={osnovaEvidentiranje === 0}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(0)}
+                  required
                 />&nbsp;
                 Не
               </label>
@@ -209,6 +211,7 @@ console.log('is_sealed', is_sealed)
                   checked={formular === 1}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setFormular(1)}
+                  required
                 />&nbsp;
                 Да
               </label>
@@ -219,6 +222,7 @@ console.log('is_sealed', is_sealed)
                   checked={formular === 0}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setFormular(0)}
+                  required
                 />&nbsp;
                 Не
               </label>
@@ -235,6 +239,7 @@ console.log('is_sealed', is_sealed)
                   checked={vneseniSredstva === 1}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setVneseniSredstva(1)}
+                  required
                 />&nbsp;
                 Да
               </label>
@@ -245,6 +250,7 @@ console.log('is_sealed', is_sealed)
                   checked={vneseniSredstva === 0}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setVneseniSredstva(0)}
+                  required
                 />&nbsp;
                 Не
               </label>
@@ -261,6 +267,7 @@ console.log('is_sealed', is_sealed)
                   checked={smetka === "603"}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("603")}
+                  required
                 />&nbsp;
                 603
               </label>
@@ -271,6 +278,7 @@ console.log('is_sealed', is_sealed)
                   checked={smetka === "788"}
                   disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("788")}
+                  required
                 />&nbsp;
                 788
               </label>

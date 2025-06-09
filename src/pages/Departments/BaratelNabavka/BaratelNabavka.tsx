@@ -188,6 +188,7 @@ const BaratelNabavka: React.FC = () => {
                   checked={poteklo === "Средства на МФС"}
                   disabled={Boolean(is_sealed)}
                   onChange={(e) => setPoteklo(e.target.value)}
+                  required
                 />&nbsp;
                 Средства на МФС
               </label>
@@ -199,6 +200,7 @@ const BaratelNabavka: React.FC = () => {
                   checked={poteklo === "Буџет"}
                   disabled={Boolean(is_sealed)}
                   onChange={(e) => setPoteklo(e.target.value)}
+                  required
                 />&nbsp;
                 Буџет
               </label>

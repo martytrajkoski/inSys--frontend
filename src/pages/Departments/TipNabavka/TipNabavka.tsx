@@ -190,6 +190,7 @@ const TipNabavka: React.FC = () => {
                 value={brDogovor}
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setBrDogovor(Number(e.target.value))}
+                required
               />
               <label>Важност на договор до</label>
               <input
@@ -197,6 +198,7 @@ const TipNabavka: React.FC = () => {
                 value={vaznostDo}
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setVaznostDo(e.target.value)}
+                required
               />
               <label>Останати расположливи средства</label>
               <input
@@ -207,6 +209,7 @@ const TipNabavka: React.FC = () => {
                 onChange={(e) =>
                   setOstanatiRaspSredstva(Number(e.target.value))
                 }
+                required
               />
             </div>
             <div className="form-item-radio">
@@ -223,6 +226,7 @@ const TipNabavka: React.FC = () => {
                     checked={soglasnoDogovor === 1}
                     disabled={Boolean(is_sealed)}
                     onChange={() => setSoglasnoDogovor(1)}
+                    required
                   />
                   <label>Да</label>
                 </div>
@@ -233,6 +237,7 @@ const TipNabavka: React.FC = () => {
                     checked={soglasnoDogovor === 0}
                     disabled={Boolean(is_sealed)}
                     onChange={() => setSoglasnoDogovor(0)}
+                    required
                   />
                   <label>Не</label>
                 </div>
@@ -245,6 +250,7 @@ const TipNabavka: React.FC = () => {
                 value={datum}
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setDatum(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -262,6 +268,7 @@ const TipNabavka: React.FC = () => {
                     checked={istTip === 1}
                     readOnly={Boolean(is_sealed)}
                     onChange={() => setIstTip(1)}
+                    required
                   />
                   <label>Да</label>
                 </div>
@@ -272,6 +279,7 @@ const TipNabavka: React.FC = () => {
                     checked={istTip === 0}
                     readOnly={Boolean(is_sealed)}
                     onChange={() => setIstTip(0)}
+                    required
                   />
                   <label>Не</label>
                 </div>
@@ -285,6 +293,7 @@ const TipNabavka: React.FC = () => {
                 value={vkPotroseno}
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setVkPotroseno(Number(e.target.value))}
+                required
               />
             </div>
             <div className="form-item-inputs">
@@ -294,6 +303,7 @@ const TipNabavka: React.FC = () => {
                 value={datum}
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setDatum(e.target.value)}
+                required
               />
             </div>
           </div>
