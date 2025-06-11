@@ -138,12 +138,14 @@ const PregledFakturi: React.FC = () => {
                   key={item.id}
                   className="dropdown-item"
                 >
-                  <span>{item.br_faktura}</span>
-                  <span
-                    className={`invoice-flag ${item.read ? "read" : "unread"}`}
-                  >
-                    {item.read ? "Прочитано" : "Непрочитано"}
-                  </span>
+                  <span>Број на фактура: {item.br_faktura}</span>
+                  {role !== "Продекан за финансии" && (
+                    <span
+                      className={`invoice-flag ${item.read ? "read" : "unread"}`}
+                    >
+                      {item.read ? "Прочитано" : "Непрочитано"}
+                    </span>
+                  )}
                 </li>
               );
             })}

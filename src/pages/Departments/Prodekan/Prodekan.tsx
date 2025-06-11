@@ -73,7 +73,6 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         const data = response.data.faktura;
-        console.log('data', data.tehnicki_sekretar.status?? "")
 
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
