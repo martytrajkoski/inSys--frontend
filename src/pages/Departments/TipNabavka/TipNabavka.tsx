@@ -200,7 +200,7 @@ const TipNabavka: React.FC = () => {
                 onChange={(e) => setVaznostDo(e.target.value)}
                 required
               />
-              <label>Останати расположливи средства</label>
+              <label>Останати расположливи средства по договорот (без вредност на фактура)</label>
               <input
                 type="number"
                 placeholder="0"
@@ -286,7 +286,7 @@ const TipNabavka: React.FC = () => {
               </div>
             </div>
             <div className="form-item-inputs">
-              <label>Вкупно потрошени средства по основ на набавка од тој тип</label>
+              <label>Вкупно потрошени средства по основ на набавка од тој тип:</label>
               <input
                 type="number"
                 placeholder="0"

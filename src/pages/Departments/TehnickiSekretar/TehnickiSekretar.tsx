@@ -195,7 +195,7 @@ const TehnickiSekretar: React.FC = () => {
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_dogovor(Number(e.target.value))}
             />
-            <label>Износ на фактура</label>
+            <label>Износ на договор</label>
             <input
               type="number"
               value={iznos_dogovor}
@@ -203,14 +203,7 @@ const TehnickiSekretar: React.FC = () => {
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setIznos_dogovor(Number(e.target.value))}
             />
-            <label>Датум</label>
-            <input
-              type="date"
-              value={datum}
-              readOnly={Boolean(is_sealed)}
-              onChange={(e) => setDatum(e.target.value)}
-            />
-            <label>Издавач:</label>
+            <label>Издавач на фактурата:</label>
             <select
               value={izdavaci_id ?? ""}
               disabled={Boolean(is_sealed)}
@@ -229,6 +222,13 @@ const TehnickiSekretar: React.FC = () => {
               value={vk_vrednost}
               placeholder="0"
               onChange={(e) => setVk_vrednost(Number(e.target.value))}
+            />
+            <label>Датум</label>
+            <input
+              type="date"
+              value={datum}
+              readOnly={Boolean(is_sealed)}
+              onChange={(e) => setDatum(e.target.value)}
             />
           </div>
           <div className="form-buttons">
