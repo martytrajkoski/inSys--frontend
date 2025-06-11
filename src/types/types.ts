@@ -125,6 +125,7 @@ export interface TehnickiSekretarType {
   created_at: string;
   updated_at: string;
   izdavaci_id: number;
+  izdavac: string;
   submited_by: UserType;
   updated_by: UserType;
 

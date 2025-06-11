@@ -15,7 +15,7 @@ const Prodekan: React.FC = () => {
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
   const [br_dogovor, setBr_dogovor] = useState<number>();
-  const [izdavaci_id, setIzdavaci_id] = useState<number>();
+  const [izdavac, setIzdavac] = useState<number>();
   const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [datumTehnicki, setDatumTehnicki] = useState<string>("");
@@ -73,12 +73,11 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         const data = response.data.faktura;
-
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
         setBr_dogovor(data.tehnicki_sekretar?.br_dogovor ?? undefined);
         setDatumTehnicki(data.tehnicki_sekretar?.datum ?? "");
-        setIzdavaci_id(data.tehnicki_sekretar?.izdavaci_id ?? undefined);
+        setIzdavac(data.tehnicki_sekretar?.izdavac.name ?? undefined);
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setVk_vrednost(data.tehnicki_sekretar?.vk_vrednost ?? undefined);
         setPotpisTehnicki(
@@ -233,7 +232,7 @@ const Prodekan: React.FC = () => {
           <input type="text" value={datumTehnicki} readOnly />
 
           <label>Издавач на фактура</label>
-          <input type="text" value={String(izdavaci_id ?? "")} readOnly />
+          <input type="text" value={String(izdavac ?? "")} readOnly />
 
           <label>Вкупна вредност на фактура (со ДДВ)</label>
           <input type="text" value={String(vk_vrednost ?? "")} readOnly />
