@@ -189,15 +189,19 @@ const Pdf: React.FC = () => {
                             </tr>
                             <tr>
                                 <td>Предметот на набавка има основа за евидентирање како основно средство(а):</td>
-                                <td></td>
+                                <td>{faktura?.smetkovodstvo.osnova_evidentiranje ? "Да" : "Не"}</td>
                             </tr>
                             <tr>
                                 <td>Пополнет е формулар за задолжување на основно средство:</td>
-                                <td>{faktura?.smetkovodstvo.formular} </td>
+                                <td>{faktura?.smetkovodstvo.formular ? "Да" : "Не"} </td>
                             </tr>
                             <tr>
                                 <td>Средства се внесени (поединечно) како новонабавени за тековната година:</td>
-                                <td>{faktura?.smetkovodstvo.vneseni_sredstva} </td>
+                                <td>{faktura?.smetkovodstvo.vneseni_sredstva ? "Да" : "Не"} </td>
+                            </tr>
+                            <tr>
+                                <td>Предлог сметка за наплата од:</td>
+                                <td>{faktura?.smetkovodstvo.smetka} </td>
                             </tr>
                             <tr>
                                 <td>Предлог конто за наплата од:</td>

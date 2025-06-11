@@ -73,6 +73,7 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         const data = response.data.faktura;
+        console.log('data', data.tehnicki_sekretar.status?? "")
 
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
@@ -152,10 +153,11 @@ const Prodekan: React.FC = () => {
         setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
 
         // STATUS
-        setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
+        setStatusTehnicki(data.tehnicki_sekretar.status ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
         setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
+        console.log('data.tehnicki.sekretar.status', data.tehnicki_sekretar.status ?? "")
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
@@ -195,7 +197,6 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Фактурата е успешно запечатена.");
-        navigate("/");
       }
 
       if (response.status === 401) {
@@ -322,19 +323,19 @@ const Prodekan: React.FC = () => {
           набавка)
         </h3>
         <div className="form-item-inputs">
-          <label>Барател на набавката</label>
+          <label>Барател на набавката која е предмет на наплата:</label>
           <input type="text" value={String(baratelId ?? "")} readOnly />
           <label>Број на картон</label>
           <input type="text" value={brKartonBaratel ?? ""} readOnly />
-          <label>Назив на проектот/работата</label>
+          <label>Назив на проектот/работата:</label>
           <input type="text" value={nazivProekt} readOnly />
         </div>
         <div className="form-item-inputs">
-          <label>Потекло на финансиите</label>
+          <label>Потекло на финансиите:</label>
           <input type="text" value={poteklo} readOnly />
-          <label>Датум</label>
+          <label>Датум:</label>
           <input type="text" value={datumBaratel} readOnly />
-          <label>Потпис</label>
+          <label>Потпис:</label>
           <input type="text" value={potpisBaratel} readOnly />
         </div>
       </div>
@@ -351,29 +352,29 @@ const Prodekan: React.FC = () => {
       <div className="form-item">
         <h3>4. Информации од сметководство (сметководство) </h3>
         <div className="form-item-inputs">
-          <label>Број на картон</label>
+          <label>Број на картон (конто):</label>
           <input type="text" value={brKartonSmetkovodstvo ?? ""} readOnly />
-          <label>Состојба на картон</label>
+          <label>Состојба на картон:</label>
           <input type="text" value={sostojbaKarton} readOnly />
-          <label>Предметот е формулар за задолжување на основно средство</label>
+          <label>Предметот на набавка има основа за евидентирање како основно средство(а):</label>
           <input
             type="text"
             value={osnovaEvidentiranje ? "Да" : "Не"}
             readOnly
           />
-          <label>Пополнет е формулар за задолжување на основно средство</label>
+          <label>Пополнет е формулар за задолжување на основно средство:</label>
           <input type="text" value={formular ? "Да" : "Не"} readOnly />
           <label>
-            Средствата се внесени како новонабавени за тековната година
+            Средствата се внесени (поединечно) како новонабавени за тековната година:
           </label>
           <input type="text" value={vneseniSredstva ? "Да" : "Не"} readOnly />
-          <label>Сметка</label>
+          <label>Предлог сметка за наплата од:</label>
           <input type="text" value={smetka} readOnly />
-          <label>Конто</label>
+          <label>Предлог конто за наплата од:</label>
           <input type="text" value={konto} readOnly />
-          <label>Датум</label>
+          <label>Датум:</label>
           <input type="text" value={datumSmetkovodstvo} readOnly />
-          <label>Потпис</label>
+          <label>Потпис:</label>
           <input type="text" value={potpisSmetkovodstvo} readOnly />
         </div>
       </div>

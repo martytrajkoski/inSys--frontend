@@ -13,7 +13,6 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
     if (initialComment) setComment(initialComment);
   }, [initialStatus, initialComment]);
 
-
   const handleSubmit = async () => {
   setLoading(true);
   setMessage("");
@@ -23,7 +22,6 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
       status: status,
       review_comment: comment,
     });
-
     if (status === "approved") {
       setMessage("Approved Successfully.");
     } else if (status === "rejected") {
@@ -31,10 +29,10 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
     } else {
       setMessage("Updated Successfully.");
     }
-
+    
   } catch (error: any) {
-      setMessage(error.response?.data?.message || "Something went wrong.");
-    } finally {
+    setMessage(error.response?.data?.message || "Something went wrong.");
+  } finally {
       setLoading(false);
     }
   };

@@ -155,7 +155,7 @@ console.log('is_sealed', is_sealed)
         <div className="form-item">
           <h1>Информации од сметководство</h1>
           <div className="form-item-inputs">
-            <label>Број на картон (Конто)</label>
+            <label>Број на картон:</label>
             <input
               type="number"
               value={brKarton}
@@ -163,7 +163,7 @@ console.log('is_sealed', is_sealed)
               onChange={(e) => setBrKarton(Number(e.target.value))}
               required
             />
-            <label>Состојба на картон</label>
+            <label>Состојба на картон (конто):</label>
             <input
               type="text"
               value={sostojbaKarton}
@@ -174,7 +174,7 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-item-radio">
-            <label>Основa за евидентирање:</label>
+            <label>Предметот на набавка има основа за евидентирање како основно средство(а):</label>
             <div className="form-radio">
               <label>
                 <input
@@ -202,7 +202,7 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-item-radio">
-            <label>Пополнет формулар:</label>
+            <label>Пополнет е формулар за задолжување на основно средство:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -230,7 +230,7 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-item-radio">
-            <label>Средства внесени:</label>
+            <label>Средствата се внесени (поединечно) како новонабавени за тековната година:</label>
             <div className="form-radio">
               <label>
                 <input
@@ -286,7 +286,7 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-item-inputs">
-            <label>Предлог конто за наплата до:</label>
+            <label>Предлог конто за наплата од:</label>
             <input
               type="text"
               value={konto}
