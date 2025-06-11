@@ -66,7 +66,7 @@ const Pdf: React.FC = () => {
                             <tr><td>Број на договор:</td><td>{faktura?.tehnicki_sekretar.br_dogovor}</td></tr>
                             <tr><td>Износ на договор:</td><td>{faktura?.tehnicki_sekretar.iznos_dogovor}</td></tr>
                             <tr><td>Датум:</td><td>{faktura?.tehnicki_sekretar.datum}</td></tr>
-                            <tr><td>Потпис:</td><td></td></tr>
+                            <tr><td>Потпис:</td><td>{faktura?.tehnicki_sekretar.submited_by.name ?? faktura?.tehnicki_sekretar.updated_by.name}</td></tr>
                         </tbody>
                     </table>
                 </section>
@@ -106,7 +106,7 @@ const Pdf: React.FC = () => {
                                     </tr>
                                     <tr>
                                         <td>Потпис:</td>
-                                        <td></td>
+                                        <td>{faktura?.tip_nabavka.submited_by.name ?? faktura?.tip_nabavka.updated_by.name}</td>
                                     </tr>
                                 </>
                             ) : (
@@ -125,7 +125,7 @@ const Pdf: React.FC = () => {
                                     </tr>
                                     <tr>
                                         <td>Потпис:</td>
-                                        <td></td>
+                                        <td>{faktura?.tip_nabavka.submited_by.name ?? faktura?.tip_nabavka.updated_by.name}</td>
                                     </tr>
                                 </>
                             )}
@@ -166,7 +166,7 @@ const Pdf: React.FC = () => {
                             </tr>
                             <tr>
                                 <td>Потпис:</td>
-                                <td></td>
+                                <td>{faktura?.baratel_javna_nabavka.submited_by.name ?? faktura?.baratel_javna_nabavka.updated_by.name}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -213,7 +213,7 @@ const Pdf: React.FC = () => {
                             </tr>
                             <tr>
                                 <td>Потпис:</td>
-                                <td></td>
+                                <td>{faktura?.smetkovodstvo.submited_by.name ?? faktura?.smetkovodstvo.updated_by.name}</td>
                             </tr>
                         </tbody>
                     </table>
