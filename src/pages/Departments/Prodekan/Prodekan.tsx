@@ -37,7 +37,7 @@ const Prodekan: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [datumBaratel, setDatumBaratel] = useState<string>("");
-  const [baratelId, setBaratelId] = useState<number>();
+  const [baratel, setBaratel] = useState<number>();
   const [potpisBaratel, setPotpisBaratel] = useState<string>("");
 
   // SMETKOVODSTVO
@@ -109,7 +109,7 @@ const Prodekan: React.FC = () => {
         );
 
         // Baratel Nabavka
-        setBaratelId(data.baratel_javna_nabavka?.baratel_id ?? undefined);
+        setBaratel(data.baratel_javna_nabavka?.baratel.name ?? undefined);
         setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
         setNazivProekt(data.baratel_javna_nabavka?.naziv_proekt ?? "");
         setPoteklo(data.baratel_javna_nabavka?.poteklo ?? "");
@@ -322,7 +322,7 @@ const Prodekan: React.FC = () => {
         </h3>
         <div className="form-item-inputs">
           <label>Барател на набавката која е предмет на наплата:</label>
-          <input type="text" value={String(baratelId ?? "")} readOnly />
+          <input type="text" value={String(baratel ?? "")} readOnly />
           <label>Број на картон</label>
           <input type="text" value={brKartonBaratel ?? ""} readOnly />
           <label>Назив на проектот/работата:</label>
