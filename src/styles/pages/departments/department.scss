@@ -81,6 +81,24 @@
           }
         }
 
+         button {
+          background-color: #e45830;
+          border: 2px solid #e45830;
+          color: white;
+          padding: 10px;
+          width: 20%;
+          font-weight: 600;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 5px;
+          transition: background-color 0.25s ease;
+
+          &:hover {
+            outline: none;
+            background-color: white;
+            color: #e45830;
+          }
+        }
         .form-item-select {
           display: flex;
           align-items: center;
@@ -136,7 +154,8 @@
           
           button{
             padding: 8px 20px;
-          
+            width: 100%;
+
             &:first-of-type{
               border: 2px solid #e45830;
               background-color: white;

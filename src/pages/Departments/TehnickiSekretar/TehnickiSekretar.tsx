@@ -216,6 +216,7 @@ const TehnickiSekretar: React.FC = () => {
                 </option>
               ))}
             </select>
+            <button onClick={()=>navigate('/lista-izdavaci')}>Креирај нов издавач</button>
             <label>Вкупна вредност на фактура (со ДДВ)</label>
             <input
               type="number"
