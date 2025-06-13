@@ -15,6 +15,12 @@ const MainMenuSidebar: React.FC = () => {
             Преглед на фактури
           </NavLink>
           <NavLink
+            to={"/fakturipoizdavac"}
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Преглед на фактури по издавач
+          </NavLink>
+          <NavLink
             to="/lista-barateli"
             className={({ isActive }) => (isActive ? "active" : "")}
           >
