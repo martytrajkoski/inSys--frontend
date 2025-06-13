@@ -98,7 +98,7 @@ const TehnickiSekretar: React.FC = () => {
     }
   };
 
-  const storeIzdavac = async(e: any) => {
+  const storeIzdavac = async (e: any) => {
     e.preventDefault();
 
     try {
@@ -106,7 +106,7 @@ const TehnickiSekretar: React.FC = () => {
         name: newIzdavac
       })
 
-      if(response.status === 201){
+      if (response.status === 201) {
         setIzdavaci_id(response.data.id)
       }
 
@@ -174,7 +174,7 @@ const TehnickiSekretar: React.FC = () => {
     try {
       const response = await axiosClient.get("/izdavaci/");
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setIzdavaci(response.data);
       }
     } catch (error) {
@@ -190,7 +190,7 @@ const TehnickiSekretar: React.FC = () => {
     fetchIzdavaci();
     fetchTehnicki();
   }, [status]);
-console.log(newIzdavac)
+  console.log(newIzdavac)
   return (
     <>
       <h1>Основни информации</h1>
@@ -226,32 +226,37 @@ console.log(newIzdavac)
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setIznos_dogovor(Number(e.target.value))}
             />
-            <label>Издавач на фактурата:</label>
-            <select
-              value={izdavaci_id ?? ""}
-              disabled={Boolean(is_sealed)}
-              onChange={(e) => setIzdavaci_id(Number(e.target.value))}
-            >
-              <option value="">-- Избери издавач --</option>
-              {izdavaci.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-            {!is_sealed && (
-              <>
-                <button onClick={()=>handleAddIzdavacModal()}>Креирај нов издавач</button>
-                {showAddIzdavacModal && (
+            {showAddIzdavacModal ? (
                   <div>
-                  <label>Додај издавач:</label>
-                  <div className="new-izdavac">
-                      <input type="text" value={newIzdavac} onChange={(e)=>setNewIzdavac(e.target.value)}/>
+                    <label>Додај издавач:</label>
+                    <div className="new-izdavac">
+                      <input type="text" value={newIzdavac} onChange={(e) => setNewIzdavac(e.target.value)} />
                       <button onClick={storeIzdavac}>Додај</button>
                     </div>
                   </div>
+                ) : (
+                  <div className="izberi-izdavac">
+                    <label>Издавач на фактурата:</label>
+                    <select
+                      value={izdavaci_id ?? ""}
+                      disabled={Boolean(is_sealed)}
+                      onChange={(e) => setIzdavaci_id(Number(e.target.value))}
+                    >
+                      <option value="">-- Избери издавач --</option>
+                      {izdavaci.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 )}
-              </>
+            {!is_sealed && (
+              showAddIzdavacModal ? (
+                <button onClick={() => handleAddIzdavacModal()}>Избери издавач</button>
+              ) : (
+                <button onClick={() => handleAddIzdavacModal()}>Креирај нов издавач</button>
+              )
             )}
             <label>Вкупна вредност на фактура (со ДДВ)</label>
             <input
