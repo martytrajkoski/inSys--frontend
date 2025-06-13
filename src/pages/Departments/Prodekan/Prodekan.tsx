@@ -83,6 +83,9 @@ const Prodekan: React.FC = () => {
           data.tehnicki_sekretar.updated_by?.name ??
             data.tehnicki_sekretar.submited_by?.name
         );
+        setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
+        setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
+
 
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
@@ -106,6 +109,9 @@ const Prodekan: React.FC = () => {
           data.tip_nabavka.updated_by?.name ??
             data.tip_nabavka.submited_by?.name
         );
+        setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
+        setStatusTipNabavka(data.tip_nabavka?.status ?? "");
+
 
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel.name ?? undefined);
@@ -117,6 +123,9 @@ const Prodekan: React.FC = () => {
           data.baratel_javna_nabavka.updated_by?.name ??
             data.baratel_javna_nabavka.submited_by?.name
         );
+        setCommentBaratel(data.baratel_javna_nabavka?.review_comment ?? "");
+        setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
+
 
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
@@ -133,6 +142,9 @@ const Prodekan: React.FC = () => {
           data.smetkovodstvo.updated_by?.name ??
             data.smetkovodstvo.submited_by?.name
         );
+        setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
+        setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
+
 
         //Prodekan
         setDatumProdekan(
@@ -141,18 +153,6 @@ const Prodekan: React.FC = () => {
             : ""
         );
         setIsSealed(data?.is_sealed ?? undefined);
-
-        // COMMENTS
-        setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
-        setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
-        setCommentBaratel(data.baratel_javna_nabavka?.review_comment ?? "");
-        setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
-
-        // STATUS
-        setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
-        setStatusTipNabavka(data.tip_nabavka?.status ?? "");
-        setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
-        setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
