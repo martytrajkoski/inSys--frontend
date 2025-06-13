@@ -10,8 +10,9 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-  const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
-  const [newIzdavac, setNewIzdavac] = useState<string>('');
+  const [showAddIzdavacModal, setShowAddIzdavacModal] =
+    useState<boolean>(false);
+  const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
   const [br_fakturaa, setBr_fakturaa] = useState<number>();
@@ -102,18 +103,17 @@ const TehnickiSekretar: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axiosClient.post('/izdavaci/', {
-        name: newIzdavac
-      })
+      const response = await axiosClient.post("/izdavaci/", {
+        name: newIzdavac,
+      });
 
       if (response.status === 201) {
-        setIzdavaci_id(response.data.id)
+        setIzdavaci_id(response.data.id);
       }
-
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const updateTehnicki = async (e: any) => {
     e.preventDefault();
@@ -184,13 +184,13 @@ const TehnickiSekretar: React.FC = () => {
 
   const handleAddIzdavacModal = () => {
     setShowAddIzdavacModal(!showAddIzdavacModal);
-  }
+  };
 
   useEffect(() => {
     fetchIzdavaci();
     fetchTehnicki();
   }, [status]);
-  console.log(newIzdavac)
+  console.log(newIzdavac);
   return (
     <>
       <h1>Основни информации</h1>
@@ -227,37 +227,44 @@ const TehnickiSekretar: React.FC = () => {
               onChange={(e) => setIznos_dogovor(Number(e.target.value))}
             />
             {showAddIzdavacModal ? (
-                  <div>
-                    <label>Додај издавач:</label>
-                    <div className="new-izdavac">
-                      <input type="text" value={newIzdavac} onChange={(e) => setNewIzdavac(e.target.value)} />
-                      <button onClick={storeIzdavac}>Додај</button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="izberi-izdavac">
-                    <label>Издавач на фактурата:</label>
-                    <select
-                      value={izdavaci_id ?? ""}
-                      disabled={Boolean(is_sealed)}
-                      onChange={(e) => setIzdavaci_id(Number(e.target.value))}
-                    >
-                      <option value="">-- Избери издавач --</option>
-                      {izdavaci.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-            {!is_sealed && (
-              showAddIzdavacModal ? (
-                <button onClick={() => handleAddIzdavacModal()}>Избери издавач</button>
-              ) : (
-                <button onClick={() => handleAddIzdavacModal()}>Креирај нов издавач</button>
-              )
+              <div>
+                <label>Додај издавач:</label>
+                <div className="new-izdavac">
+                  <input
+                    type="text"
+                    value={newIzdavac}
+                    onChange={(e) => setNewIzdavac(e.target.value)}
+                  />
+                  <button onClick={storeIzdavac}>Додај</button>
+                </div>
+              </div>
+            ) : (
+              <div className="izberi-izdavac">
+                <label>Издавач на фактурата:</label>
+                <select
+                  value={izdavaci_id ?? ""}
+                  disabled={Boolean(is_sealed)}
+                  onChange={(e) => setIzdavaci_id(Number(e.target.value))}
+                >
+                  <option value="">-- Избери издавач --</option>
+                  {izdavaci.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
+            {!is_sealed &&
+              (showAddIzdavacModal ? (
+                <button onClick={() => handleAddIzdavacModal()}>
+                  Избери издавач
+                </button>
+              ) : (
+                <button onClick={() => handleAddIzdavacModal()}>
+                  Креирај нов издавач
+                </button>
+              ))}
             <label>Вкупна вредност на фактура (со ДДВ)</label>
             <input
               type="number"
