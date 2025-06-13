@@ -54,7 +54,6 @@ const Prodekan: React.FC = () => {
   //PRODEKAN
   const [datumProdekan, setDatumProdekan] = useState<string>("");
   const [isSealed, setIsSealed] = useState<boolean>();
-  const [potpisProdekan, setPotpisProdekan] = useState<string>("");
 
   // COMMENTS
   const [commentTehnicki, setCommentTehnicki] = useState<string>("");
@@ -142,20 +141,18 @@ const Prodekan: React.FC = () => {
             : ""
         );
         setIsSealed(data?.is_sealed ?? undefined);
-        setPotpisProdekan(data.approved_by.name);
 
         // COMMENTS
-        setCommentTehnicki(data.tehnicki_sekretar?.comment ?? "");
-        setCommentTipNabavka(data.tip_nabavka?.comment ?? "");
-        setCommentBaratel(data.baratel_javna_nabavka?.comment ?? "");
-        setCommentSmetkovodstvo(data.smetkovodstvo?.comment ?? "");
+        setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
+        setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
+        setCommentBaratel(data.baratel_javna_nabavka?.review_comment ?? "");
+        setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
 
         // STATUS
-        setStatusTehnicki(data.tehnicki_sekretar.status ?? "");
+        setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
         setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
-        console.log('data.tehnicki.sekretar.status', data.tehnicki_sekretar.status ?? "")
       }
     } catch (error) {
       console.error("Error fetching faktura:", error);
@@ -401,7 +398,7 @@ const Prodekan: React.FC = () => {
             readOnly={isSealed}
           />
           <label>Потпис</label>
-          <input type="text" value={potpisProdekan} readOnly />
+          <input type="text" value="" readOnly />
         </div>
       </div>
       <div className="form-buttons">
