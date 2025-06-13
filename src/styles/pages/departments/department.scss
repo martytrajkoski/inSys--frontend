@@ -99,6 +99,7 @@
             color: #e45830;
           }
         }
+
         .form-item-select {
           display: flex;
           align-items: center;
@@ -109,29 +110,30 @@
           display: flex;
           flex-direction: column;
           gap: 10px;
-          
-          .izberi-izdavac{
+
+          .izberi-izdavac {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            
-            select{
+
+            select {
               margin: 0px;
             }
           }
 
-          .new-izdavac{
+          .new-izdavac {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 4px;
 
-            button{
-              padding: 8px 20px;
+            button {
+              padding: 6px 20px;
               width: 125px;
               border-radius: 10px;
             }
 
-            input{
+            input {
               width: 85%;
               margin: 0px;
             }
@@ -178,33 +180,33 @@
         .form-buttons-edit {
           display: flex;
           gap: 10px;
-          
-          button{
+
+          button {
             padding: 8px 20px;
             width: 100%;
 
-            &:first-of-type{
+            &:first-of-type {
               border: 2px solid #e45830;
               background-color: white;
               color: #e45830;
 
-              &:hover{
+              &:hover {
                 background-color: #e457302c;
                 transition: 300ms;
               }
             }
 
-            &:nth-of-type(2){
+            &:nth-of-type(2) {
               border: 2px solid #e45830;
               background-color: #e45830;
               color: white;
 
-              &:hover{
+              &:hover {
                 background-color: #af4325;
                 transition: 300ms;
               }
             }
-          }          
+          }
         }
       }
     }
