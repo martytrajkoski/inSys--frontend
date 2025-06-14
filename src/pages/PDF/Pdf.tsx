@@ -41,7 +41,7 @@ const Pdf: React.FC = () => {
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('faktura.pdf');
+        pdf.save(`Faktura${br_faktura}.pdf`);
     };
 
     return (
