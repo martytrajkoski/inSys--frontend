@@ -97,6 +97,12 @@
             }
         }
 
+        .mainmenu-filters{
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
         .departments-container {
             width: 95%;
             margin: 40px;

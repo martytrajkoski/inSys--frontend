@@ -17,7 +17,7 @@ import Arhiva from "../pages/MainMenu/Arhiva";
 import Pdf from "../pages/PDF/Pdf";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleProtectedRoute from "./RoleProtectedRoute";
-import PregledFakturaIzdavaci from "../pages/MainMenu/PregledFakturaIzdavaci";
+import PregledFakturaFilter from "../pages/MainMenu/PregledFakturaFilter";
 
 const AppRoutes: React.FC = () => {
   let role: number | null = null;
@@ -47,7 +47,7 @@ const AppRoutes: React.FC = () => {
             <Route path="lista-barateli" element={<Barateli />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
             <Route path="archive" element={<Arhiva />} />
-            <Route path="fakturipoizdavac" element={<PregledFakturaIzdavaci />} />
+            <Route path="fakturipoizdavac" element={<PregledFakturaFilter />} />
           </Route>
 
           {/* Department routes */}
