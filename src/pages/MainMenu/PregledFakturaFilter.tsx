@@ -30,7 +30,7 @@ const PregledFakturaFilter: React.FC = () => {
       console.error(error);
     }
   };
-
+  console.log('izdavaci[0]', izdavaci[0])
   const fetchIzdavaci = async () => {
     try {
       const response = await axiosClient.get("/izdavaci/");
@@ -85,7 +85,7 @@ const PregledFakturaFilter: React.FC = () => {
                 setFakturaCurrentPage(1);
               }}
             >
-              <option value="" disabled>
+              <option value="">
                 -- Изберете издавач --
               </option>
               {izdavaci.map((item) => (
@@ -95,22 +95,20 @@ const PregledFakturaFilter: React.FC = () => {
               ))}
             </select>
           </div>
-          {(role === "Јавна набавка" || role === "Продекан за финансии") && (
-            <div className="archive-sort">
-              <label>Сортирај по тип: </label>
-              <select
-                value={selectedTipId}
-                onChange={(e) => {
-                  setSelectedTipId(e.target.value);
-                  setFakturaCurrentPage(1);
-                }}
-              >
-                <option value="">-- Сите типови --</option>
-                <option value="javna">Јавна</option>
-                <option value="tender">Тендер</option>
-              </select>
-            </div>
-          )}
+          <div className="archive-sort">
+            <label>Сортирај по тип: </label>
+            <select
+              value={selectedTipId}
+              onChange={(e) => {
+                setSelectedTipId(e.target.value);
+                setFakturaCurrentPage(1);
+              }}
+            >
+              <option value="">-- Сите типови --</option>
+              <option value="javna">Јавна</option>
+              <option value="tender">Тендер</option>
+            </select>
+          </div>
         </div>
         {selectedIzdavacId && (
           <>

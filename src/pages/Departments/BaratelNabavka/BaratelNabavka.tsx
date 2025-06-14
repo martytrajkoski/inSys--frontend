@@ -130,6 +130,8 @@ const BaratelNabavka: React.FC = () => {
         setNazivProekt("");
         setPoteklo("");
         setDatum("");
+
+        setShowDeleteModal(false);
       }
     } catch (error) {
       console.error(error);

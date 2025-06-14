@@ -10,8 +10,7 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-  const [showAddIzdavacModal, setShowAddIzdavacModal] =
-    useState<boolean>(false);
+  const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -90,7 +89,6 @@ const TehnickiSekretar: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Tehnicki Sekretar and Faktuta created");
-        navigate("/");
         setDocumentId(response.data.document.id);
         setCreated(true);
       }
@@ -190,7 +188,7 @@ const TehnickiSekretar: React.FC = () => {
     fetchIzdavaci();
     fetchTehnicki();
   }, [status]);
-  console.log(newIzdavac);
+
   return (
     <>
       <h1>Основни информации</h1>

@@ -156,6 +156,8 @@ const TipNabavka: React.FC = () => {
         setIstTip(undefined);
         setVkPotroseno(undefined);
         setDocumentId(undefined);
+
+        setShowDeleteModal(false);
       }
     } catch (error) {
       console.error(error);

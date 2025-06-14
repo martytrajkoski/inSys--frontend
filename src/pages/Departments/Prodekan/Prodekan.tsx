@@ -192,6 +192,7 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Фактурата е успешно запечатена.");
+        navigate('/');
       }
 
       if (response.status === 401) {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../axiosClient/axiosClient";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
 const Smetkovodstvo: React.FC = () => {
-  const navigate = useNavigate(); 
 
   const { br_faktura } = useParams<string>();
   const [is_sealed, setIs_sealed] = useState<number>(0);
@@ -87,7 +86,6 @@ const Smetkovodstvo: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Smetkovodstvo stored");
-        navigate('/')
         setCreated(true);
         setDocumentId(response.data.document.id);
       }
@@ -143,6 +141,8 @@ const Smetkovodstvo: React.FC = () => {
         setKonto("");
         setDatum("");
         setCreated(false);
+
+        setShowDeleteModal(false);
       }
     } catch (error) {
       console.error(error);

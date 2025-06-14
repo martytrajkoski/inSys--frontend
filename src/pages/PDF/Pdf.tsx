@@ -145,7 +145,7 @@ const Pdf: React.FC = () => {
                                 <td>{faktura?.baratel_javna_nabavka.baratel_id}</td>
                             </tr>
                             <tr>
-                                <td>Предлог за евиденција на трошокот:</td>
+                                <td><b>Предлог за евиденција на трошокот</b></td>
                                 <td></td>
                             </tr>
                             <tr>
