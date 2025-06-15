@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import type { FakturaType, InvoiceType } from "../../types/types";
 
-const getRouteByRole = (role: string, br_faktura: number): string => {
+const getRouteByRole = (role: string, br_faktura: string): string => {
   switch (role) {
     case "Продекан за финансии":
       return `/prodekan/${br_faktura}`;

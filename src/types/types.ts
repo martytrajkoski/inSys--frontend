@@ -18,7 +18,7 @@ export interface RoleType {
 export interface FakturaType {
   id: number;
   arhivski_br: string;
-  br_faktura: number;
+  br_faktura: string;
   basic_info_id: number;
   smetkovodstvo_id: number;
   evidencija_id: number;
@@ -36,14 +36,14 @@ export interface FakturaType {
   smetkovodstvo: SmetkovodstvoType;
   baratel_javna_nabavka: BaratelNabavkaType;
   tehnicki_sekretar: TehnickiSekretarType;
-  read: boolean
+  read: boolean;
 }
 
 export interface TipNabavkaType {
   id: number;
-  br_faktura: number;
+  br_faktura: string;
   datum: string;
-  tip: 'javna' | 'tender';
+  tip: "javna" | "tender";
   status: string;
   review_comment: string;
   created_at: string;
@@ -74,7 +74,7 @@ export interface TipNabavkaType {
 
 export interface SmetkovodstvoType {
   id: number;
-  br_faktura: number;
+  br_faktura: string;
   br_karton: number;
   datum: string;
   konto: string;
@@ -90,12 +90,11 @@ export interface SmetkovodstvoType {
   updated_at: string;
   submited_by: UserType;
   updated_by: UserType;
-
 }
 
 export interface BaratelNabavkaType {
   id: number;
-  br_faktura: number;
+  br_faktura: string;
   br_karton: number;
   datum: string;
   naziv_proekt: string;
@@ -109,12 +108,11 @@ export interface BaratelNabavkaType {
   baratel: string;
   submited_by: UserType;
   updated_by: UserType;
-
 }
 
 export interface TehnickiSekretarType {
   id: number;
-  br_faktura: number;
+  br_faktura: string;
   br_dogovor: number;
   datum: string;
   arhivski_br: string;
@@ -129,7 +127,6 @@ export interface TehnickiSekretarType {
   izdavac: string;
   submited_by: UserType;
   updated_by: UserType;
-
 }
 
 export interface Baratel {

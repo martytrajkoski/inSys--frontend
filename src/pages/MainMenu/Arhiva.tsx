@@ -6,7 +6,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
 
 
-const getRouteByRole = (role: string, br_faktura: number): string => {
+const getRouteByRole = (role: string, br_faktura: string): string => {
   switch (role) {
     case "Продекан за финансии":
       return `/prodekan/${br_faktura}`;

@@ -16,7 +16,7 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
   const [arhivski_br, setArhivski_br] = useState<string>();
   const [datum, setDatum] = useState<string>();
   const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
-    const [izdavaci_id, setIzdavaci_id] = useState<number>();
+  const [izdavaci_id, setIzdavaci_id] = useState<number>();
   const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
@@ -35,14 +35,18 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
     e.preventDefault();
   };
 
+  console.log(izdavaci_id);
   const handleUpload = async () => {
-    if (!arhivski_br || !br_faktura || !datum || !file) {
+    if (!arhivski_br || !br_faktura || !izdavaci_id || !datum || !file) {
       setShowAlert(true);
     }
+
+    
 
     const formData = new FormData();
     formData.append("arhivski_br", arhivski_br || "");
     formData.append("br_faktura", br_faktura || "");
+    formData.append("izdavaci_id", (izdavaci_id ?? "").toString());
     formData.append("datum", datum || "");
     formData.append("scan_file", file);
 
@@ -58,7 +62,7 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
       );
 
       if (response.status === 201) {
-        console.log("Tehnicki Sekretar and Faktuta created");
+        console.log("Tehnicki Sekretar and Faktura created");
         window.location.reload();
       }
     } catch (error: any) {

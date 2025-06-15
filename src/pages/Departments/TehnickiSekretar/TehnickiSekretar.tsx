@@ -14,7 +14,7 @@ const TehnickiSekretar: React.FC = () => {
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
-  const [br_fakturaa, setBr_fakturaa] = useState<number>();
+  const [br_fakturaa, setBr_fakturaa] = useState<string>();
   const [br_dogovor, setBr_dogovor] = useState<number>();
   const [izdavaci_id, setIzdavaci_id] = useState<number>();
   const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
@@ -42,7 +42,7 @@ const TehnickiSekretar: React.FC = () => {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(document.id ?? undefined);
         setArhivski_br(document.arhivski_br ?? "");
-        setBr_fakturaa(document.br_faktura ?? undefined);
+        setBr_fakturaa(document.br_faktura ?? "");
         setBr_dogovor(document.br_dogovor ?? undefined);
         setIzdavaci_id(document.izdavaci_id ?? undefined);
         setIznos_dogovor(document.iznos_dogovor ?? undefined);
@@ -56,7 +56,7 @@ const TehnickiSekretar: React.FC = () => {
         setIs_sealed(0);
         setDocumentId(undefined);
         setArhivski_br("");
-        setBr_fakturaa(undefined);
+        setBr_fakturaa("");
         setBr_dogovor(undefined);
         setIzdavaci_id(undefined);
         setIznos_dogovor(undefined);
@@ -151,7 +151,7 @@ const TehnickiSekretar: React.FC = () => {
         console.log("Tehnicki Sekretar and Faktura deleted");
 
         setArhivski_br("");
-        setBr_fakturaa(0);
+        setBr_fakturaa("");
         setBr_dogovor(0);
         setIzdavaci_id(0);
         setIznos_dogovor(0);
@@ -204,10 +204,10 @@ const TehnickiSekretar: React.FC = () => {
             />
             <label>Број на фактура</label>
             <input
-              type="number"
+              type="text"
               value={br_fakturaa}
               readOnly={Boolean(is_sealed)}
-              onChange={(e) => setBr_fakturaa(Number(e.target.value))}
+              onChange={(e) => setBr_fakturaa(e.target.value)}
             />
             <label>Број на договор</label>
             <input

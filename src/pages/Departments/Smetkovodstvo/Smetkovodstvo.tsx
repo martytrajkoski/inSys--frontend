@@ -73,7 +73,7 @@ const Smetkovodstvo: React.FC = () => {
     try {
       const response = await axiosClient.post("/smetkovodstvo/addDocument", {
         br_karton: brKarton,
-        br_faktura: parseInt(br_faktura || "0", 10),
+        br_faktura: br_faktura || "0",
         sostojba_karton: sostojbaKarton,
         osnova_evidentiranje: osnovaEvidentiranje,
         formular: formular,
@@ -102,7 +102,7 @@ const Smetkovodstvo: React.FC = () => {
         `/smetkovodstvo/updateDocument/${documentId}`,
         {
           br_karton: brKarton,
-          br_faktura: parseInt(br_faktura || "0", 10),
+          br_faktura: br_faktura || "0",
           sostojba_karton: sostojbaKarton,
           osnova_evidentiranje: osnovaEvidentiranje,
           formular: formular,

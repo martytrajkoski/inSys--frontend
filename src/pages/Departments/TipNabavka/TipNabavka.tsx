@@ -81,7 +81,7 @@ const TipNabavka: React.FC = () => {
 
     try {
       const response = await axiosClient.post("/tipnabavka/addDocument", {
-        br_faktura: parseInt(br_faktura || "0", 10),
+        br_faktura: br_faktura || "0",
         tip: tip,
         read: true,
         datum: datum,
@@ -112,7 +112,7 @@ const TipNabavka: React.FC = () => {
       const response = await axiosClient.patch(
         `/tipnabavka/updateTip/${documentId}`,
         {
-          br_faktura: parseInt(br_faktura || "0", 10),
+          br_faktura: br_faktura || "0",
           tip: tip,
           read: true,
           datum: datum,

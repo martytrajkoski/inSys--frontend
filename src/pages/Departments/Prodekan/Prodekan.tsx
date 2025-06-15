@@ -184,7 +184,7 @@ const Prodekan: React.FC = () => {
   const storeProdekan = async () => {
     try {
       const response = await axiosClient.patch(`/prodekan/statusplakjanje`, {
-        br_faktura: Number(br_faktura),
+        br_faktura: br_faktura,
         status: "approved",
         is_sealed: true,
         review_comment: "",

@@ -72,7 +72,7 @@ const BaratelNabavka: React.FC = () => {
     
     try {
       const response = await axiosClient.post("/baratelnabavka/addDocument", {
-        br_faktura: parseInt(br_faktura || "0", 10),
+        br_faktura: br_faktura || "0",
         br_karton: brKarton,
         naziv_proekt: nazivProekt,
         poteklo,
@@ -97,7 +97,7 @@ const BaratelNabavka: React.FC = () => {
       const response = await axiosClient.patch(
         `/baratelnabavka/updateDocument/${documentId}`,
         {
-          br_faktura: parseInt(br_faktura || "0", 10),
+          br_faktura: br_faktura || "0",
           br_karton: brKarton,
           naziv_proekt: nazivProekt,
           poteklo,
