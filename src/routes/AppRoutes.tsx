@@ -7,7 +7,6 @@ import MainMenu from "../pages/MainMenu/MainMenu";
 import Department from "../pages/Departments/Department";
 import TehnickiSekretar from "../pages/Departments/TehnickiSekretar/TehnickiSekretar";
 import TipNabavka from "../pages/Departments/TipNabavka/TipNabavka";
-// import BaratelNabavka from "../pages/Departments/BaratelNabavka/BaratelNabavka";
 import Smetkovodstvo from "../pages/Departments/Smetkovodstvo/Smetkovodstvo";
 import Prodekan from "../pages/Departments/Prodekan/Prodekan";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
@@ -19,19 +18,6 @@ import RoleProtectedRoute from "./RoleProtectedRoute";
 import PregledFakturaFilter from "../pages/MainMenu/PregledFakturaFilter";
 
 const AppRoutes: React.FC = () => {
-  let role: number | null = null;
-
-  try {
-    const raw = localStorage.getItem("inSys");
-    const parsed = raw ? JSON.parse(raw) : null;
-
-    if (parsed && typeof parsed === "object") {
-      role = parsed.role ?? null;
-    }
-  } catch (e) {
-    console.error("Failed to parse localStorage item 'inSys'", e);
-  }
-
   return (
     <Router>
       <Routes>
@@ -62,10 +48,6 @@ const AppRoutes: React.FC = () => {
             <Route element={<RoleProtectedRoute allowedRoles={[3]} />}>
               <Route path="tipnabavka/:br_faktura" element={<TipNabavka />} />
             </Route>
-
-            {/* <Route element={<RoleProtectedRoute allowedRoles={[3, 4]} />}>
-              <Route path="baratelnabavka/:br_faktura" element={<BaratelNabavka />} />
-            </Route> */}
 
             <Route element={<RoleProtectedRoute allowedRoles={[5]} />}>
               <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />
