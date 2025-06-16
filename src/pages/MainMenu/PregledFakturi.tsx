@@ -158,7 +158,6 @@ const PregledFakturi: React.FC = () => {
         <div className="mainmenu-invoices">
           <div className="mainmenu-tehnicki-buttons">
             <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
-            <button onClick={(e) => {e.preventDefault(); handleImportModal();}}>Прикачи фактура</button>
           </div>
           <InvoiceCard items={faktura} role={role} />
           {fakturaLastPage && fakturaLastPage > 1 && (

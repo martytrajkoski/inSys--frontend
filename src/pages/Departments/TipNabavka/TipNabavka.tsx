@@ -10,6 +10,7 @@ const TipNabavka: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [file, setFile] = useState<any>();
 
   //TIP
   const [tip, setTip] = useState<string>("javna");
@@ -43,6 +44,10 @@ const TipNabavka: React.FC = () => {
 
   const showTipNabavka = async () => {
     try {
+      const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
+      
+      setFile(responsePDF.data.faktura.scan_file);
+      
       const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
 
       if (response.status === 201) {
@@ -281,7 +286,10 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-
+  const showPdf = (path: string, e: any) => {
+    e.preventDefault()
+    window.open(path, "_blank");
+  };
 
   return (
     <>
@@ -515,7 +523,9 @@ const TipNabavka: React.FC = () => {
 
         
                   <div className="form-buttons">
-                    <button className="vidi-faktura">Види фактура</button>
+                    <button className="vidi-faktura"
+                          onClick={(e) => showPdf(file, e)}
+                    >Види фактура</button>
                     <div className="form-buttons">
                       <div className="form-buttons-edit">
                         {is_sealed === 0 && (

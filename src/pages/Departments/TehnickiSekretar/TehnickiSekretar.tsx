@@ -4,6 +4,8 @@ import type { IzdavaciType } from "../../../types/types";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 const TehnickiSekretar: React.FC = () => {
   const { br_faktura } = useParams<string>();
@@ -21,12 +23,25 @@ const TehnickiSekretar: React.FC = () => {
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
-  const [scan_file, setScan_file] = useState<string>();
+  const [file, setFile] = useState<any>();
 
   const [created, setCreated] = useState<boolean>();
   const [documentId, setDocumentId] = useState<number>();
 
   const navigate = useNavigate();
+
+    const handleDrop = (e: any) => {
+    e.preventDefault();
+    setFile(e.dataTransfer.files[0]);
+  };
+
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+  };
+
+   const handleFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
 
   const fetchTehnicki = async () => {
     try {
@@ -44,7 +59,7 @@ const TehnickiSekretar: React.FC = () => {
         setIzdavaci_id(document.izdavaci_id ?? undefined);
         setIznos_dogovor(document.iznos_dogovor ?? undefined);
         setDatum(document.datum ?? "");
-        setScan_file(document.scan_file ?? "");
+        setFile(response.data.scan_file ?? "");
         setReview_comment(document.review_comment ?? "");
         setStatus(document.status ?? "pending");
         setCreated(true);
@@ -56,7 +71,7 @@ const TehnickiSekretar: React.FC = () => {
         setIzdavaci_id(undefined);
         setIznos_dogovor(undefined);
         setDatum("");
-        setScan_file("");
+        setFile(response.data.scan_file);
         setDocumentId(undefined);
         setCreated(false);
         setReview_comment("");
@@ -67,27 +82,30 @@ const TehnickiSekretar: React.FC = () => {
   };
 
   const storeTehnicki = async (e: any) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const response = await axiosClient.post("/tehnickisekretar/addDocument", {
-        arhivski_br: arhivski_br,
-        br_faktura: br_fakturaa,
-        izdavaci_id: izdavaci_id,
-        iznos_dogovor: iznos_dogovor,
-        datum: datum,
-        scan_file: scan_file,
-      });
+  try {
+    const formData = new FormData();
+    formData.append("arhivski_br", arhivski_br);
+    formData.append("br_faktura", br_fakturaa || "");
+    formData.append("izdavaci_id", String(izdavaci_id));
+    formData.append("iznos_dogovor", String(iznos_dogovor || 0));
+    formData.append("datum", datum);
+    if (file) formData.append("scan_file", file);
 
-      if (response.status === 201) {
-        console.log("Tehnicki Sekretar and Faktuta created");
-        setDocumentId(response.data.document.id);
-        setCreated(true);
-      }
-    } catch (error) {
-      console.error(error);
+    const response = await axiosClient.post("/tehnickisekretar/addDocument", formData);
+
+    if (response.status === 201) {
+      console.log("Tehnicki Sekretar and Faktura created");
+      setDocumentId(response.data.document.id);
+      setCreated(true);
+      navigate('/');
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   const storeIzdavac = async (e: any) => {
     e.preventDefault();
@@ -105,31 +123,35 @@ const TehnickiSekretar: React.FC = () => {
     }
   };
 
-  const updateTehnicki = async (e: any) => {
-    e.preventDefault();
+ const updateTehnicki = async (e: any) => {
+  e.preventDefault();
 
-    try {
-      const response = await axiosClient.patch(
-        `/tehnickisekretar/updateDocument/${documentId}`,
-        {
-          arhivski_br: arhivski_br,
-          br_faktura: br_fakturaa,
-          izdavaci_id: izdavaci_id,
-          iznos_dogovor: iznos_dogovor,
-          datum: datum,
-          scan_file: scan_file,
-        }
-      );
-
-      if (response.status === 201) {
-        setStatus("pending");
-        setShowUpdateModal(true);
-        console.log("Tehnicki Sekretar and Faktura updated successfully");
-      }
-    } catch (error) {
-      console.error(error);
+  try {
+    const formData = new FormData();
+    formData.append("arhivski_br", arhivski_br);
+    formData.append("br_faktura", br_fakturaa || "");
+    formData.append("izdavaci_id", String(izdavaci_id));
+    formData.append("iznos_dogovor", String(iznos_dogovor || 0));
+    formData.append("datum", datum);
+    if (file instanceof File) {
+      formData.append("scan_file", file);
     }
-  };
+
+    const response = await axiosClient.post(
+      `/tehnickisekretar/updateDocument/${documentId}`,
+      formData
+    );
+
+    if (response.status === 201) {
+      setStatus("pending");
+      setShowUpdateModal(true);
+      console.log("Tehnicki Sekretar and Faktura updated successfully");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   const deleteTehnicki = async () => {
     try {
@@ -145,7 +167,7 @@ const TehnickiSekretar: React.FC = () => {
         setIzdavaci_id(0);
         setIznos_dogovor(0);
         setDatum("");
-        setScan_file("");
+        setFile("");
         setCreated(false);
         setDocumentId(0);
 
@@ -176,6 +198,11 @@ const TehnickiSekretar: React.FC = () => {
     fetchIzdavaci();
     fetchTehnicki();
   }, [status]);
+
+  const showPdf = (path: string, e:any) => {
+    e.preventDefault();
+    window.open(path, "_blank");
+  };
 
   return (
     <>
@@ -252,8 +279,39 @@ const TehnickiSekretar: React.FC = () => {
               onChange={(e) => setDatum(e.target.value)}
             />
           </div>
+          <div
+                      className="upload-container"
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                    >
+                      <div className="upload-content">
+                        <div className="upload-icon">
+                          <FontAwesomeIcon icon={faUpload} />
+                        </div>
+                        <p>
+                          Drag & drop or{" "}
+                          <span className="upload-choose">Choose file</span> to upload
+                        </p>
+                        <p className="upload-formats">PDF</p>
+                        <input
+                          type="file"
+                          className="upload-input"
+                          onChange={handleFileChange}
+                          accept="application/pdf"
+                        />
+          
+                        {file && <p>{file.name}</p>}
+                      </div>
+                    </div>
           <div className="form-buttons">
-            <button className="vidi-faktura">Види фактура</button>
+            {br_faktura ? (
+                <button className="vidi-faktura" 
+                                    onClick={(e) => showPdf(file, e)}
+                >Види фактура</button>
+
+            ):(
+              <div></div>
+            )}
             <div className="form-buttons-edit">
               {is_sealed === 0 && (
                 <>

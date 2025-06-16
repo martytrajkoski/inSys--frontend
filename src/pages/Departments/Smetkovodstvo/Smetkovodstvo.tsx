@@ -21,7 +21,8 @@ const Smetkovodstvo: React.FC = () => {
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
-
+  const [file, setFile] = useState<any>();
+  
   const [documentId, setDocumentId] = useState<number>();
   const [created, setCreated] = useState<boolean>();
 
@@ -31,6 +32,11 @@ const Smetkovodstvo: React.FC = () => {
 
   const showSmetkovodstvo = async () => {
     try {
+
+      const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
+      
+      setFile(responsePDF.data.faktura.scan_file);
+
       const response = await axiosClient.get(
         `/smetkovodstvo/show/${br_faktura}`
       );
@@ -148,7 +154,12 @@ const Smetkovodstvo: React.FC = () => {
       console.error(error);
     }
   };
-console.log('is_sealed', is_sealed)
+
+  const showPdf = (path: string, e: any) => {
+    e.preventDefault()
+    window.open(path, "_blank");
+  };
+
   return (
     <>
       <form onSubmit={storeSmetkovodstvo}>
@@ -306,7 +317,9 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-buttons">
-            <button className="vidi-faktura">Види фактура</button>
+            <button className="vidi-faktura"
+                                      onClick={(e) => showPdf(file, e)}
+            >Види фактура</button>
             <div className="form-buttons-edit">
               {is_sealed === 0 && (
                 <>

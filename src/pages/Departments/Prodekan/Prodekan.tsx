@@ -19,6 +19,7 @@ const Prodekan: React.FC = () => {
   const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [datumTehnicki, setDatumTehnicki] = useState<string>("");
   const [potpisTehnicki, setPotpisTehnicki] = useState<string>("");
+  const [file, setFile] = useState<any>();
 
   // TIP NABAVKA
   const [tip, setTip] = useState<string>("javna");
@@ -67,7 +68,7 @@ const Prodekan: React.FC = () => {
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
-      console.log('response.data.faktura', response.data.faktura)
+
       if (response.status === 201) {
         const data = response.data.faktura;
         // Tehnicki Sekretar
@@ -81,7 +82,7 @@ const Prodekan: React.FC = () => {
         );
         setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
-
+        setFile(data.scan_file)
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
         setDatumTip(data.tip_nabavka?.datum ?? "");
@@ -198,6 +199,11 @@ const Prodekan: React.FC = () => {
       fetchFakturas();
     }
   }, [br_faktura]);
+
+    const showPdf = (path: string, e: any) => {
+    e.preventDefault()
+    window.open(path, "_blank");
+  };
 
   return (
     <form>
@@ -384,7 +390,9 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
       <div className="form-buttons">
-        <button className="vidi-faktura">Види фактура</button>
+        <button className="vidi-faktura"
+        onClick={(e) => showPdf(file, e)}
+        >Види фактура</button>
         <div className="form-buttons-edit">
           {!isSealed ? (
             <button onClick={(e) => handleApproval(e)}>
