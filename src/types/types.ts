@@ -105,7 +105,6 @@ export interface BaratelNabavkaType {
   read: number;
   created_at: string;
   updated_at: string;
-  baratel_id: number;
   baratel: string;
   submited_by: UserType;
   updated_by: UserType;

@@ -34,12 +34,10 @@ const TipNabavka: React.FC = () => {
   const [brKarton, setBrKarton] = useState<number>();
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
-  const [baratelId, setBaratelId] = useState<number>();
   const [baratel, setBaratel] = useState<string>();
 
   useEffect(() => {
     showTipNabavka();
-    fetchBarateli();
     showBaratel();
   }, []);
 
@@ -183,7 +181,7 @@ const TipNabavka: React.FC = () => {
       if (responseBaratel.status === 201) {
         setDocumentId(undefined);
         setCreated(false);
-        setBaratelId(undefined);
+        setBaratel("");
         setBrKarton(0);
         setNazivProekt("");
         setPoteklo("");
@@ -202,14 +200,6 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  const fetchBarateli = async () => {
-    try {
-      const response = await axiosClient.get("/barateli/");
-      setBaratel(response.data);
-    } catch (error) {
-      console.error("Failed to fetch barateli", error);
-    }
-  };
   
   const showBaratel = async () => {
     try {
@@ -224,7 +214,7 @@ const TipNabavka: React.FC = () => {
         setNazivProekt(response.data.document.naziv_proekt);
         setPoteklo(response.data.document.poteklo);
         setDatum(response.data.document.datum);
-        setBaratelId(response.data.document.baratel_id);
+        setBaratel(response.data.document.baratel);
         setReview_comment(response.data.document.review_comment);
         setStatus(response.data.document.status);
         setCreated(true);
@@ -233,7 +223,7 @@ const TipNabavka: React.FC = () => {
         setNazivProekt("");
         setPoteklo("");
         setDatum("");
-        setBaratelId(undefined);
+        setBaratel("");
         setCreated(false);
         setReview_comment("");
       }
@@ -252,7 +242,7 @@ const TipNabavka: React.FC = () => {
         naziv_proekt: nazivProekt,
         poteklo,
         datum,
-        baratel_id: baratelId,
+        baratel: baratel,
         read: true,
       });
 
@@ -277,7 +267,7 @@ const TipNabavka: React.FC = () => {
           naziv_proekt: nazivProekt,
           poteklo,
           datum,
-          baratel_id: baratelId,
+          baratel: baratel,
         }
       );
 
