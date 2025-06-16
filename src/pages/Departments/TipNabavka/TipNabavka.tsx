@@ -16,7 +16,8 @@ const TipNabavka: React.FC = () => {
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
 
-  const [brDogovor, setBrDogovor] = useState<number>();
+  const [brDogovor, setBrDogovor] = useState<string>();
+  const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [vaznostDo, setVaznostDo] = useState<string>();
   const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
   const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
@@ -46,6 +47,7 @@ const TipNabavka: React.FC = () => {
 
         if (doc.tip === "javna") {
           setBrDogovor(doc.javna_nabavka.br_dogovor);
+          setVk_vrednost(doc.javna_nabavka.vk_vrednost ?? undefined);
           setVaznostDo(doc.javna_nabavka.vaznost_do);
           setSoglasnoDogovor(doc.javna_nabavka.soglasno_dogovor);
           setOstanatiRaspSredstva(doc.javna_nabavka.ostanati_rasp_sredstva);
@@ -55,12 +57,12 @@ const TipNabavka: React.FC = () => {
         }
 
         setCreated(true);
-
       } else if (response.status === 404) {
         setIs_sealed(0);
         setTip("javna");
         setDatum(undefined);
-        setBrDogovor(undefined);
+        setBrDogovor("");
+        setVk_vrednost(undefined);
         setVaznostDo(undefined);
         setSoglasnoDogovor(undefined);
         setOstanatiRaspSredstva(undefined);
@@ -87,6 +89,7 @@ const TipNabavka: React.FC = () => {
         datum: datum,
 
         br_dogovor: brDogovor,
+        vk_vrednost: vk_vrednost,
         vaznost_do: vaznostDo,
         ostanati_rasp_sredstva: ostanatiRaspSredstva,
         soglasno_dogovor: soglasnoDogovor,
@@ -118,6 +121,7 @@ const TipNabavka: React.FC = () => {
           datum: datum,
 
           br_dogovor: brDogovor,
+          vk_vrednost: vk_vrednost,
           vaznost_do: vaznostDo,
           ostanati_rasp_sredstva: ostanatiRaspSredstva,
           soglasno_dogovor: soglasnoDogovor,
@@ -149,7 +153,8 @@ const TipNabavka: React.FC = () => {
         setCreated(false);
         setTip("");
         setDatum("");
-        setBrDogovor(undefined);
+        setBrDogovor("");
+        setVk_vrednost(undefined);
         setVaznostDo("");
         setSoglasnoDogovor(undefined);
         setOstanatiRaspSredstva(undefined);
@@ -188,10 +193,10 @@ const TipNabavka: React.FC = () => {
             <div className="form-item-inputs">
               <label>Број на договор</label>
               <input
-                type="number"
+                type="text"
                 value={brDogovor}
                 readOnly={Boolean(is_sealed)}
-                onChange={(e) => setBrDogovor(Number(e.target.value))}
+                onChange={(e) => setBrDogovor(e.target.value)}
                 required
               />
               <label>Важност на договор до</label>
@@ -201,6 +206,13 @@ const TipNabavka: React.FC = () => {
                 readOnly={Boolean(is_sealed)}
                 onChange={(e) => setVaznostDo(e.target.value)}
                 required
+              />
+              <label>Вкупна вредност на фактура (со ДДВ)</label>
+              <input
+                type="number"
+                value={vk_vrednost}
+                placeholder="0"
+                onChange={(e) => setVk_vrednost(Number(e.target.value))}
               />
               <label>Останати расположливи средства по договорот (без вредност на фактура)</label>
               <input

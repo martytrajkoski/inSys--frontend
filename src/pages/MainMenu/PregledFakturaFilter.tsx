@@ -105,8 +105,8 @@ const PregledFakturaFilter: React.FC = () => {
               }}
             >
               <option value="">-- Сите типови --</option>
-              <option value="javna">Јавна</option>
-              <option value="tender">Тендер</option>
+              <option value="javna">Јавна Набавка</option>
+              <option value="tender">Набавка Без Тендер</option>
             </select>
           </div>
         </div>

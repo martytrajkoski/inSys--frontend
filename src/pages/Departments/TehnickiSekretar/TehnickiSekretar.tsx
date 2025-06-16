@@ -15,11 +15,9 @@ const TehnickiSekretar: React.FC = () => {
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
   const [br_fakturaa, setBr_fakturaa] = useState<string>();
-  const [br_dogovor, setBr_dogovor] = useState<number>();
   const [izdavaci_id, setIzdavaci_id] = useState<number>();
   const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
   const [iznos_dogovor, setIznos_dogovor] = useState<number>();
-  const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
@@ -43,10 +41,8 @@ const TehnickiSekretar: React.FC = () => {
         setDocumentId(document.id ?? undefined);
         setArhivski_br(document.arhivski_br ?? "");
         setBr_fakturaa(document.br_faktura ?? "");
-        setBr_dogovor(document.br_dogovor ?? undefined);
         setIzdavaci_id(document.izdavaci_id ?? undefined);
         setIznos_dogovor(document.iznos_dogovor ?? undefined);
-        setVk_vrednost(document.vk_vrednost ?? undefined);
         setDatum(document.datum ?? "");
         setScan_file(document.scan_file ?? "");
         setReview_comment(document.review_comment ?? "");
@@ -57,10 +53,8 @@ const TehnickiSekretar: React.FC = () => {
         setDocumentId(undefined);
         setArhivski_br("");
         setBr_fakturaa("");
-        setBr_dogovor(undefined);
         setIzdavaci_id(undefined);
         setIznos_dogovor(undefined);
-        setVk_vrednost(undefined);
         setDatum("");
         setScan_file("");
         setDocumentId(undefined);
@@ -79,10 +73,8 @@ const TehnickiSekretar: React.FC = () => {
       const response = await axiosClient.post("/tehnickisekretar/addDocument", {
         arhivski_br: arhivski_br,
         br_faktura: br_fakturaa,
-        br_dogovor: br_dogovor,
         izdavaci_id: izdavaci_id,
         iznos_dogovor: iznos_dogovor,
-        vk_vrednost: vk_vrednost,
         datum: datum,
         scan_file: scan_file,
       });
@@ -122,10 +114,8 @@ const TehnickiSekretar: React.FC = () => {
         {
           arhivski_br: arhivski_br,
           br_faktura: br_fakturaa,
-          br_dogovor: br_dogovor,
           izdavaci_id: izdavaci_id,
           iznos_dogovor: iznos_dogovor,
-          vk_vrednost: vk_vrednost,
           datum: datum,
           scan_file: scan_file,
         }
@@ -152,10 +142,8 @@ const TehnickiSekretar: React.FC = () => {
 
         setArhivski_br("");
         setBr_fakturaa("");
-        setBr_dogovor(0);
         setIzdavaci_id(0);
         setIznos_dogovor(0);
-        setVk_vrednost(0);
         setDatum("");
         setScan_file("");
         setCreated(false);
@@ -209,13 +197,6 @@ const TehnickiSekretar: React.FC = () => {
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_fakturaa(e.target.value)}
             />
-            <label>Број на договор</label>
-            <input
-              type="number"
-              value={br_dogovor}
-              readOnly={Boolean(is_sealed)}
-              onChange={(e) => setBr_dogovor(Number(e.target.value))}
-            />
             <label>Износ на договор</label>
             <input
               type="number"
@@ -262,14 +243,7 @@ const TehnickiSekretar: React.FC = () => {
                 <button onClick={() => handleAddIzdavacModal()}>
                   Креирај нов издавач
                 </button>
-              ))}
-            <label>Вкупна вредност на фактура (со ДДВ)</label>
-            <input
-              type="number"
-              value={vk_vrednost}
-              placeholder="0"
-              onChange={(e) => setVk_vrednost(Number(e.target.value))}
-            />
+            ))}
             <label>Датум</label>
             <input
               type="date"

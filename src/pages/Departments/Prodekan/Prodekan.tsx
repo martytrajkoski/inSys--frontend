@@ -14,17 +14,16 @@ const Prodekan: React.FC = () => {
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
-  const [br_dogovor, setBr_dogovor] = useState<number>();
   const [izdavac, setIzdavac] = useState<number>();
   const [iznos_dogovor, setIznos_dogovor] = useState<number>();
-  const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [datumTehnicki, setDatumTehnicki] = useState<string>("");
   const [potpisTehnicki, setPotpisTehnicki] = useState<string>("");
 
   // TIP NABAVKA
   const [tip, setTip] = useState<string>("javna");
   const [datumTip, setDatumTip] = useState<string>("");
-  const [brDogovor, setBrDogovor] = useState<number>();
+  const [brDogovor, setBrDogovor] = useState<string>();
+  const [vk_vrednost, setVk_vrednost] = useState<number>();
   const [vaznostDo, setVaznostDo] = useState<string>("");
   const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
   const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
@@ -41,7 +40,7 @@ const Prodekan: React.FC = () => {
   const [potpisBaratel, setPotpisBaratel] = useState<string>("");
 
   // SMETKOVODSTVO
-  const [brKartonSmetkovodstvo, setBrKartonSmetkovodstvo] = useState<number>();
+  const [brKartonSmetkovodstvo, setBrKartonSmetkovodstvo] = useState<string>();
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
   const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
   const [formular, setFormular] = useState<number>();
@@ -69,16 +68,14 @@ const Prodekan: React.FC = () => {
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
-
+      console.log('response.data.faktura', response.data.faktura)
       if (response.status === 201) {
         const data = response.data.faktura;
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
-        setBr_dogovor(data.tehnicki_sekretar?.br_dogovor ?? undefined);
         setDatumTehnicki(data.tehnicki_sekretar?.datum ?? "");
         setIzdavac(data.tehnicki_sekretar?.izdavac.name ?? undefined);
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
-        setVk_vrednost(data.tehnicki_sekretar?.vk_vrednost ?? undefined);
         setPotpisTehnicki(
           data.tehnicki_sekretar.updated_by?.name ??
             data.tehnicki_sekretar.submited_by?.name
@@ -92,8 +89,9 @@ const Prodekan: React.FC = () => {
         setDatumTip(data.tip_nabavka?.datum ?? "");
         if (data.tip_nabavka?.tip === "javna") {
           setBrDogovor(
-            data.tip_nabavka?.javna_nabavka?.br_dogovor ?? undefined
+            data.tip_nabavka?.javna_nabavka?.br_dogovor ?? ""
           );
+          setVk_vrednost(data.tip_nabavka?.javna_nabavka?.vk_vrednost ?? undefined);
           setVaznostDo(data.tip_nabavka?.javna_nabavka?.vaznost_do ?? "");
           setSoglasnoDogovor(
             data.tip_nabavka?.javna_nabavka?.soglasno_dogovor ?? undefined
@@ -128,7 +126,7 @@ const Prodekan: React.FC = () => {
 
 
         // Smetkovodstvo
-        setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
+        setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? "");
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
         setOsnovaEvidentiranje(
           data.smetkovodstvo?.osnova_evidentiranje ?? undefined
@@ -220,9 +218,6 @@ const Prodekan: React.FC = () => {
           <label>Број на фактура</label>
           <input type="text" value={br_faktura ?? ""} readOnly />
 
-          <label>Број на договор</label>
-          <input type="text" value={br_dogovor} readOnly />
-
           <label>Износ на фактура</label>
           <input type="text" value={iznos_dogovor} readOnly />
 
@@ -231,9 +226,6 @@ const Prodekan: React.FC = () => {
 
           <label>Издавач на фактура</label>
           <input type="text" value={String(izdavac ?? "")} readOnly />
-
-          <label>Вкупна вредност на фактура (со ДДВ)</label>
-          <input type="text" value={String(vk_vrednost ?? "")} readOnly />
 
           <label>Потпис</label>
           <input type="text" value={potpisTehnicki} readOnly />
@@ -267,7 +259,7 @@ const Prodekan: React.FC = () => {
         <div className="form-item">
           <div className="form-item-inputs">
             <label>Број на договор</label>
-            <input type="text" value={String(brDogovor) ?? ""} readOnly />
+            <input type="text" value={brDogovor ?? ""} readOnly />
             <label>Важност на договор до</label>
             <input type="text" value={vaznostDo} readOnly />
             <label>
@@ -275,6 +267,8 @@ const Prodekan: React.FC = () => {
               договорот:
             </label>
             <input type="text" value={soglasnoDogovor ? "Да" : "Не"} readOnly />
+            <label>Вкупна вредност на фактура (со ДДВ)</label>
+            <input type="text" value={vk_vrednost} readOnly />
             <label>
               Останати расположливи средства по договорот (без вред. на факт.)
             </label>

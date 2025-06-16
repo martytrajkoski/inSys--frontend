@@ -62,8 +62,6 @@ const Pdf: React.FC = () => {
                             <tr><td>Број на фактура:</td><td>{faktura?.br_faktura}</td></tr>
                             <tr><td>Архивски број:</td><td>{faktura?.tehnicki_sekretar.arhivski_br}</td></tr>
                             <tr><td>Издавач на фактура:</td><td>{faktura?.tehnicki_sekretar.izdavaci_id}</td></tr>
-                            <tr><td>Вкупна вредност на фактура (со ДДВ):</td><td>{faktura?.tehnicki_sekretar.vk_vrednost}</td></tr>
-                            <tr><td>Број на договор:</td><td>{faktura?.tehnicki_sekretar.br_dogovor}</td></tr>
                             <tr><td>Износ на договор:</td><td>{faktura?.tehnicki_sekretar.iznos_dogovor}</td></tr>
                             <tr><td>Датум:</td><td>{faktura?.tehnicki_sekretar.datum}</td></tr>
                             <tr><td>Потпис:</td><td>{faktura?.tehnicki_sekretar.submited_by.name ?? faktura?.tehnicki_sekretar.updated_by.name}</td></tr>
@@ -92,6 +90,10 @@ const Pdf: React.FC = () => {
                                         <td>Важност на договорот до:</td>
                                         <td>{faktura?.tip_nabavka.javna_nabavka?.vaznost_do}</td>
                                     </tr>
+                                        <tr>
+                                            <td>Вкупна вредност на фактура (со ДДВ):</td>
+                                            <td>{faktura?.tip_nabavka.vk_vrednost}</td>
+                                        </tr>
                                     <tr>
                                         <td>Останати расположливи средства по договорот (без вкл. на фак.):</td>
                                         <td>{faktura?.tip_nabavka.javna_nabavka?.ostanati_rasp_sredstva}</td>

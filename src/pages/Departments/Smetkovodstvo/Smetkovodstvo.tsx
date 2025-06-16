@@ -11,7 +11,7 @@ const Smetkovodstvo: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
-  const [brKarton, setBrKarton] = useState<number>();
+  const [brKarton, setBrKarton] = useState<string>();
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
   const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
   const [formular, setFormular] = useState<number>();
@@ -132,7 +132,7 @@ const Smetkovodstvo: React.FC = () => {
       if (response.status === 201) {
         console.log("Smetkovodstvo deleted");
 
-        setBrKarton(0);
+        setBrKarton("");
         setSostojbaKarton("");
         setOsnovaEvidentiranje(undefined);
         setFormular(undefined);
@@ -157,10 +157,10 @@ console.log('is_sealed', is_sealed)
           <div className="form-item-inputs">
             <label>Број на картон:</label>
             <input
-              type="number"
+              type="text"
               value={brKarton}
               readOnly={Boolean(is_sealed)}
-              onChange={(e) => setBrKarton(Number(e.target.value))}
+              onChange={(e) => setBrKarton(e.target.value)}
               required
             />
             <label>Состојба на картон (конто):</label>

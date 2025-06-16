@@ -42,6 +42,7 @@ export interface FakturaType {
 export interface TipNabavkaType {
   id: number;
   br_faktura: string;
+  vk_vrednost: number;
   datum: string;
   tip: "javna" | "tender";
   status: string;
@@ -75,7 +76,7 @@ export interface TipNabavkaType {
 export interface SmetkovodstvoType {
   id: number;
   br_faktura: string;
-  br_karton: number;
+  br_karton: string;
   datum: string;
   konto: string;
   smetka: string;
@@ -113,11 +114,9 @@ export interface BaratelNabavkaType {
 export interface TehnickiSekretarType {
   id: number;
   br_faktura: string;
-  br_dogovor: number;
   datum: string;
   arhivski_br: string;
   iznos_dogovor: number;
-  vk_vrednost: number;
   scan_file: string;
   review_comment: string;
   status: string;
