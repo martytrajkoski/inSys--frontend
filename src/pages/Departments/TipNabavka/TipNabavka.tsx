@@ -3,7 +3,6 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
-import type { Baratel } from "../../../types/types";
 
 
 const TipNabavka: React.FC = () => {
@@ -36,7 +35,7 @@ const TipNabavka: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratelId, setBaratelId] = useState<number>();
-  const [barateli, setBarateli] = useState<Baratel[]>([]);
+  const [baratel, setBaratel] = useState<string>();
 
   useEffect(() => {
     showTipNabavka();
@@ -206,7 +205,7 @@ const TipNabavka: React.FC = () => {
   const fetchBarateli = async () => {
     try {
       const response = await axiosClient.get("/barateli/");
-      setBarateli(response.data);
+      setBaratel(response.data);
     } catch (error) {
       console.error("Failed to fetch barateli", error);
     }
@@ -454,20 +453,15 @@ const TipNabavka: React.FC = () => {
                   <h1>Информации за евиденција</h1>
         
                   <div className="form-item-inputs">
-                    <label>Избери барател</label>
-                    <select
-                      value={baratelId}
+                    <label>Барател на набавка која е предмет на наплата:</label>
+                    <input
+                      value={baratel}
                       disabled={Boolean(is_sealed)}
-                      onChange={(e) => setBaratelId(Number(e.target.value))}
+                      onChange={(e) => setBaratel(e.target.value)}
                       required
                     >
-                      <option value="">-- Избери барател --</option>
-                      {barateli.map((b) => (
-                        <option key={b.id} value={b.id}>
-                          {b.name}
-                        </option>
-                      ))}
-                    </select>
+                      
+                    </input>
         
                     <label>Број на картон (Конто)</label>
                     <input

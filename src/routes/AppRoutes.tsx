@@ -10,7 +10,6 @@ import TipNabavka from "../pages/Departments/TipNabavka/TipNabavka";
 import BaratelNabavka from "../pages/Departments/BaratelNabavka/BaratelNabavka";
 import Smetkovodstvo from "../pages/Departments/Smetkovodstvo/Smetkovodstvo";
 import Prodekan from "../pages/Departments/Prodekan/Prodekan";
-import Barateli from "../pages/Departments/Barateli/Barateli";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 import Arhiva from "../pages/MainMenu/Arhiva";
@@ -44,7 +43,6 @@ const AppRoutes: React.FC = () => {
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}>
           <Route element={<MainMenu />}>
             <Route index element={<PregledFakturi />} />
-            <Route path="lista-barateli" element={<Barateli />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
             <Route path="archive" element={<Arhiva />} />
             <Route path="fakturipoizdavac" element={<PregledFakturaFilter />} />
