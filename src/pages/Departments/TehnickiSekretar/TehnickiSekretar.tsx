@@ -12,7 +12,8 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-  const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
+  const [showAddIzdavacModal, setShowAddIzdavacModal] =
+    useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -30,7 +31,7 @@ const TehnickiSekretar: React.FC = () => {
 
   const navigate = useNavigate();
 
-    const handleDrop = (e: any) => {
+  const handleDrop = (e: any) => {
     e.preventDefault();
     setFile(e.dataTransfer.files[0]);
   };
@@ -39,7 +40,7 @@ const TehnickiSekretar: React.FC = () => {
     e.preventDefault();
   };
 
-   const handleFileChange = (e: any) => {
+  const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
   };
 
@@ -82,30 +83,32 @@ const TehnickiSekretar: React.FC = () => {
   };
 
   const storeTehnicki = async (e: any) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const formData = new FormData();
-    formData.append("arhivski_br", arhivski_br);
-    formData.append("br_faktura", br_fakturaa || "");
-    formData.append("izdavaci_id", String(izdavaci_id));
-    formData.append("iznos_dogovor", String(iznos_dogovor || 0));
-    formData.append("datum", datum);
-    if (file) formData.append("scan_file", file);
+    try {
+      const formData = new FormData();
+      formData.append("arhivski_br", arhivski_br);
+      formData.append("br_faktura", br_fakturaa || "");
+      formData.append("izdavaci_id", String(izdavaci_id));
+      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
+      formData.append("datum", datum);
+      if (file) formData.append("scan_file", file);
 
-    const response = await axiosClient.post("/tehnickisekretar/addDocument", formData);
+      const response = await axiosClient.post(
+        "/tehnickisekretar/addDocument",
+        formData
+      );
 
-    if (response.status === 201) {
-      console.log("Tehnicki Sekretar and Faktura created");
-      setDocumentId(response.data.document.id);
-      setCreated(true);
-      navigate('/');
+      if (response.status === 201) {
+        console.log("Tehnicki Sekretar and Faktura created");
+        setDocumentId(response.data.document.id);
+        setCreated(true);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  };
 
   const storeIzdavac = async (e: any) => {
     e.preventDefault();
@@ -123,35 +126,34 @@ const TehnickiSekretar: React.FC = () => {
     }
   };
 
- const updateTehnicki = async (e: any) => {
-  e.preventDefault();
+  const updateTehnicki = async (e: any) => {
+    e.preventDefault();
 
-  try {
-    const formData = new FormData();
-    formData.append("arhivski_br", arhivski_br);
-    formData.append("br_faktura", br_fakturaa || "");
-    formData.append("izdavaci_id", String(izdavaci_id));
-    formData.append("iznos_dogovor", String(iznos_dogovor || 0));
-    formData.append("datum", datum);
-    if (file instanceof File) {
-      formData.append("scan_file", file);
+    try {
+      const formData = new FormData();
+      formData.append("arhivski_br", arhivski_br);
+      formData.append("br_faktura", br_fakturaa || "");
+      formData.append("izdavaci_id", String(izdavaci_id));
+      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
+      formData.append("datum", datum);
+      if (file instanceof File) {
+        formData.append("scan_file", file);
+      }
+
+      const response = await axiosClient.post(
+        `/tehnickisekretar/updateDocument/${documentId}`,
+        formData
+      );
+
+      if (response.status === 201) {
+        setStatus("pending");
+        setShowUpdateModal(true);
+        console.log("Tehnicki Sekretar and Faktura updated successfully");
+      }
+    } catch (error) {
+      console.error(error);
     }
-
-    const response = await axiosClient.post(
-      `/tehnickisekretar/updateDocument/${documentId}`,
-      formData
-    );
-
-    if (response.status === 201) {
-      setStatus("pending");
-      setShowUpdateModal(true);
-      console.log("Tehnicki Sekretar and Faktura updated successfully");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+  };
 
   const deleteTehnicki = async () => {
     try {
@@ -199,7 +201,7 @@ const TehnickiSekretar: React.FC = () => {
     fetchTehnicki();
   }, [status]);
 
-  const showPdf = (path: string, e:any) => {
+  const showPdf = (path: string, e: any) => {
     e.preventDefault();
     window.open(path, "_blank");
   };
@@ -270,7 +272,38 @@ const TehnickiSekretar: React.FC = () => {
                 <button onClick={() => handleAddIzdavacModal()}>
                   Креирај нов издавач
                 </button>
-            ))}
+              ))}
+            {!is_sealed && (
+              <>
+                <label>Прикачи фактура: </label>
+                <div
+                  className="upload-container"
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                >
+                  <div className="upload-content">
+                    <div className="upload-icon">
+                      <FontAwesomeIcon icon={faUpload} />
+                    </div>
+                    <p>
+                      Drag & drop or{" "}
+                      <span className="upload-choose">Choose file</span> to
+                      upload
+                    </p>
+                    <p className="upload-formats">PDF</p>
+                    <input
+                      type="file"
+                      className="upload-input"
+                      onChange={handleFileChange}
+                      accept="application/pdf"
+                    />
+
+                    {file && <p>{file.name}</p>}
+                  </div>
+                </div>
+              </>
+            )}
+
             <label>Датум</label>
             <input
               type="date"
@@ -279,37 +312,15 @@ const TehnickiSekretar: React.FC = () => {
               onChange={(e) => setDatum(e.target.value)}
             />
           </div>
-          <div
-                      className="upload-container"
-                      onDrop={handleDrop}
-                      onDragOver={handleDragOver}
-                    >
-                      <div className="upload-content">
-                        <div className="upload-icon">
-                          <FontAwesomeIcon icon={faUpload} />
-                        </div>
-                        <p>
-                          Drag & drop or{" "}
-                          <span className="upload-choose">Choose file</span> to upload
-                        </p>
-                        <p className="upload-formats">PDF</p>
-                        <input
-                          type="file"
-                          className="upload-input"
-                          onChange={handleFileChange}
-                          accept="application/pdf"
-                        />
-          
-                        {file && <p>{file.name}</p>}
-                      </div>
-                    </div>
           <div className="form-buttons">
             {br_faktura ? (
-                <button className="vidi-faktura" 
-                                    onClick={(e) => showPdf(file, e)}
-                >Види фактура</button>
-
-            ):(
+              <button
+                className="vidi-faktura"
+                onClick={(e) => showPdf(file, e)}
+              >
+                Види фактура
+              </button>
+            ) : (
               <div></div>
             )}
             <div className="form-buttons-edit">
