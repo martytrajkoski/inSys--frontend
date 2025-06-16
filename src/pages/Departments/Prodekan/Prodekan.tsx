@@ -384,7 +384,7 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
       <div className="form-buttons">
-        <div></div>
+        <button className="vidi-faktura">Види фактура</button>
         <div className="form-buttons-edit">
           {!isSealed ? (
             <button onClick={(e) => handleApproval(e)}>

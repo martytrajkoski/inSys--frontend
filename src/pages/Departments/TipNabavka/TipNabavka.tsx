@@ -515,9 +515,8 @@ const TipNabavka: React.FC = () => {
 
         
                   <div className="form-buttons">
-                    <div></div>
+                    <button className="vidi-faktura">Види фактура</button>
                     <div className="form-buttons">
-                      <div></div>
                       <div className="form-buttons-edit">
                         {is_sealed === 0 && (
                           <>

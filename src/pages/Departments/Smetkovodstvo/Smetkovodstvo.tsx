@@ -306,7 +306,7 @@ console.log('is_sealed', is_sealed)
           </div>
 
           <div className="form-buttons">
-            <div></div>
+            <button className="vidi-faktura">Види фактура</button>
             <div className="form-buttons-edit">
               {is_sealed === 0 && (
                 <>
