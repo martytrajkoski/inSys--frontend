@@ -10,7 +10,8 @@ const Prodekan: React.FC = () => {
   const navigate = useNavigate();
 
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
-  const [showUnauthorizedModal, setShowUnauthorizedModal] =useState<boolean>(false);
+  const [showUnauthorizedModal, setShowUnauthorizedModal] =
+    useState<boolean>(false);
 
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -58,12 +59,10 @@ const Prodekan: React.FC = () => {
   // COMMENTS
   const [commentTehnicki, setCommentTehnicki] = useState<string>("");
   const [commentTipNabavka, setCommentTipNabavka] = useState<string>("");
-  const [commentBaratel, setCommentBaratel] = useState<string>("");
   const [commentSmetkovodstvo, setCommentSmetkovodstvo] = useState<string>("");
 
   const [statusTehnicki, setStatusTehnicki] = useState<string>("");
   const [statusTipNabavka, setStatusTipNabavka] = useState<string>("");
-  const [statusBaratel, setStatusBaratel] = useState<string>("");
   const [statusSmetkovodstvo, setStatusSmetkovodstvo] = useState<string>("");
 
   const fetchFakturas = async () => {
@@ -85,7 +84,6 @@ const Prodekan: React.FC = () => {
         );
         setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
-
 
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
@@ -112,7 +110,6 @@ const Prodekan: React.FC = () => {
         setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
 
-
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel.name ?? undefined);
         setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
@@ -123,9 +120,6 @@ const Prodekan: React.FC = () => {
           data.baratel_javna_nabavka.updated_by?.name ??
             data.baratel_javna_nabavka.submited_by?.name
         );
-        setCommentBaratel(data.baratel_javna_nabavka?.review_comment ?? "");
-        setStatusBaratel(data.baratel_javna_nabavka?.status ?? "");
-
 
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? undefined);
@@ -144,7 +138,6 @@ const Prodekan: React.FC = () => {
         );
         setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
-
 
         //Prodekan
         setDatumProdekan(
@@ -165,7 +158,6 @@ const Prodekan: React.FC = () => {
     const hasRejectedSection =
       statusTehnicki === "rejected" ||
       statusTipNabavka === "rejected" ||
-      statusBaratel === "rejected" ||
       statusSmetkovodstvo === "rejected";
 
     if (hasRejectedSection) {
@@ -192,7 +184,7 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         console.log("Фактурата е успешно запечатена.");
-        navigate('/');
+        navigate("/");
       }
 
       if (response.status === 401) {
@@ -304,15 +296,6 @@ const Prodekan: React.FC = () => {
         </div>
       )}
 
-      {!isSealed && (
-        <CommentSection
-          brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/updatedepartmentstatus/tip"
-          initialStatus={statusTipNabavka}
-          initialComment={commentTipNabavka}
-        />
-      )}
-
       <div className="form-item">
         <h3>
           3. Информации за евиденција (одделение за јавна набавка или барател на
@@ -339,9 +322,9 @@ const Prodekan: React.FC = () => {
       {!isSealed && (
         <CommentSection
           brFaktura={br_faktura ?? ""}
-          endpoint="/prodekan/updatedepartmentstatus/baratel"
-          initialStatus={statusBaratel}
-          initialComment={commentBaratel}
+          endpoint="/prodekan/updatedepartmentstatus/tip"
+          initialStatus={statusTipNabavka}
+          initialComment={commentTipNabavka}
         />
       )}
 
@@ -352,7 +335,10 @@ const Prodekan: React.FC = () => {
           <input type="text" value={brKartonSmetkovodstvo ?? ""} readOnly />
           <label>Состојба на картон:</label>
           <input type="text" value={sostojbaKarton} readOnly />
-          <label>Предметот на набавка има основа за евидентирање како основно средство(а):</label>
+          <label>
+            Предметот на набавка има основа за евидентирање како основно
+            средство(а):
+          </label>
           <input
             type="text"
             value={osnovaEvidentiranje ? "Да" : "Не"}
@@ -361,7 +347,8 @@ const Prodekan: React.FC = () => {
           <label>Пополнет е формулар за задолжување на основно средство:</label>
           <input type="text" value={formular ? "Да" : "Не"} readOnly />
           <label>
-            Средствата се внесени (поединечно) како новонабавени за тековната година:
+            Средствата се внесени (поединечно) како новонабавени за тековната
+            година:
           </label>
           <input type="text" value={vneseniSredstva ? "Да" : "Не"} readOnly />
           <label>Предлог сметка за наплата од:</label>
@@ -410,7 +397,9 @@ const Prodekan: React.FC = () => {
               Одобри ја фактурата
             </button>
           ) : (
-            <button onClick={()=>navigate(`/pdf/${br_faktura}`)}>Печати</button>
+            <button onClick={() => navigate(`/pdf/${br_faktura}`)}>
+              Печати
+            </button>
           )}
         </div>
       </div>
