@@ -14,6 +14,7 @@ const TehnickiSekretar: React.FC = () => {
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showAddIzdavacModal, setShowAddIzdavacModal] =
     useState<boolean>(false);
+  const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -105,8 +106,12 @@ const TehnickiSekretar: React.FC = () => {
         setCreated(true);
         navigate("/");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+        if (error.response?.status === 409) {
+        setShowDuplicateFakturaError(true);
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -363,6 +368,13 @@ const TehnickiSekretar: React.FC = () => {
         onCancel={() => setShowUpdateModal(false)}
         confirmButton=""
         message="Промените се успешно реализирани"
+      />
+      <SweetAlert
+        visibility={showDuplicateFakturaError}
+        onConfirm={() => setShowDuplicateFakturaError(false)} 
+        onCancel={() => setShowDuplicateFakturaError(false)} 
+        confirmButton=""
+        message="Фактура со овој број на фактура веќе постои"
       />
     </>
   );
