@@ -144,7 +144,7 @@ const Pdf: React.FC = () => {
                         <tbody>
                             <tr>
                                 <td>Барател на набавката која е предмет на наплатата:</td>
-                                <td>{faktura?.baratel_javna_nabavka.baratel_id}</td>
+                                <td>{faktura?.baratel_javna_nabavka.baratel}</td>
                             </tr>
                             <tr>
                                 <td><b>Предлог за евиденција на трошокот</b></td>
