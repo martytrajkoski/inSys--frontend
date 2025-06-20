@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'http://10.10.0.6:8000/api',
-  headers: {
+  baseURL: 'http://insys-be.com/api',
+  headers: {  
     'Accept': 'application/json',
   },
   timeout: 10000,
