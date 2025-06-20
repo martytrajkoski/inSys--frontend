@@ -187,7 +187,7 @@ const TehnickiSekretar: React.FC = () => {
 
   const fetchIzdavaci = async () => {
     try {
-      const response = await axiosClient.get("/izdavaci/");
+      const response = await axiosClient.get("/izdavaci");
 
       if (response.status === 201) {
         setIzdavaci(response.data);
