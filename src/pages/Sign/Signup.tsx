@@ -4,7 +4,7 @@ import type { RoleType } from "../../types/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import bgImage from '../../../public/Logo/Asset_2.png';
+import bgImage from "../../../public/Logo/Asset_2.png";
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -31,7 +31,10 @@ const Signup: React.FC = () => {
       if (response.status === 201) {
         const token = response.data.token;
         const role = response.data.user.role_id;
-        localStorage.setItem("inSys", JSON.stringify({ 'token': token, 'role': role}));
+        localStorage.setItem(
+          "inSys",
+          JSON.stringify({ token: token, role: role })
+        );
         console.log("User created and Logged in");
         navigate("/");
       }
@@ -44,7 +47,7 @@ const Signup: React.FC = () => {
     try {
       const response = await axiosClient.get("/roles");
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         setRoles(response.data.roles);
       }
     } catch (error) {
@@ -57,9 +60,12 @@ const Signup: React.FC = () => {
   }, []);
 
   return (
-    <div className="sign" style={{
-    backgroundImage: `url(${bgImage})`,
-  }}>
+    <div
+      className="sign"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+      }}
+    >
       <h1 className="app-name">inSys</h1>
       <div className="sign-container">
         <div className="sign-info">
