@@ -47,7 +47,7 @@ const Signup: React.FC = () => {
     try {
       const response = await axiosClient.get("/roles");
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setRoles(response.data.roles);
       }
     } catch (error) {
