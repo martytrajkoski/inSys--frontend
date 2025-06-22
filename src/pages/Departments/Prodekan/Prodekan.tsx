@@ -108,7 +108,7 @@ const Prodekan: React.FC = () => {
         );
         setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
-        console.log('baratel', baratel)
+
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel ?? "");
         setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
@@ -182,7 +182,6 @@ const Prodekan: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log("Фактурата е успешно запечатена.");
         navigate("/");
       }
 
@@ -390,9 +389,7 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
       <div className="form-buttons">
-        <button className="vidi-faktura"
-        onClick={(e) => showPdf(file, e)}
-        >Види фактура</button>
+        <button className="vidi-faktura" onClick={(e) => showPdf(file, e)} >Види фактура</button>
         <div className="form-buttons-edit">
           {!isSealed ? (
             <button onClick={(e) => handleApproval(e)}>

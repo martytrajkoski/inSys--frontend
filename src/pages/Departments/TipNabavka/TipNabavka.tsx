@@ -10,6 +10,7 @@ const TipNabavka: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [file, setFile] = useState<any>();
 
   //TIP
@@ -113,12 +114,11 @@ const TipNabavka: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log("Tip Nabavka created");
         setCreated(true);
         setDocumentId(response.data.document[0].id);
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -148,10 +148,9 @@ const TipNabavka: React.FC = () => {
       if (response.status === 201) {
         setStatus("pending");
         setShowUpdateModal(true);
-        console.log("TipNabavka is updated successfully");
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -162,8 +161,6 @@ const TipNabavka: React.FC = () => {
       );
 
       if (responseTip.status === 201) {
-        console.log("Tip nabavka is deleted");
-
         setCreated(false);
         setTip("");
         setDatum("");
@@ -195,13 +192,7 @@ const TipNabavka: React.FC = () => {
         setShowDeleteModal(false);
       }
     } catch (error) {
-      console.error(error);
-    }
-
-    try {
-     
-    } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -252,14 +243,14 @@ const TipNabavka: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log("BaratelNabavka stored");
         setDocumentId(response.data.document.id);
         setCreated(true);
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
+
   const updateBaratelNabavka = async (e: any) => {
     e.preventDefault();
 
@@ -279,10 +270,9 @@ const TipNabavka: React.FC = () => {
       if (response.status == 201) {
         setStatus("pending");
         setShowUpdateModal(true);
-        console.log("BaratelNabavka is updated successfully");
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -571,9 +561,13 @@ const TipNabavka: React.FC = () => {
         confirmButton=""
         message="Промените се успешно реализирани"
       />
-
-
-      
+      <SweetAlert
+        visibility={showFakturaError}
+        onConfirm={() => setShowFakturaError(false)} 
+        onCancel={() => setShowFakturaError(false)} 
+        confirmButton=""
+        message="Грешка при ажурирање на оваа фактура"
+      />
     </>
   );
 };

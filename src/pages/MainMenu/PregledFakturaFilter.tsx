@@ -30,7 +30,6 @@ const PregledFakturaFilter: React.FC = () => {
       console.error(error);
     }
   };
-  console.log('izdavaci[0]', izdavaci[0])
   const fetchIzdavaci = async () => {
     try {
       const response = await axiosClient.get("/izdavaci");

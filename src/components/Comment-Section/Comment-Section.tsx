@@ -23,11 +23,11 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
       review_comment: comment,
     });
     if (status === "approved") {
-      setMessage("Approved Successfully.");
+      setMessage("Успешно поднесена.");
     } else if (status === "rejected") {
-      setMessage("Rejected Successfully.");
+      setMessage("Успешно поднесена.");
     } else {
-      setMessage("Updated Successfully.");
+      setMessage("Успешно поднесена.");
     }
     
   } catch (error: any) {
@@ -45,13 +45,13 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
           className={`status-button ${status === "approved" ? "approved" : ""}`}
           onClick={() => setStatus("approved")}
         >
-          Approved
+          Прифати
         </div>
         <div
           className={`status-button ${status === "rejected" ? "rejected" : ""}`}
           onClick={() => setStatus("rejected")}
         >
-          Rejected
+          Отфрли
         </div>
       </div>
 
@@ -70,7 +70,7 @@ const CommentSection = ({  brFaktura, endpoint, initialStatus, initialComment }:
           onClick={handleSubmit}
           disabled={loading || !status}
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Се поднесува..." : "Поднеси"}
         </button>
 
         {message && <div className="feedback-message">{message}</div>}

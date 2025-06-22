@@ -41,10 +41,9 @@ const SignIn: React.FC = () => {
   const handleForgotPassword = async () => {
     setResetMessage(null);
     try {
-      const response = await axiosClient.get("/auth/reset-password", {
+      await axiosClient.get("/auth/reset-password", {
         params: { email: resetEmail },
       });
-      console.log(response);
       setResetMessage("Password reset instructions sent to your email.");
     } catch (err: any) {
       setResetMessage("Failed to send reset instructions. Please try again.");
@@ -95,14 +94,7 @@ const SignIn: React.FC = () => {
             Forgot Password
           </button>
         </form>
-
-        <p>
-          Don't have an account?{" "}
-          <a href="/signup" style={{ color: "#e45830" }}>
-            Sign Up
-          </a>
-        </p>
-
+        
         {error && <p className="error-message">{error}</p>}
       </div>
 

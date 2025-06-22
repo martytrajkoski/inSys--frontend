@@ -52,6 +52,10 @@
 }
 
 .comment-button-submit{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
   .submit-button {
     padding: 10px 20px;
     border: 2px solid #e45830;
@@ -75,7 +79,6 @@
   }
   
   .feedback-message {
-    margin-top: 10px;
     font-size: 14px;
     color: #374151;
   }
