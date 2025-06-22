@@ -5,7 +5,7 @@ const CommentSectionRead: React.FC<{review_comment: string, status: string}> = (
         <div className="comment-section">
             <div className="status-buttons">
                 <div className={`status-button ${status === "approved" ? "approved" : "rejected"}` } style={{cursor: 'auto'}}>
-                    {status}
+                    {status === "approved" ? "Прифатена" : "Отфрлена"}
                 </div>
             </div>
             {review_comment.length > 2 && (

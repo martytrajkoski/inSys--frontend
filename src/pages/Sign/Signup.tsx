@@ -35,7 +35,6 @@ const Signup: React.FC = () => {
           "inSys",
           JSON.stringify({ token: token, role: role })
         );
-        console.log("User created and Logged in");
         navigate("/");
       }
     } catch (error: any) {

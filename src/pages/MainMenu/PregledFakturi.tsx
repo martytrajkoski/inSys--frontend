@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import InvoiceCard from "../../components/MainMenu/InvoiceCard";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { FakturaType } from "../../types/types";
@@ -36,10 +36,10 @@ const PregledFakturi: React.FC = () => {
   >("Нови фактури");
 
   const navigate = useNavigate();
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchFakturas = async () => {
     if (filterType == "Нови фактури" || filterType == "Прегледани фактури") {
-      console.log("filterType", filterType);
       try {
         const response = await axiosClient.post(
           `/faktura/read?page=${fakturaCurrentPage}`,
@@ -49,10 +49,6 @@ const PregledFakturi: React.FC = () => {
         );
 
         if (response.status === 201) {
-          console.log(
-            "response.data.document.data",
-            response.data.documents.data
-          );
           setFaktura(response.data.documents.data);
           setFakturaLastPage(response.data.documents.last_page);
           setFakturaCurrentPage(response.data.documents.current_page);
@@ -70,7 +66,6 @@ const PregledFakturi: React.FC = () => {
         );
 
         if (response.status === 201) {
-          console.log("response.data.document.data", response.data.documents);
           setFaktura(response.data.documents.data);
           setFakturaLastPage(response.data.documents.last_page);
           setFakturaCurrentPage(response.data.documents.current_page);
@@ -85,21 +80,30 @@ const PregledFakturi: React.FC = () => {
     setopenImportModal(!openImportModal);
   };
 
-  const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     setSearch(value);
 
-    try {
-      const response = await axiosClient.post("/faktura/search", {
-        search: value,
-      });
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
 
-      if (response.status === 201) {
-        setFilteredFaktura(response.data.documents);
+    searchTimeoutRef.current = setTimeout(async () => {
+      if (value.trim() === "") {
+        setFilteredFaktura([]);
+        return;
       }
-    } catch (error) {
-      console.error(error);
-    }
+
+      try {
+        const response = await axiosClient.post("/faktura/search", {
+          search: value.trim(),
+        });
+
+        if (response.status === 201) {
+          setFilteredFaktura(response.data.documents);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }, 300);
   };
 
   const fetchUser = async () => {

@@ -15,6 +15,8 @@ const TehnickiSekretar: React.FC = () => {
   const [showAddIzdavacModal, setShowAddIzdavacModal] =
     useState<boolean>(false);
   const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
+  const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
+  const [showIzdavaciError, setShowIzdavaciError] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
 
   const [arhivski_br, setArhivski_br] = useState<string>("");
@@ -101,16 +103,15 @@ const TehnickiSekretar: React.FC = () => {
       );
 
       if (response.status === 201) {
-        console.log("Tehnicki Sekretar and Faktura created");
         setDocumentId(response.data.document.id);
         setCreated(true);
         navigate("/");
       }
     } catch (error: any) {
-        if (error.response?.status === 409) {
+      if (error.response?.status === 409) {
         setShowDuplicateFakturaError(true);
       } else {
-        console.error(error);
+        setShowFakturaError(true);
       }
     }
   };
@@ -126,8 +127,13 @@ const TehnickiSekretar: React.FC = () => {
       if (response.status === 201) {
         setIzdavaci_id(response.data.id);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 422) {
+        setShowIzdavaciError(true);
+      } else {
+        console.error("Error adding izdavac:", error);
+        alert("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -153,10 +159,9 @@ const TehnickiSekretar: React.FC = () => {
       if (response.status === 201) {
         setStatus("pending");
         setShowUpdateModal(true);
-        console.log("Tehnicki Sekretar and Faktura updated successfully");
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -167,8 +172,6 @@ const TehnickiSekretar: React.FC = () => {
       );
 
       if (response.status === 201) {
-        console.log("Tehnicki Sekretar and Faktura deleted");
-
         setArhivski_br("");
         setBr_fakturaa("");
         setIzdavaci_id(0);
@@ -181,7 +184,7 @@ const TehnickiSekretar: React.FC = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -371,10 +374,24 @@ const TehnickiSekretar: React.FC = () => {
       />
       <SweetAlert
         visibility={showDuplicateFakturaError}
-        onConfirm={() => setShowDuplicateFakturaError(false)} 
-        onCancel={() => setShowDuplicateFakturaError(false)} 
+        onConfirm={() => setShowDuplicateFakturaError(false)}
+        onCancel={() => setShowDuplicateFakturaError(false)}
         confirmButton=""
         message="Фактура со овој број на фактура веќе постои"
+      />
+      <SweetAlert
+        visibility={showFakturaError}
+        onConfirm={() => setShowFakturaError(false)}
+        onCancel={() => setShowFakturaError(false)}
+        confirmButton=""
+        message="Грешка при креирање на оваа фактура"
+      />
+      <SweetAlert
+        visibility={showIzdavaciError}
+        onConfirm={() => setShowIzdavaciError(false)}
+        onCancel={() => setShowIzdavaciError(false)}
+        confirmButton=""
+        message="Издавач со ова име веќе постои"
       />
     </>
   );

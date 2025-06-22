@@ -5,7 +5,6 @@ import InvoiceCard from "../../components/MainMenu/InvoiceCard";
 import Pagination from "../../components/Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
 
-
 const getRouteByRole = (role: string, br_faktura: string): string => {
   switch (role) {
     case "Продекан за финансии":
@@ -29,43 +28,27 @@ const Arhiva: React.FC = () => {
   const [fakturaLastPage, setFakturaLastPage] = useState<number>();
   const [fakturaCurrentPage, setFakturaCurrentPage] = useState<number>(1);
   const [filteredFaktura, setFilteredFaktura] = useState<FakturaType[]>([]);
-  const [search, setSearch] = useState<string>("")
+  const [search, setSearch] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [sortYear, setSortYear] = useState<number>(new Date().getFullYear());
   const [selectSortYears, setSelectSortYears] = useState<number[]>([]);
-  
+
   const fetchArhivedFakturas = async () => {
     try {
-      const response = await axiosClient.get(`/faktura/archive/?year=${sortYear}&page=${fakturaCurrentPage}`);
-      
+      const response = await axiosClient.get(
+        `/faktura/archive/?year=${sortYear}&page=${fakturaCurrentPage}`
+      );
+
       if (response.status === 201) {
-        setSelectSortYears(response.data.years)
+        setSelectSortYears(response.data.years);
         setArchiveFaktura(response.data.documents.data || []);
         setFakturaLastPage(response.data.documents.last_page);
         setFakturaCurrentPage(response.data.documents.current_page);
       }
-
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setSearch(value);
-
-    try {
-      const response = await axiosClient.post('/faktura/searcharchive',{
-        search: value
-      })
-
-      if(response.status === 201){
-        setFilteredFaktura(response.data.documents)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   const fetchUser = async () => {
     try {
@@ -78,18 +61,49 @@ const Arhiva: React.FC = () => {
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      const fetchFilteredFaktura = async () => {
+        if (!search.trim()) {
+          setFilteredFaktura([]);
+          return;
+        }
+
+        try {
+          const response = await axiosClient.post("/faktura/searcharchive", {
+            search: search.trim(),
+          });
+
+          if (response.status === 201) {
+            setFilteredFaktura(response.data.documents);
+          }
+        } catch (error) {
+          console.error("Search error:", error);
+        }
+      };
+
+      fetchFilteredFaktura();
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
+
   useEffect(() => {
     fetchArhivedFakturas();
     setFakturaCurrentPage(1);
   }, [sortYear, fakturaCurrentPage]);
-  
+
   useEffect(() => {
     fetchUser();
   }, []);
 
   return (
     <div className="mainmenu-content">
-        <div className="mainmenu-search">
+      <div className="mainmenu-search">
         <input
           type="search"
           placeholder="Пребарај фактура..."
@@ -126,7 +140,9 @@ const Arhiva: React.FC = () => {
             }}
           >
             {selectSortYears.map((item, index) => (
-              <option value={item} key={index}>{item}</option>
+              <option value={item} key={index}>
+                {item}
+              </option>
             ))}
           </select>
         </div>

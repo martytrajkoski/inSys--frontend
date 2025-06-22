@@ -35,7 +35,6 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
     e.preventDefault();
   };
 
-  console.log(izdavaci_id);
   const handleUpload = async () => {
     if (!arhivski_br || !br_faktura || !izdavaci_id || !datum || !file) {
       setShowAlert(true);
@@ -62,7 +61,6 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
       );
 
       if (response.status === 201) {
-        console.log("Tehnicki Sekretar and Faktura created");
         window.location.reload();
       }
     } catch (error: any) {

@@ -10,6 +10,7 @@ const Smetkovodstvo: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
 
   const [brKarton, setBrKarton] = useState<string>();
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
@@ -91,12 +92,11 @@ const Smetkovodstvo: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log("Smetkovodstvo stored");
         setCreated(true);
         setDocumentId(response.data.document.id);
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -122,10 +122,9 @@ const Smetkovodstvo: React.FC = () => {
       if (response.status === 201) {
         setStatus("pending");
         setShowUpdateModal(true);
-        console.log("Smetkovodstvo updated");
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -136,8 +135,6 @@ const Smetkovodstvo: React.FC = () => {
       );
 
       if (response.status === 201) {
-        console.log("Smetkovodstvo deleted");
-
         setBrKarton("");
         setSostojbaKarton("");
         setOsnovaEvidentiranje(undefined);
@@ -151,7 +148,7 @@ const Smetkovodstvo: React.FC = () => {
         setShowDeleteModal(false);
       }
     } catch (error) {
-      console.error(error);
+      setShowFakturaError(true);
     }
   };
 
@@ -359,6 +356,13 @@ const Smetkovodstvo: React.FC = () => {
         onCancel={() => setShowUpdateModal(false)}
         confirmButton=""
         message="Промените се успешно реализирани"
+      />
+      <SweetAlert
+        visibility={showFakturaError}
+        onConfirm={() => setShowFakturaError(false)}
+        onCancel={() => setShowFakturaError(false)}
+        confirmButton=""
+        message="Грешка при ажурирање на оваа фактура"
       />
     </>
   );
