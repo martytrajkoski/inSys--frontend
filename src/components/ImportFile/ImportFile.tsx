@@ -103,7 +103,7 @@ const ImportFile: React.FC<ScanInvoiceModalProps> = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const response = await axiosClient.post("/izdavaci/", {
+      const response = await axiosClient.post("/izdavaci", {
         name: newIzdavac,
       });
 

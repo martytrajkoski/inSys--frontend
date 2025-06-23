@@ -19,7 +19,7 @@ const IzdavaciPage: React.FC = () => {
 
   const fetchIzdavaci = async () => {
     try {
-      const response = await axiosClient.get("/izdavaci/");
+      const response = await axiosClient.get("/izdavaci");
       setIzdavaci(response.data);
     } catch (error) {
       console.error("Error fetching izdavaci:", error);
@@ -29,7 +29,7 @@ const IzdavaciPage: React.FC = () => {
   const handleAdd = async () => {
     if (!newIzdavac.trim()) return;
     try {
-      await axiosClient.post("/izdavaci/", { name: newIzdavac });
+      await axiosClient.post("/izdavaci", { name: newIzdavac });
       setNewIzdavac("");
       fetchIzdavaci();
     } catch (error: any) {
