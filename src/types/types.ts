@@ -9,6 +9,10 @@ export interface IzdavaciType {
   id: number;
   name: string;
 }
+export interface BrKartonType {
+  id: number;
+  name: string;
+}
 
 export interface RoleType {
   id: string;

@@ -3,6 +3,7 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
+import type { BrKartonType } from "../../../types/types";
 
 const TipNabavka: React.FC = () => {
   const { br_faktura } = useParams<string>();
@@ -32,7 +33,7 @@ const TipNabavka: React.FC = () => {
 
   //EVIDENCIJA
 
-  const [brKarton, setBrKarton] = useState<number>();
+  const [brKartoni, setBrKartoni] = useState<BrKartonType[]>([]);
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratel, setBaratel] = useState<string>();
@@ -192,7 +193,7 @@ const TipNabavka: React.FC = () => {
         setDocumentId(undefined);
         setCreated(false);
         setBaratel("");
-        setBrKarton(0);
+        setBrKarton_id(0);
         setNazivProekt("");
         setPoteklo("");
         setDatum("");
@@ -213,7 +214,7 @@ const TipNabavka: React.FC = () => {
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
-        setBrKarton(response.data.document.br_karton);
+        setBrKartoni(response.data.document.br_karton);
         setNazivProekt(response.data.document.naziv_proekt);
         setPoteklo(response.data.document.poteklo);
         setDatum(response.data.document.datum);
@@ -222,7 +223,7 @@ const TipNabavka: React.FC = () => {
         setStatus(response.data.document.status);
         setCreated(true);
       } else if (response.status === 404) {
-        setBrKarton(undefined);
+        setBrKarton_id(0);
         setNazivProekt("");
         setPoteklo("");
         setDatum("");
@@ -241,7 +242,7 @@ const TipNabavka: React.FC = () => {
     try {
       const response = await axiosClient.post("/baratelnabavka/addDocument", {
         br_faktura: br_faktura || "0",
-        br_karton: brKarton,
+        br_karton: brKartoni,
         naziv_proekt: nazivProekt,
         poteklo,
         datum,
@@ -266,7 +267,7 @@ const TipNabavka: React.FC = () => {
         `/baratelnabavka/updateDocument/${documentId}`,
         {
           br_faktura: br_faktura || "0",
-          br_karton: brKarton,
+          br_karton: brKartoni,
           naziv_proekt: nazivProekt,
           poteklo,
           datum,
@@ -282,6 +283,23 @@ const TipNabavka: React.FC = () => {
       setShowFakturaError(true);
     }
   };
+
+  const fetchBrKarton = async () => {
+    try {
+      const response = await axiosClient.get("/brKarton");
+
+      if (response.status === 201) {
+        setBrKartoni(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBrKarton();
+  }), [status];
+  
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
@@ -493,7 +511,7 @@ const TipNabavka: React.FC = () => {
                   onChange={(e) => setBrKarton_id(Number(e.target.value))}
                 >
                   <option value="">-- Избери број на картон (конто) --</option>
-                  {br_karton.map((item) => (
+                  {brKartoni.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
@@ -631,7 +649,7 @@ const TipNabavka: React.FC = () => {
         onConfirm={() => setShowUpdateModalBrKarton(false)}
         onCancel={() => setShowUpdateModalBrKarton(false)}
         confirmButton=""
-        message="Успешно е додаден нов издавач"
+        message="Успешно е додаден нов број на картон"
       />
       <SweetAlert
         visibility={showFakturaError}
