@@ -39,6 +39,8 @@ const TipNabavka: React.FC = () => {
   const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
   const [newBrKarton, setNewBrKarton] = useState<string>("");
   const [br_karton_id, setBrKarton_id] = useState<number>();
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
+
 
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
@@ -623,6 +625,13 @@ const TipNabavka: React.FC = () => {
         onCancel={() => setShowUpdateModal(false)}
         confirmButton=""
         message="Промените се успешно реализирани"
+      />
+      <SweetAlert
+        visibility={showUpdateModalBrKarton}
+        onConfirm={() => setShowUpdateModalBrKarton(false)}
+        onCancel={() => setShowUpdateModalBrKarton(false)}
+        confirmButton=""
+        message="Успешно е додаден нов издавач"
       />
       <SweetAlert
         visibility={showFakturaError}
