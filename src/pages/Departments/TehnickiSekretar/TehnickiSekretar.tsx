@@ -12,9 +12,12 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [showUpdateModalIzdavac, setShowUpdateModalIzdavac] =
+    useState<boolean>(false);
   const [showAddIzdavacModal, setShowAddIzdavacModal] =
     useState<boolean>(false);
-  const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
+  const [showDuplicateFakturaError, setShowDuplicateFakturaError] =
+    useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [showIzdavaciError, setShowIzdavaciError] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
@@ -126,6 +129,7 @@ const TehnickiSekretar: React.FC = () => {
 
       if (response.status === 201) {
         setIzdavaci_id(response.data.id);
+        setShowUpdateModalIzdavac(true);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 422) {
@@ -273,11 +277,11 @@ const TehnickiSekretar: React.FC = () => {
             )}
             {!is_sealed &&
               (showAddIzdavacModal ? (
-                <button onClick={() => handleAddIzdavacModal()}>
+                <button type="button" onClick={() => handleAddIzdavacModal()}>
                   Избери издавач
                 </button>
               ) : (
-                <button onClick={() => handleAddIzdavacModal()}>
+                <button type="button" onClick={() => handleAddIzdavacModal()}>
                   Креирај нов издавач
                 </button>
               ))}
@@ -371,6 +375,13 @@ const TehnickiSekretar: React.FC = () => {
         onCancel={() => setShowUpdateModal(false)}
         confirmButton=""
         message="Промените се успешно реализирани"
+      />
+      <SweetAlert
+        visibility={showUpdateModalIzdavac}
+        onConfirm={() => setShowUpdateModalIzdavac(false)}
+        onCancel={() => setShowUpdateModalIzdavac(false)}
+        confirmButton=""
+        message="Успешно е додаден нов издавач"
       />
       <SweetAlert
         visibility={showDuplicateFakturaError}
