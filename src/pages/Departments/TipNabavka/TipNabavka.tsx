@@ -530,15 +530,6 @@ const TipNabavka: React.FC = () => {
                 </button>
               ))}
 
-            {/* <label>Број на картон (Конто)</label>
-                    <input
-                      type="number"
-                      value={brKarton}
-                      readOnly={Boolean(is_sealed)}
-                      onChange={(e) => setBrKarton(Number(e.target.value))}
-                      required
-                    /> */}
-
             <label>Назив на проектот</label>
             <input
               type="text"
