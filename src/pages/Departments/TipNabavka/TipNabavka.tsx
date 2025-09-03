@@ -37,11 +37,12 @@ const TipNabavka: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratel, setBaratel] = useState<string>();
-  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
+  const [showAddBrKartonModal, setShowAddBrKartonModal] =
+    useState<boolean>(false);
   const [newBrKarton, setNewBrKarton] = useState<string>("");
   const [br_karton_id, setBrKarton_id] = useState<number>();
-  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
-
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] =
+    useState<boolean>(false);
 
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
@@ -205,6 +206,44 @@ const TipNabavka: React.FC = () => {
     }
   };
 
+  const storeBrKarton = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.post("/brojKartoni", {
+        br_karton: newBrKarton,
+      });
+
+      if (response.status === 201) {
+        fetchBrKarton();
+        setNewBrKarton("");
+        setShowAddBrKartonModal(false);
+        setShowUpdateModalBrKarton(true);
+      }
+    } catch (error: any) {
+      console.error(error.response?.data || error);
+      setShowFakturaError(true);
+    }
+  };
+
+    const fetchBrKarton = async () => {
+  try {
+    const response = await axiosClient.get("/brojKartoni");
+
+    if (response.status === 200 || response.status === 201) {
+      // Adjust depending on backend response shape
+      setBrKartoni(response.data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  fetchBrKarton();
+}, [status]);
+
+
   const showBaratel = async () => {
     try {
       const response = await axiosClient.get(
@@ -284,22 +323,11 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  const fetchBrKarton = async () => {
-    try {
-      const response = await axiosClient.get("/brKarton");
 
-      if (response.status === 201) {
-        setBrKartoni(response.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     fetchBrKarton();
-  }), [status];
-  
+  }, [status])  ;
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
@@ -499,7 +527,7 @@ const TipNabavka: React.FC = () => {
                     value={newBrKarton}
                     onChange={(e) => setNewBrKarton(e.target.value)}
                   />
-                  <button onClick={storeBaratelNabavka}>Додај</button>
+                  <button onClick={storeBrKarton}>Додај</button>
                 </div>
               </div>
             ) : (
@@ -513,19 +541,20 @@ const TipNabavka: React.FC = () => {
                   <option value="">-- Избери број на картон (конто) --</option>
                   {brKartoni.map((item) => (
                     <option key={item.id} value={item.id}>
-                      {item.name}
+                      {item.br_karton}
                     </option>
                   ))}
                 </select>
               </div>
             )}
+
             {!is_sealed &&
               (showAddBrKartonModal ? (
-                <button onClick={() => handleAddBrKartonModal()}>
+                <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Избери број на картон (конто)
                 </button>
               ) : (
-                <button onClick={() => handleAddBrKartonModal()}>
+                <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Креирај нов број на картон (конто)
                 </button>
               ))}
@@ -582,7 +611,7 @@ const TipNabavka: React.FC = () => {
           </div>
 
           <div className="form-buttons">
-            <button className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
+            <button type="button" className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
               Види фактура
             </button>
             <div className="form-buttons">
@@ -593,7 +622,7 @@ const TipNabavka: React.FC = () => {
                       <button type="submit">Зачувај</button>
                     ) : (
                       <>
-                        <button
+                        <button type="button"
                           onClick={() => {
                             updateBaratelNabavka({});
                             updateTipNabavka({});
