@@ -12,6 +12,7 @@ export interface IzdavaciType {
 export interface BrKartonType {
   id: number;
   br_karton: string;
+  br_kartoni_id: number;
 }
 
 export interface RoleType {

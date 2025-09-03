@@ -32,7 +32,7 @@ const TipNabavka: React.FC = () => {
   const [documentId, setDocumentId] = useState<number>();
 
   //EVIDENCIJA
-
+  const [evidencijaId, setEvidencijaId] = useState<number>();
   const [brKartoni, setBrKartoni] = useState<BrKartonType[]>([]);
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
@@ -40,7 +40,7 @@ const TipNabavka: React.FC = () => {
   const [showAddBrKartonModal, setShowAddBrKartonModal] =
     useState<boolean>(false);
   const [newBrKarton, setNewBrKarton] = useState<string>("");
-  const [br_karton_id, setBrKarton_id] = useState<number>();
+  const [brKarton_id, setBrKarton_id] = useState<number>();
   const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] =
     useState<boolean>(false);
 
@@ -103,8 +103,7 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  const storeTipNabavka = async (e: any) => {
-    e.preventDefault();
+  const storeTipNabavka = async () => {
 
     try {
       const response = await axiosClient.post("/tipnabavka/addDocument", {
@@ -132,9 +131,7 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  const updateTipNabavka = async (e: any) => {
-    e.preventDefault();
-
+  const updateTipNabavka = async () => {
     try {
       const response = await axiosClient.patch(
         `/tipnabavka/updateTip/${documentId}`,
@@ -249,11 +246,11 @@ useEffect(() => {
       const response = await axiosClient.get(
         `/baratelnabavka/show/${br_faktura}`
       );
-
+      
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
-        setBrKartoni(response.data.document.br_karton);
+        setBrKarton_id(response.data.document.br_kartoni_id ?? undefined);
         setNazivProekt(response.data.document.naziv_proekt);
         setPoteklo(response.data.document.poteklo);
         setDatum(response.data.document.datum);
@@ -275,13 +272,11 @@ useEffect(() => {
     }
   };
 
-  const storeBaratelNabavka = async (e: any) => {
-    e.preventDefault();
-
+  const storeBaratelNabavka = async () => {
     try {
       const response = await axiosClient.post("/baratelnabavka/addDocument", {
         br_faktura: br_faktura || "0",
-        br_karton: brKartoni,
+        br_kartoni_id: brKarton_id,
         naziv_proekt: nazivProekt,
         poteklo,
         datum,
@@ -290,7 +285,7 @@ useEffect(() => {
       });
 
       if (response.status === 201) {
-        setDocumentId(response.data.document.id);
+        setEvidencijaId(response.data.document.id);
         setCreated(true);
       }
     } catch (error) {
@@ -298,15 +293,13 @@ useEffect(() => {
     }
   };
 
-  const updateBaratelNabavka = async (e: any) => {
-    e.preventDefault();
-
+  const updateBaratelNabavka = async () => {
     try {
       const response = await axiosClient.patch(
-        `/baratelnabavka/updateDocument/${documentId}`,
+        `/baratelnabavka/updateDocument/${evidencijaId}`,
         {
           br_faktura: br_faktura || "0",
-          br_karton: brKartoni,
+          br_kartoni_id: brKarton_id,
           naziv_proekt: nazivProekt,
           poteklo,
           datum,
@@ -319,15 +312,15 @@ useEffect(() => {
         setShowUpdateModal(true);
       }
     } catch (error) {
+      console.log(error);
+      
       setShowFakturaError(true);
     }
-  };
-
-
+  };  
 
   useEffect(() => {
     fetchBrKarton();
-  }, [status])  ;
+  }, [])  ;
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
@@ -340,11 +333,11 @@ useEffect(() => {
         onSubmit={(e) => {
           e.preventDefault();
           if (!created) {
-            storeTipNabavka(e);
-            storeBaratelNabavka(e);
+            storeTipNabavka();
+            storeBaratelNabavka();
           } else {
-            updateTipNabavka(e);
-            updateBaratelNabavka(e);
+            updateTipNabavka();
+            updateBaratelNabavka();
           }
         }}
       >
@@ -534,7 +527,7 @@ useEffect(() => {
               <div className="izberi-izdavac">
                 <label>Број на картон (Конто):</label>
                 <select
-                  value={br_karton_id ?? ""}
+                  value={brKarton_id ?? ""}
                   disabled={Boolean(is_sealed)}
                   onChange={(e) => setBrKarton_id(Number(e.target.value))}
                 >
@@ -624,13 +617,13 @@ useEffect(() => {
                       <>
                         <button type="button"
                           onClick={() => {
-                            updateBaratelNabavka({});
-                            updateTipNabavka({});
+                            updateBaratelNabavka();
+                            updateTipNabavka();
                           }}
                         >
                           Измени
                         </button>
-                        <button onClick={() => setShowDeleteModal(true)}>
+                        <button type="button" onClick={() => setShowDeleteModal(true)}>
                           Избриши
                         </button>
                       </>
