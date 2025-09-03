@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 
-
 const TipNabavka: React.FC = () => {
   const { br_faktura } = useParams<string>();
   const [is_sealed, setIs_sealed] = useState<number>();
@@ -37,6 +36,13 @@ const TipNabavka: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratel, setBaratel] = useState<string>();
+  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
+  const [newBrKarton, setNewBrKarton] = useState<string>("");
+  const [br_karton_id, setBrKarton_id] = useState<number>();
+
+  const handleAddBrKartonModal = () => {
+    setShowAddBrKartonModal(!showAddBrKartonModal);
+  };
 
   useEffect(() => {
     showTipNabavka();
@@ -46,9 +52,9 @@ const TipNabavka: React.FC = () => {
   const showTipNabavka = async () => {
     try {
       const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
-      
+
       setFile(responsePDF.data.faktura.scan_file);
-      
+
       const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
 
       if (response.status === 201) {
@@ -88,7 +94,7 @@ const TipNabavka: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
-      setIs_sealed(0); 
+      setIs_sealed(0);
       setCreated(false);
     }
   };
@@ -176,7 +182,7 @@ const TipNabavka: React.FC = () => {
         setShowDeleteModal(false);
       }
 
-       const responseBaratel = await axiosClient.delete(
+      const responseBaratel = await axiosClient.delete(
         `/baratelnabavka/destroy/${documentId}`
       );
 
@@ -196,13 +202,12 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-  
   const showBaratel = async () => {
     try {
       const response = await axiosClient.get(
         `/baratelnabavka/show/${br_faktura}`
       );
-      
+
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
@@ -230,7 +235,7 @@ const TipNabavka: React.FC = () => {
 
   const storeBaratelNabavka = async (e: any) => {
     e.preventDefault();
-    
+
     try {
       const response = await axiosClient.post("/baratelnabavka/addDocument", {
         br_faktura: br_faktura || "0",
@@ -277,26 +282,35 @@ const TipNabavka: React.FC = () => {
   };
 
   const showPdf = (path: string, e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     window.open(path, "_blank");
   };
 
   return (
     <>
-      <form onSubmit={(e) => {e.preventDefault();
-        if (!created) {
-          storeTipNabavka(e);
-          storeBaratelNabavka(e);
-        } else {
-          updateTipNabavka(e);
-          updateBaratelNabavka(e);
-        }
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!created) {
+            storeTipNabavka(e);
+            storeBaratelNabavka(e);
+          } else {
+            updateTipNabavka(e);
+            updateBaratelNabavka(e);
+          }
+        }}
+      >
         <div className="form-item">
           <h1>Информации за тип на набавка </h1>
           <div className="form-item-select">
-            <label>Содржината на фактурата, предметот на наплата е согласно:</label>
-            <select value={tip} disabled={Boolean(is_sealed)} onChange={(e) => setTip(e.target.value)}>
+            <label>
+              Содржината на фактурата, предметот на наплата е согласно:
+            </label>
+            <select
+              value={tip}
+              disabled={Boolean(is_sealed)}
+              onChange={(e) => setTip(e.target.value)}
+            >
               <option value="javna">Јавна набавка</option>
               <option value="tender">Набавка без тендер</option>
             </select>
@@ -328,7 +342,10 @@ const TipNabavka: React.FC = () => {
                 placeholder="0"
                 onChange={(e) => setVk_vrednost(Number(e.target.value))}
               />
-              <label>Останати расположливи средства по договорот (без вредност на фактура)</label>
+              <label>
+                Останати расположливи средства по договорот (без вредност на
+                фактура)
+              </label>
               <input
                 type="number"
                 placeholder="0"
@@ -387,7 +404,9 @@ const TipNabavka: React.FC = () => {
         {tip === "tender" && (
           <div className="form-item">
             <div className="form-item-radio">
-              <label>Дали до сега е набавувана стока или услуга од ист тип:</label>
+              <label>
+                Дали до сега е набавувана стока или услуга од ист тип:
+              </label>
               <div className="form-radio">
                 <div>
                   <input
@@ -414,7 +433,9 @@ const TipNabavka: React.FC = () => {
               </div>
             </div>
             <div className="form-item-inputs">
-              <label>Вкупно потрошени средства по основ на набавка од тој тип:</label>
+              <label>
+                Вкупно потрошени средства по основ на набавка од тој тип:
+              </label>
               <input
                 type="number"
                 placeholder="0"
@@ -438,114 +459,156 @@ const TipNabavka: React.FC = () => {
         )}
 
         <div className="form-item">
-                  <h1>Информации за евиденција</h1>
-        
-                  <div className="form-item-inputs">
-                    <label>Барател на набавка која е предмет на наплата:</label>
-                    <input
-                      value={baratel}
-                      disabled={Boolean(is_sealed)}
-                      onChange={(e) => setBaratel(e.target.value)}
-                      required
-                    >
-                      
-                    </input>
-        
-                    <label>Број на картон (Конто)</label>
+          <h1>Информации за евиденција</h1>
+
+          <div className="form-item-inputs">
+            <label>Барател на набавка која е предмет на наплата:</label>
+            <input
+              value={baratel}
+              disabled={Boolean(is_sealed)}
+              onChange={(e) => setBaratel(e.target.value)}
+              required
+            ></input>
+
+            {showAddBrKartonModal ? (
+              <div>
+                <label>Додај број на картон:</label>
+                <div className="new-izdavac">
+                  <input
+                    type="text"
+                    value={newBrKarton}
+                    onChange={(e) => setNewBrKarton(e.target.value)}
+                  />
+                  <button onClick={storeBaratelNabavka}>Додај</button>
+                </div>
+              </div>
+            ) : (
+              <div className="izberi-izdavac">
+                <label>Број на картон (Конто):</label>
+                <select
+                  value={br_karton_id ?? ""}
+                  disabled={Boolean(is_sealed)}
+                  onChange={(e) => setBrKarton_id(Number(e.target.value))}
+                >
+                  <option value="">-- Избери број на картон (конто) --</option>
+                  {br_karton.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {!is_sealed &&
+              (showAddBrKartonModal ? (
+                <button onClick={() => handleAddBrKartonModal()}>
+                  Избери број на картон (конто)
+                </button>
+              ) : (
+                <button onClick={() => handleAddBrKartonModal()}>
+                  Креирај нов број на картон (конто)
+                </button>
+              ))}
+
+            {/* <label>Број на картон (Конто)</label>
                     <input
                       type="number"
                       value={brKarton}
                       readOnly={Boolean(is_sealed)}
                       onChange={(e) => setBrKarton(Number(e.target.value))}
                       required
-                    />
-        
-                    <label>Назив на проектот</label>
-                    <input
-                      type="text"
-                      value={nazivProekt}
-                      readOnly={Boolean(is_sealed)}
-                      onChange={(e) => setNazivProekt(e.target.value)}
-                      required
-                    />
-                  </div>
-        
-                  <div className="form-item-radio">
-                    <label>Потекло на финансиите:</label>
-                    <div className="form-radio">
-                      <label>
-                        <input
-                          type="radio"
-                          name="poteklo"
-                          value="Средства на МФС"
-                          checked={poteklo === "Средства на МФС"}
-                          disabled={Boolean(is_sealed)}
-                          onChange={(e) => setPoteklo(e.target.value)}
-                          required
-                        />&nbsp;
-                        Средства на МФС
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="poteklo"
-                          value="Буџет"
-                          checked={poteklo === "Буџет"}
-                          disabled={Boolean(is_sealed)}
-                          onChange={(e) => setPoteklo(e.target.value)}
-                          required
-                        />&nbsp;
-                        Буџет
-                      </label>
-                    </div>
-                  </div>
-        
-                  <div className="form-item-inputs">
-                    <label>Датум</label>
-                    <input
-                      type="date"
-                      value={datum}
-                      readOnly={Boolean(is_sealed)}
-                      onChange={(e) => setDatum(e.target.value)}
-                      required
-                    />
-                  </div>
+                    /> */}
 
-        
-                  <div className="form-buttons">
-                    <button className="vidi-faktura"
-                          onClick={(e) => showPdf(file, e)}
-                    >Види фактура</button>
-                    <div className="form-buttons">
-                      <div className="form-buttons-edit">
-                        {is_sealed === 0 && (
-                          <>
-                            {!created ? (
-                              <button type="submit">Зачувај</button>
-                            ) : (
-                              <>
-                                <button onClick={() => {
-                                  updateBaratelNabavka({}); 
-                                  updateTipNabavka({});
-                                  }}>Измени</button>
-                                <button onClick={() => setShowDeleteModal(true)}>Избриши</button>
-                              </>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {status !== "pending" ? (
-                    <CommentSectionRead
-                      review_comment={review_comment || ""}
-                      status={status || "pending"}
+            <label>Назив на проектот</label>
+            <input
+              type="text"
+              value={nazivProekt}
+              readOnly={Boolean(is_sealed)}
+              onChange={(e) => setNazivProekt(e.target.value)}
+              required
+            />
+          </div>
 
-                    />
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
+          <div className="form-item-radio">
+            <label>Потекло на финансиите:</label>
+            <div className="form-radio">
+              <label>
+                <input
+                  type="radio"
+                  name="poteklo"
+                  value="Средства на МФС"
+                  checked={poteklo === "Средства на МФС"}
+                  disabled={Boolean(is_sealed)}
+                  onChange={(e) => setPoteklo(e.target.value)}
+                  required
+                />
+                &nbsp; Средства на МФС
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="poteklo"
+                  value="Буџет"
+                  checked={poteklo === "Буџет"}
+                  disabled={Boolean(is_sealed)}
+                  onChange={(e) => setPoteklo(e.target.value)}
+                  required
+                />
+                &nbsp; Буџет
+              </label>
+            </div>
+          </div>
+
+          <div className="form-item-inputs">
+            <label>Датум</label>
+            <input
+              type="date"
+              value={datum}
+              readOnly={Boolean(is_sealed)}
+              onChange={(e) => setDatum(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-buttons">
+            <button className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
+              Види фактура
+            </button>
+            <div className="form-buttons">
+              <div className="form-buttons-edit">
+                {is_sealed === 0 && (
+                  <>
+                    {!created ? (
+                      <button type="submit">Зачувај</button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => {
+                            updateBaratelNabavka({});
+                            updateTipNabavka({});
+                          }}
+                        >
+                          Измени
+                        </button>
+                        <button onClick={() => setShowDeleteModal(true)}>
+                          Избриши
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+          {status !== "pending" ? (
+            <CommentSectionRead
+              review_comment={review_comment || ""}
+              status={status || "pending"}
+            />
+          ) : (
+            <div></div>
+          )}
+        </div>
       </form>
       <SweetAlert
         visibility={showDeleteModal}
@@ -563,8 +626,8 @@ const TipNabavka: React.FC = () => {
       />
       <SweetAlert
         visibility={showFakturaError}
-        onConfirm={() => setShowFakturaError(false)} 
-        onCancel={() => setShowFakturaError(false)} 
+        onConfirm={() => setShowFakturaError(false)}
+        onCancel={() => setShowFakturaError(false)}
         confirmButton=""
         message="Грешка при ажурирање на оваа фактура"
       />

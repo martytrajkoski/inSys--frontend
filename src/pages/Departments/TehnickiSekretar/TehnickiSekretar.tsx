@@ -12,8 +12,7 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-  const [showAddIzdavacModal, setShowAddIzdavacModal] =
-    useState<boolean>(false);
+  const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
   const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [showIzdavaciError, setShowIzdavaciError] = useState<boolean>(false);
