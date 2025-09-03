@@ -13,6 +13,7 @@ const TehnickiSekretar: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
+  const [showAddIzdavacSuccess, setShowAddIzdavacSuccess] = useState<boolean>(false);
   const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [showIzdavaciError, setShowIzdavaciError] = useState<boolean>(false);
@@ -125,6 +126,7 @@ const TehnickiSekretar: React.FC = () => {
 
       if (response.status === 201) {
         setIzdavaci_id(response.data.id);
+        setShowAddIzdavacSuccess(true);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 422) {
@@ -150,7 +152,7 @@ const TehnickiSekretar: React.FC = () => {
         formData.append("scan_file", file);
       }
 
-      const response = await axiosClient.post(
+      const response = await axiosClient.patch(
         `/tehnickisekretar/updateDocument/${documentId}`,
         formData
       );
@@ -272,11 +274,11 @@ const TehnickiSekretar: React.FC = () => {
             )}
             {!is_sealed &&
               (showAddIzdavacModal ? (
-                <button onClick={() => handleAddIzdavacModal()}>
+                <button type="button" onClick={() => handleAddIzdavacModal()}>
                   Избери издавач
                 </button>
               ) : (
-                <button onClick={() => handleAddIzdavacModal()}>
+                <button type="button" onClick={() => handleAddIzdavacModal()}>
                   Креирај нов издавач
                 </button>
               ))}
@@ -370,6 +372,13 @@ const TehnickiSekretar: React.FC = () => {
         onCancel={() => setShowUpdateModal(false)}
         confirmButton=""
         message="Промените се успешно реализирани"
+      />
+      <SweetAlert
+        visibility={showAddIzdavacSuccess}
+        onConfirm={() => setShowAddIzdavacSuccess(false)}
+        onCancel={() => setShowAddIzdavacSuccess(false)}
+        confirmButton=""
+        message="Успешно креиран издавач"
       />
       <SweetAlert
         visibility={showDuplicateFakturaError}

@@ -47,6 +47,7 @@ const Prodekan: React.FC = () => {
   const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
   const [formular, setFormular] = useState<number>();
   const [vneseniSredstva, setVneseniSredstva] = useState<number>();
+  const [inventarenBr, setInventarenBr] = useState<string>();
   const [smetka, setSmetka] = useState<string>("");
   const [konto, setKonto] = useState<string>("");
   const [datumSmetkovodstvo, setDatumSmetkovodstvo] = useState<string>("");
@@ -78,7 +79,7 @@ const Prodekan: React.FC = () => {
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setPotpisTehnicki(
           data.tehnicki_sekretar.updated_by?.name ??
-            data.tehnicki_sekretar.submited_by?.name
+          data.tehnicki_sekretar.submited_by?.name
         );
         setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
@@ -104,7 +105,7 @@ const Prodekan: React.FC = () => {
         }
         setPotpisTip(
           data.tip_nabavka.updated_by?.name ??
-            data.tip_nabavka.submited_by?.name
+          data.tip_nabavka.submited_by?.name
         );
         setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
@@ -117,7 +118,7 @@ const Prodekan: React.FC = () => {
         setDatumBaratel(data.baratel_javna_nabavka?.datum ?? "");
         setPotpisBaratel(
           data.baratel_javna_nabavka.updated_by?.name ??
-            data.baratel_javna_nabavka.submited_by?.name
+          data.baratel_javna_nabavka.submited_by?.name
         );
 
         // Smetkovodstvo
@@ -129,11 +130,12 @@ const Prodekan: React.FC = () => {
         setFormular(data.smetkovodstvo?.formular ?? undefined);
         setVneseniSredstva(data.smetkovodstvo?.vneseni_sredstva ?? undefined);
         setSmetka(data.smetkovodstvo?.smetka ?? "");
+        setInventarenBr(data.smetkovodstvo.inventaren_br ?? "");
         setKonto(data.smetkovodstvo?.konto ?? "");
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
         setPotpisSmetkovodstvo(
           data.smetkovodstvo.updated_by?.name ??
-            data.smetkovodstvo.submited_by?.name
+          data.smetkovodstvo.submited_by?.name
         );
         setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
@@ -199,7 +201,7 @@ const Prodekan: React.FC = () => {
     }
   }, [br_faktura]);
 
-    const showPdf = (path: string, e: any) => {
+  const showPdf = (path: string, e: any) => {
     e.preventDefault()
     window.open(path, "_blank");
   };
@@ -350,6 +352,8 @@ const Prodekan: React.FC = () => {
             година:
           </label>
           <input type="text" value={vneseniSredstva ? "Да" : "Не"} readOnly />
+          <label>Инвентарен број на основно средство:</label>
+          <input type="text" value={inventarenBr} readOnly />
           <label>Предлог сметка за наплата од:</label>
           <input type="text" value={smetka} readOnly />
           <label>Предлог конто за наплата од:</label>

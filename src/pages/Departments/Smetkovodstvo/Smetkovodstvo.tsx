@@ -17,6 +17,7 @@ const Smetkovodstvo: React.FC = () => {
   const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
   const [formular, setFormular] = useState<number>();
   const [vneseniSredstva, setVneseniSredstva] = useState<number>();
+  const [inventarenBr, setInventarenBr] = useState<string>();
   const [smetka, setSmetka] = useState<string>("");
   const [konto, setKonto] = useState<string>("");
   const [datum, setDatum] = useState<string>("");
@@ -50,6 +51,7 @@ const Smetkovodstvo: React.FC = () => {
         setOsnovaEvidentiranje(response.data.document.osnova_evidentiranje);
         setFormular(response.data.document.formular);
         setVneseniSredstva(response.data.document.vneseni_sredstva);
+        setInventarenBr(response.data.document.inventaren_br);
         setSmetka(response.data.document.smetka);
         setKonto(response.data.document.konto);
         setDatum(response.data.document.datum);
@@ -63,6 +65,7 @@ const Smetkovodstvo: React.FC = () => {
         setOsnovaEvidentiranje(undefined);
         setFormular(undefined);
         setVneseniSredstva(undefined);
+        setInventarenBr("");
         setSmetka("");
         setKonto("");
         setDatum("");
@@ -85,6 +88,7 @@ const Smetkovodstvo: React.FC = () => {
         osnova_evidentiranje: osnovaEvidentiranje,
         formular: formular,
         vneseni_sredstva: vneseniSredstva,
+        inventaren_br: inventarenBr,
         smetka: smetka,
         konto: konto,
         datum: datum,
@@ -113,6 +117,7 @@ const Smetkovodstvo: React.FC = () => {
           osnova_evidentiranje: osnovaEvidentiranje,
           formular: formular,
           vneseni_sredstva: vneseniSredstva,
+          inventaren_br: inventarenBr,
           smetka: smetka,
           konto: konto,
           datum: datum,
@@ -140,6 +145,7 @@ const Smetkovodstvo: React.FC = () => {
         setOsnovaEvidentiranje(undefined);
         setFormular(undefined);
         setVneseniSredstva(undefined);
+        setInventarenBr("");
         setSmetka("");
         setKonto("");
         setDatum("");
@@ -265,6 +271,17 @@ const Smetkovodstvo: React.FC = () => {
             </div>
           </div>
 
+          <div className="form-item-inputs">
+            <label>Инвентарен број на основно средство:</label>
+            <input
+              type="text"
+              value={inventarenBr}
+              readOnly={Boolean(is_sealed)}
+              onChange={(e) => setInventarenBr(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="form-item-radio">
             <label>Предлог сметка за наплата од:</label>
             <div className="form-radio">
@@ -324,8 +341,8 @@ const Smetkovodstvo: React.FC = () => {
                     <button type="submit">Зачувај</button>
                   ) : (
                     <>
-                      <button onClick={updateSmetkovodstvo}>Измени</button>
-                      <button onClick={()=>setShowDeleteModal(true)}>Избриши</button>
+                      <button type="button" onClick={updateSmetkovodstvo}>Измени</button>
+                      <button type="button" onClick={()=>setShowDeleteModal(true)}>Избриши</button>
                     </>
                   )}
                 </>
