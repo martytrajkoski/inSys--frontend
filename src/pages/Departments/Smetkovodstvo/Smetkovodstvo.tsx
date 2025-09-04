@@ -3,6 +3,7 @@ import axiosClient from "../../../axiosClient/axiosClient";
 import { useParams } from "react-router-dom";
 import CommentSectionRead from "../../../components/Comment-Section/Comment-Section-Read";
 import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
+import type { BrKartonType } from "../../../types/types";
 
 const Smetkovodstvo: React.FC = () => {
 
@@ -11,8 +12,13 @@ const Smetkovodstvo: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
+  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
 
-  const [brKarton, setBrKarton] = useState<string>();
+
+  const [brKartoni, setBrKartoni] = useState<BrKartonType[]>([]);
+  const [brKarton_id, setBrKarton_id] = useState<number>();
+  const [newBrKarton, setNewBrKarton] = useState<string>("");
   const [sostojbaKarton, setSostojbaKarton] = useState<string>("");
   const [osnovaEvidentiranje, setOsnovaEvidentiranje] = useState<number>();
   const [formular, setFormular] = useState<number>();
@@ -24,19 +30,24 @@ const Smetkovodstvo: React.FC = () => {
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
   const [file, setFile] = useState<any>();
-  
+
   const [documentId, setDocumentId] = useState<number>();
   const [created, setCreated] = useState<boolean>();
 
   useEffect(() => {
     showSmetkovodstvo();
+    fetchBrKarton()
   }, []);
+
+  const handleAddBrKartonModal = () => {
+    setShowAddBrKartonModal(!showAddBrKartonModal);
+  };
 
   const showSmetkovodstvo = async () => {
     try {
 
       const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
-      
+
       setFile(responsePDF.data.faktura.scan_file);
 
       const response = await axiosClient.get(
@@ -46,7 +57,7 @@ const Smetkovodstvo: React.FC = () => {
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
-        setBrKarton(response.data.document.br_karton);
+        setBrKarton_id(response.data.document.br_kartoni_id ?? undefined);
         setSostojbaKarton(response.data.document.sostojba_karton);
         setOsnovaEvidentiranje(response.data.document.osnova_evidentiranje);
         setFormular(response.data.document.formular);
@@ -60,7 +71,7 @@ const Smetkovodstvo: React.FC = () => {
         setCreated(true);
       } else if (response.status === 404) {
         setIs_sealed(0);
-        setBrKarton(undefined);
+        setBrKarton_id(0);
         setSostojbaKarton("");
         setOsnovaEvidentiranje(undefined);
         setFormular(undefined);
@@ -82,7 +93,7 @@ const Smetkovodstvo: React.FC = () => {
 
     try {
       const response = await axiosClient.post("/smetkovodstvo/addDocument", {
-        br_karton: brKarton,
+        br_kartoni_id: brKarton_id,
         br_faktura: br_faktura || "0",
         sostojba_karton: sostojbaKarton,
         osnova_evidentiranje: osnovaEvidentiranje,
@@ -111,7 +122,7 @@ const Smetkovodstvo: React.FC = () => {
       const response = await axiosClient.patch(
         `/smetkovodstvo/updateDocument/${documentId}`,
         {
-          br_karton: brKarton,
+          br_kartoni_id: brKarton_id,
           br_faktura: br_faktura || "0",
           sostojba_karton: sostojbaKarton,
           osnova_evidentiranje: osnovaEvidentiranje,
@@ -140,7 +151,7 @@ const Smetkovodstvo: React.FC = () => {
       );
 
       if (response.status === 201) {
-        setBrKarton("");
+        setBrKarton_id(0);
         setSostojbaKarton("");
         setOsnovaEvidentiranje(undefined);
         setFormular(undefined);
@@ -158,6 +169,38 @@ const Smetkovodstvo: React.FC = () => {
     }
   };
 
+  const fetchBrKarton = async () => {
+    try {
+      const response = await axiosClient.get("/brojKartoni");
+
+      if (response.status === 200 || response.status === 201) {
+        setBrKartoni(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const storeBrKarton = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosClient.post("/brojKartoni", {
+        br_karton: newBrKarton,
+      });
+
+      if (response.status === 201) {
+        fetchBrKarton();
+        setNewBrKarton("");
+        setShowAddBrKartonModal(false);
+        setShowUpdateModalBrKarton(true);
+      }
+    } catch (error: any) {
+      console.error(error.response?.data || error);
+      setShowFakturaError(true);
+    }
+  };
+
   const showPdf = (path: string, e: any) => {
     e.preventDefault()
     window.open(path, "_blank");
@@ -169,15 +212,7 @@ const Smetkovodstvo: React.FC = () => {
         <div className="form-item">
           <h1>Информации од сметководство</h1>
           <div className="form-item-inputs">
-            <label>Број на картон:</label>
-            <input
-              type="text"
-              value={brKarton}
-              readOnly={Boolean(is_sealed)}
-              onChange={(e) => setBrKarton(e.target.value)}
-              required
-            />
-            <label>Состојба на картон (конто):</label>
+            <label>Состојба на картон (контон)</label>
             <input
               type="text"
               value={sostojbaKarton}
@@ -185,6 +220,48 @@ const Smetkovodstvo: React.FC = () => {
               onChange={(e) => setSostojbaKarton(e.target.value)}
               required
             />
+
+              {showAddBrKartonModal ? (
+                <div>
+                  <label>Додај број на картон:</label>
+                  <div className="new-izdavac">
+                    <input
+                      type="text"
+                      value={newBrKarton}
+                      onChange={(e) => setNewBrKarton(e.target.value)}
+                    />
+                    <button onClick={storeBrKarton}>Додај</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="izberi-izdavac">
+                  <label>Број на картон (Конто):</label>
+                  <select
+                    value={brKarton_id ?? ""}
+                    disabled={Boolean(is_sealed)}
+                    onChange={(e) => setBrKarton_id(Number(e.target.value))}
+                  >
+                    <option value="">-- Избери број на картон (конто) --</option>
+                    {brKartoni.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.br_karton}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {!is_sealed &&
+              (showAddBrKartonModal ? (
+                <button type="button" onClick={() => handleAddBrKartonModal()}>
+                  Избери број на картон (конто)
+                </button>
+              ) : (
+                <button type="button" onClick={() => handleAddBrKartonModal()}>
+                  Креирај нов број на картон (конто)
+                </button>
+              ))
+              }
           </div>
 
           <div className="form-item-radio">
@@ -332,7 +409,7 @@ const Smetkovodstvo: React.FC = () => {
 
           <div className="form-buttons">
             <button className="vidi-faktura"
-                                      onClick={(e) => showPdf(file, e)}
+              onClick={(e) => showPdf(file, e)}
             >Види фактура</button>
             <div className="form-buttons-edit">
               {is_sealed === 0 && (
@@ -342,7 +419,7 @@ const Smetkovodstvo: React.FC = () => {
                   ) : (
                     <>
                       <button type="button" onClick={updateSmetkovodstvo}>Измени</button>
-                      <button type="button" onClick={()=>setShowDeleteModal(true)}>Избриши</button>
+                      <button type="button" onClick={() => setShowDeleteModal(true)}>Избриши</button>
                     </>
                   )}
                 </>
@@ -380,6 +457,13 @@ const Smetkovodstvo: React.FC = () => {
         onCancel={() => setShowFakturaError(false)}
         confirmButton=""
         message="Грешка при ажурирање на оваа фактура"
+      />
+      <SweetAlert
+        visibility={showUpdateModalBrKarton}
+        onConfirm={() => setShowUpdateModalBrKarton(false)}
+        onCancel={() => setShowUpdateModalBrKarton(false)}
+        confirmButton=""
+        message="Успешно е додаден нов број на картон"
       />
     </>
   );

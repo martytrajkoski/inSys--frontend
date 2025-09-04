@@ -37,12 +37,10 @@ const TipNabavka: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratel, setBaratel] = useState<string>();
-  const [showAddBrKartonModal, setShowAddBrKartonModal] =
-    useState<boolean>(false);
+  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
   const [newBrKarton, setNewBrKarton] = useState<string>("");
   const [brKarton_id, setBrKarton_id] = useState<number>();
-  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] =
-    useState<boolean>(false);
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
 
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
@@ -51,6 +49,7 @@ const TipNabavka: React.FC = () => {
   useEffect(() => {
     showTipNabavka();
     showBaratel();
+    fetchBrKarton();
   }, []);
 
   const showTipNabavka = async () => {
@@ -223,30 +222,24 @@ const TipNabavka: React.FC = () => {
     }
   };
 
-    const fetchBrKarton = async () => {
-  try {
-    const response = await axiosClient.get("/brojKartoni");
+  const fetchBrKarton = async () => {
+    try {
+      const response = await axiosClient.get("/brojKartoni");
 
-    if (response.status === 200 || response.status === 201) {
-      // Adjust depending on backend response shape
-      setBrKartoni(response.data);
+      if (response.status === 200 || response.status === 201) {
+        setBrKartoni(response.data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-useEffect(() => {
-  fetchBrKarton();
-}, [status]);
-
+  };
 
   const showBaratel = async () => {
     try {
       const response = await axiosClient.get(
         `/baratelnabavka/show/${br_faktura}`
       );
-      
+
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
         setDocumentId(response.data.document.id);
@@ -313,15 +306,11 @@ useEffect(() => {
       }
     } catch (error) {
       console.log(error);
-      
+
       setShowFakturaError(true);
     }
-  };  
-
-  useEffect(() => {
-    fetchBrKarton();
-  }, [])  ;
-
+  };
+  
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
     window.open(path, "_blank");
@@ -550,7 +539,8 @@ useEffect(() => {
                 <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Креирај нов број на картон (конто)
                 </button>
-              ))}
+              ))
+            }
 
             <label>Назив на проектот</label>
             <input
