@@ -6,7 +6,6 @@ import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 import type { BrKartonType } from "../../../types/types";
 
 const Smetkovodstvo: React.FC = () => {
-
   const { br_faktura } = useParams<string>();
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -14,7 +13,6 @@ const Smetkovodstvo: React.FC = () => {
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
   const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
-
 
   const [brKartoni, setBrKartoni] = useState<BrKartonType[]>([]);
   const [brKarton_id, setBrKarton_id] = useState<number>();
@@ -38,6 +36,15 @@ const Smetkovodstvo: React.FC = () => {
     showSmetkovodstvo();
     fetchBrKarton()
   }, []);
+
+  useEffect(() => {
+    if (osnovaEvidentiranje === 0) {
+      setFormular(0);
+      setVneseniSredstva(0);
+      setInventarenBr("0");
+    }
+  }, [osnovaEvidentiranje]);
+
 
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
@@ -221,37 +228,37 @@ const Smetkovodstvo: React.FC = () => {
               required
             />
 
-              {showAddBrKartonModal ? (
-                <div>
-                  <label>Додај број на картон:</label>
-                  <div className="new-izdavac">
-                    <input
-                      type="text"
-                      value={newBrKarton}
-                      onChange={(e) => setNewBrKarton(e.target.value)}
-                    />
-                    <button onClick={storeBrKarton}>Додај</button>
-                  </div>
+            {showAddBrKartonModal ? (
+              <div>
+                <label>Додај број на картон:</label>
+                <div className="new-izdavac">
+                  <input
+                    type="text"
+                    value={newBrKarton}
+                    onChange={(e) => setNewBrKarton(e.target.value)}
+                  />
+                  <button onClick={storeBrKarton}>Додај</button>
                 </div>
-              ) : (
-                <div className="izberi-izdavac">
-                  <label>Број на картон (Конто):</label>
-                  <select
-                    value={brKarton_id ?? ""}
-                    disabled={Boolean(is_sealed)}
-                    onChange={(e) => setBrKarton_id(Number(e.target.value))}
-                  >
-                    <option value="">-- Избери број на картон (конто) --</option>
-                    {brKartoni.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.br_karton}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              </div>
+            ) : (
+              <div className="izberi-izdavac">
+                <label>Број на картон (Конто):</label>
+                <select
+                  value={brKarton_id ?? ""}
+                  disabled={Boolean(is_sealed)}
+                  onChange={(e) => setBrKarton_id(Number(e.target.value))}
+                >
+                  <option value="">-- Избери број на картон (конто) --</option>
+                  {brKartoni.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.br_karton}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-              {!is_sealed &&
+            {!is_sealed &&
               (showAddBrKartonModal ? (
                 <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Избери број на картон (конто)
@@ -261,7 +268,7 @@ const Smetkovodstvo: React.FC = () => {
                   Креирај нов број на картон (конто)
                 </button>
               ))
-              }
+            }
           </div>
 
           <div className="form-item-radio">
@@ -300,7 +307,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="formular"
                   checked={formular === 1}
-                  disabled={Boolean(is_sealed)}
+                  disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setFormular(1)}
                   required
                 />&nbsp;
@@ -311,7 +318,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="formular"
                   checked={formular === 0}
-                  disabled={Boolean(is_sealed)}
+                  disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setFormular(0)}
                   required
                 />&nbsp;
@@ -328,7 +335,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="sredstva"
                   checked={vneseniSredstva === 1}
-                  disabled={Boolean(is_sealed)}
+                  disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setVneseniSredstva(1)}
                   required
                 />&nbsp;
@@ -339,7 +346,7 @@ const Smetkovodstvo: React.FC = () => {
                   type="radio"
                   name="sredstva"
                   checked={vneseniSredstva === 0}
-                  disabled={Boolean(is_sealed)}
+                  disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setVneseniSredstva(0)}
                   required
                 />&nbsp;
@@ -353,7 +360,7 @@ const Smetkovodstvo: React.FC = () => {
             <input
               type="text"
               value={inventarenBr}
-              readOnly={Boolean(is_sealed)}
+              readOnly={Boolean(is_sealed) || osnovaEvidentiranje === 0}
               onChange={(e) => setInventarenBr(e.target.value)}
               required
             />
