@@ -92,7 +92,7 @@ const Pdf: React.FC = () => {
                                     </tr>
                                         <tr>
                                             <td>Вкупна вредност на фактура (со ДДВ):</td>
-                                            <td>{faktura?.tip_nabavka.vk_vrednost}</td>
+                                            <td>{faktura?.tip_nabavka.javna_nabavka?.vk_vrednost}</td>
                                         </tr>
                                     <tr>
                                         <td>Останати расположливи средства по договорот (без вкл. на фак.):</td>
@@ -160,7 +160,7 @@ const Pdf: React.FC = () => {
                             </tr>
                             <tr>
                                 <td>Број на картон (конто):</td>
-                                <td>{faktura?.baratel_javna_nabavka.br_karton} </td>
+                                <td>{faktura?.baratel_javna_nabavka.br_kartoni_id} </td>
                             </tr>
                             <tr>
                                 <td>Датум:</td>
@@ -183,7 +183,7 @@ const Pdf: React.FC = () => {
                         <tbody>
                             <tr>
                                 <td>Број на картон (конто):</td>
-                                <td>{faktura?.smetkovodstvo.br_karton} </td>
+                                <td>{faktura?.smetkovodstvo.br_kartoni_id} </td>
                             </tr>
                             <tr>
                                 <td>Состојба на картон:</td>

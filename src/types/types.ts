@@ -61,6 +61,7 @@ export interface TipNabavkaType {
   javna_nabavka?: {
     id: number;
     br_dogovor: number;
+    vk_vrednost: number;
     vaznost_do: string;
     ostanati_rasp_sredstva: number;
     soglasno_dogovor: number;
@@ -81,7 +82,7 @@ export interface TipNabavkaType {
 export interface SmetkovodstvoType {
   id: number;
   br_faktura: string;
-  br_karton: string;
+  br_kartoni_id: string;
   datum: string;
   konto: string;
   smetka: string;
@@ -101,7 +102,7 @@ export interface SmetkovodstvoType {
 export interface BaratelNabavkaType {
   id: number;
   br_faktura: string;
-  br_karton: number;
+  br_kartoni_id: string;
   datum: string;
   naziv_proekt: string;
   poteklo: string;
