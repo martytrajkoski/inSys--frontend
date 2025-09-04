@@ -24,6 +24,7 @@ export interface FakturaType {
   id: number;
   arhivski_br: string;
   br_faktura: string;
+  br_dogovor: string;
   basic_info_id: number;
   smetkovodstvo_id: number;
   evidencija_id: number;
