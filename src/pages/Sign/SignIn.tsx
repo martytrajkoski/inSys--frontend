@@ -3,7 +3,6 @@ import axiosClient from "../../axiosClient/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import bgImage from '../../../public/Logo/Asset_2.png';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -51,10 +50,7 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="sign"
-    style={{
-    backgroundImage: `url(${bgImage})`,
-  }}>
+    <div className="sign">
       <div className="app-name">inSys</div>
 
       <div className="sign-container">

@@ -12,9 +12,9 @@
     font-size: 25px;
 
     button {
-      background-color: #e45830;
-      border: 2px solid #e45830;
-      color: white;
+      background-color: white;
+      border: 2px solid #2E91D0;
+      color: #2E91D0;
       padding: 12px 28px;
       font-weight: 600;
       font-size: 16px;
@@ -24,8 +24,8 @@
 
       &:hover {
         outline: none;
-        background-color: white;
-        color: #e45830;
+        background-color: #2E91D0;
+        color: white;
       }
     }
   }
@@ -68,7 +68,7 @@
           &:focus {
             outline: none;
             transition: 0.3s ease-in-out;
-            border: 2px solid #e45830;
+            border: 2px solid #2E91D0;
           }
 
           option {
@@ -82,9 +82,9 @@
         }
 
         button {
-          background-color: #e45830;
-          border: 2px solid #e45830;
-          color: white;
+          background-color: white;
+          border: 2px solid #2E91D0;
+          color: #2E91D0;
           padding: 10px;
           width: 20%;
           font-weight: 600;
@@ -95,8 +95,8 @@
 
           &:hover {
             outline: none;
-            background-color: white;
-            color: #e45830;
+            background-color: #2E91D0;
+            color: white;
           }
         }
 
@@ -112,7 +112,7 @@
           gap: 10px;
 
           .upload-container {
-            background-color: #e457303d;
+            background-color: #2E91D0;
             border: 3px dashed #ffffff;
             border-radius: 8px;
             padding: 20px;
@@ -151,16 +151,16 @@
             margin-top: 20px;
             width: 40px;
             height: 40px;
-            color: #e45830;
+            color: #2E91D0;
           }
 
           .upload-choose {
-            color: #e45830;
+            color: white;
             cursor: pointer;
           }
 
           .upload-formats {
-            color: #e45830;
+            color: white;
             margin-top: 10px;
           }
 
@@ -172,15 +172,16 @@
             height: 100%;
             opacity: 0;
             cursor: pointer;
+            color: white;
           }
 
           .upload-container:hover {
-            border: 3px dashed #e4573077;
-            background-color: white;
+            border: 3px dashed #2E91D0;
+            background-color: #2e92d0b0;
             transition: 300ms;
 
             .upload-icon {
-              background-color: #e4573077;
+              background-color: #2E91D0;
               transition: 300ms;
             }
           }
@@ -242,8 +243,8 @@
         }
 
         .vidi-faktura{
-          background-color: #e45830;
-          border: 2px solid #e45830;
+          background-color: #2E91D0;
+          border: 2px solid #2E91D0;
           color: white;
           padding: 10px;
           width: 20%;
@@ -256,7 +257,7 @@
           &:hover {
             outline: none;
             background-color: white;
-            color: #e45830;
+            color: #2E91D0;
           }
         }
 
@@ -279,23 +280,24 @@
             width: 100%;
 
             &:first-of-type {
-              border: 2px solid #e45830;
+              border: 2px solid #2E91D0;
               background-color: white;
-              color: #e45830;
+              color: #2E91D0;
 
               &:hover {
-                background-color: #e457302c;
+                background-color: #2E91D0;
+                color: white;
                 transition: 300ms;
               }
             }
 
             &:nth-of-type(2) {
-              border: 2px solid #e45830;
-              background-color: #e45830;
+              border: 2px solid #2E91D0;
+              background-color: #2E91D0;
               color: white;
 
               &:hover {
-                background-color: #af4325;
+                background-color: #2E91D0;
                 transition: 300ms;
               }
             }

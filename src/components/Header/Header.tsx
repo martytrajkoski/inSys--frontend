@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "../../axiosClient/axiosClient";
 import type { UserType } from "../../types/types";
 import { useNavigate } from "react-router-dom";
-import logo from "../../../public/Logo/Asset_2.png";
+import logo from "../../../public/Logo/FinkiLogo.png";
 import ProfileModal from "../../pages/Sign/ProfileModal";
 
 const Header: React.FC = () => {
@@ -44,8 +44,6 @@ const Header: React.FC = () => {
         <div className="header-info">
           <img src={logo} alt="Лого" />
           <div className="header-title">
-            <p>Универзитет “Св. Кирил и Методиј” во Скопје</p>
-            <p>Машински факултет - Скопје</p>
           </div>
         </div>
         <div className="header-user">

@@ -17,7 +17,7 @@
     gap: 19px;
 
     img {
-      width: 10%;
+      width: 100%;
     }
   }
 
@@ -29,7 +29,7 @@
 
     span {
       margin-right: 30px;
-      border-bottom: 3px solid #e45830;
+      border-bottom: 3px solid #2E91D0;
       font-size: 24px;
       font-weight: bold;
       color: rgb(85, 85, 82);
@@ -40,14 +40,14 @@
       background: none;
       font-weight: 600;
       font-size: 18px;
-      color: #e45830;
-      border: 2px solid #e45830;
+      color: #2E91D0;
+      border: 2px solid #2E91D0;
       border-radius: 10px;
       cursor: pointer;
 
       &:hover {
         outline: none;
-        background-color: #e45830;
+        background-color: #2E91D0;
         color: white;
       }
     }

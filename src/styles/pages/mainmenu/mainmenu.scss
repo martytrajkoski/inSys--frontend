@@ -26,7 +26,7 @@
                 transition: 200ms;
                 
                 &:focus, &:hover{
-                    border: 2px solid #e45830;
+                    border: 2px solid #2E91D0;
 
                 }
             }
@@ -55,14 +55,14 @@
             }
 
             button{
-                background-color: #e45830;
-                border: 2px solid #e45830;
-                color: white;
+                background-color: white;
+                border: 2px solid #2E91D0;
+                color: #2E91D0;
 
                 &:hover {
                     outline: none;
-                    background-color: white;
-                    color: #e45830;
+                    background-color: #2E91D0;
+                    color: white;
                 }
             }
             
@@ -85,13 +85,13 @@
                     transition: all 0.2s ease;
 
                     &:hover {
-                    border-color: #e45830;
+                    border-color: #2E91D0;
                     background-color: #f0f0f0;
                     }
 
                     &:focus {
-                    border-color: #e45830;
-                    box-shadow: 0 0 0 2px #e45830;
+                    border-color: #2E91D0;
+                    box-shadow: 0 0 0 2px #2E91D0;
                     }
                 }
             }
@@ -229,23 +229,25 @@
                     }
 
                     button:nth-child(1) {
-                        border: 2px solid #e45830;
+                        border: 2px solid #2E91D0;
                         background-color: white;
-                        color: #e45830;
+                        color: #2E91D0;
 
                         &:hover{
-                            background-color: #e457302c;
+                            background-color: #2E91D0;
+                            color: white;
                             transition: 300ms;
                         }
                     }
 
                     button:nth-child(2) {
-                        border: 2px solid #e45830;
-                        background-color: #e45830;
+                        border: 2px solid red;
+                        background-color: red;
                         color: white;
 
                         &:hover{
-                            background-color: #af4325;
+                            background-color: white;
+                            color: red;
                             transition: 300ms;
                         }
                     }

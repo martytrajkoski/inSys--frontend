@@ -13,7 +13,7 @@
 
   .modal-content {
     background: white;
-    border: 2px solid #e45830;
+    border: 2px solid #2E91D0;
     padding: 60px 60px;
     border-radius: 15px;
     width: 40%;
@@ -65,7 +65,7 @@
       &:focus {
         outline: none;
         transition: 0.3s ease-in-out;
-        border-bottom: 2px solid #e45830;
+        border-bottom: 2px solid #2E91D0;
       }
     }
 
@@ -81,14 +81,14 @@
       margin-top: 50px;
 
       button{
-        background-color: #e45830;
-        border: 2px solid #e45830;
+        background-color: #2E91D0;
+        border: 2px solid #2E91D0;
         color: white;
 
         &:hover {
             outline: none;
             background-color: white;
-            color: #e45830;
+            color: #2E91D0;
         }
       }
     }

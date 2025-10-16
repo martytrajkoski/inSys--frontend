@@ -88,9 +88,9 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
                     <div>{item.tehnicki_sekretar.arhivski_br}</div>
                     <div>{item.br_faktura}</div>
                     <div className="invoice-date">
-                      {new Date(item.tehnicki_sekretar.datum)
-                        .toISOString()
-                        .slice(0, 10)}
+                      {item.tehnicki_sekretar?.datum && !isNaN(Date.parse(item.tehnicki_sekretar.datum))
+                        ? new Date(item.tehnicki_sekretar.datum).toISOString().slice(0, 10)
+                        : ""}
                     </div>
                     {role !== "Продекан за финансии" && (
                       <div>

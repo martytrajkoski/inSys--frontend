@@ -13,26 +13,31 @@
 
   &::before {
     content: "";
-    background: center repeat;
+    background-image: url("../../../../public/Logo/FinkiLogo.png");
+    width: 30%;
+    background-position: center;
+    background-repeat: repeat;
+    background-size: contain;
     position: absolute;
     inset: 0;
     z-index: -1;
-    filter: blur(2px) brightness(0.5);
+    filter: blur(2px) brightness(0.3);
   }
 
   .app-name {
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: bold;
     color: #ffffff;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
     letter-spacing: 1.5px;
+    margin-bottom: 1em;
   }
 
   .sign-container {
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(60px);
+    backdrop-filter: blur(4px);
     border-radius: 12px;
-    padding: 30px 20px; // Reduced padding
+    padding: 3em; // Reduced padding
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
@@ -85,7 +90,7 @@
 
           &:focus {
             outline: none;
-            border-color: #e45830;
+            border-color: #2E91D0;
             background: rgba(255, 255, 255, 0.5);
           }
         }
@@ -124,14 +129,14 @@
 
         &:focus {
           outline: none;
-          border-color: #e45830;
+          border-color: #2E91D0;
           background: rgba(255, 255, 255, 0.5);
         }
       }
     }
 
     button {
-      background-color: #e45830;
+      background-color: #2E91D0;
       color: #ffffff;
       font-size: 14px;
       font-weight: bold;
@@ -143,20 +148,20 @@
       transition: background-color 0.3s ease-in-out;
 
       &:hover {
-        background-color: darken(#e45830, 10%);
+        background-color: darken(#2E91D0, 10%);
       }
     }
   }
 
   // Additional text link styling
   a {
-    color: #e45830;
+    color: #2E91D0;
     font-weight: bold;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 
     &:hover {
-      color: lighten(#e45830, 10%);
+      color: lighten(#2E91D0, 10%);
     }
   }
 }
