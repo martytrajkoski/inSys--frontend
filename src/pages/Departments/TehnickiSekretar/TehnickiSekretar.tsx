@@ -12,9 +12,12 @@ const TehnickiSekretar: React.FC = () => {
   const [is_sealed, setIs_sealed] = useState<number>(0);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-  const [showAddIzdavacModal, setShowAddIzdavacModal] = useState<boolean>(false);
-  const [showAddIzdavacSuccess, setShowAddIzdavacSuccess] = useState<boolean>(false);
-  const [showDuplicateFakturaError, setShowDuplicateFakturaError] = useState<boolean>(false);
+  const [showAddIzdavacModal, setShowAddIzdavacModal] =
+    useState<boolean>(false);
+  const [showAddIzdavacSuccess, setShowAddIzdavacSuccess] =
+    useState<boolean>(false);
+  const [showDuplicateFakturaError, setShowDuplicateFakturaError] =
+    useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
   const [showIzdavaciError, setShowIzdavaciError] = useState<boolean>(false);
   const [newIzdavac, setNewIzdavac] = useState<string>("");
@@ -231,6 +234,7 @@ const TehnickiSekretar: React.FC = () => {
             <label>Број на фактура</label>
             <input
               type="text"
+              placeholder="Да не се користи знакот ' / ' во бројот на фактура"
               value={br_fakturaa}
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_fakturaa(e.target.value)}

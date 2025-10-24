@@ -37,10 +37,12 @@ const TipNabavka: React.FC = () => {
   const [nazivProekt, setNazivProekt] = useState<string>("");
   const [poteklo, setPoteklo] = useState<string>("");
   const [baratel, setBaratel] = useState<string>();
-  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
+  const [showAddBrKartonModal, setShowAddBrKartonModal] =
+    useState<boolean>(false);
   const [newBrKarton, setNewBrKarton] = useState<string>("");
   const [brKarton_id, setBrKarton_id] = useState<number>();
-  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] =
+    useState<boolean>(false);
 
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
@@ -103,7 +105,6 @@ const TipNabavka: React.FC = () => {
   };
 
   const storeTipNabavka = async () => {
-
     try {
       const response = await axiosClient.post("/tipnabavka/addDocument", {
         br_faktura: br_faktura || "0",
@@ -310,7 +311,7 @@ const TipNabavka: React.FC = () => {
       setShowFakturaError(true);
     }
   };
-  
+
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
     window.open(path, "_blank");
@@ -539,8 +540,7 @@ const TipNabavka: React.FC = () => {
                 <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Креирај нов број на картон (конто)
                 </button>
-              ))
-            }
+              ))}
 
             <label>Назив на проектот</label>
             <input
@@ -565,7 +565,7 @@ const TipNabavka: React.FC = () => {
                   onChange={(e) => setPoteklo(e.target.value)}
                   required
                 />
-                &nbsp; Средства на МФС
+                &nbsp; Средства на ФИНКИ
               </label>
               <label>
                 <input
@@ -594,7 +594,11 @@ const TipNabavka: React.FC = () => {
           </div>
 
           <div className="form-buttons">
-            <button type="button" className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
+            <button
+              type="button"
+              className="vidi-faktura"
+              onClick={(e) => showPdf(file, e)}
+            >
               Види фактура
             </button>
             <div className="form-buttons">
@@ -605,7 +609,8 @@ const TipNabavka: React.FC = () => {
                       <button type="submit">Зачувај</button>
                     ) : (
                       <>
-                        <button type="button"
+                        <button
+                          type="button"
                           onClick={() => {
                             updateBaratelNabavka();
                             updateTipNabavka();
@@ -613,7 +618,10 @@ const TipNabavka: React.FC = () => {
                         >
                           Измени
                         </button>
-                        <button type="button" onClick={() => setShowDeleteModal(true)}>
+                        <button
+                          type="button"
+                          onClick={() => setShowDeleteModal(true)}
+                        >
                           Избриши
                         </button>
                       </>
