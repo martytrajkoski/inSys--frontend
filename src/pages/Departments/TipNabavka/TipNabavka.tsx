@@ -565,7 +565,7 @@ const TipNabavka: React.FC = () => {
                   onChange={(e) => setPoteklo(e.target.value)}
                   required
                 />
-                &nbsp; Средства на ФИНКИ
+                &nbsp; Средства на МФС
               </label>
               <label>
                 <input
