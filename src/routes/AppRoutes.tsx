@@ -53,8 +53,8 @@ const AppRoutes: React.FC = () => {
               <Route path="smetkovodstvo/:br_faktura" element={<Smetkovodstvo />} />
             </Route>
           </Route>
+          <Route path="pdf/:br_faktura" element={<Pdf />} />
         </Route>
-        <Route path="/pdf/:br_faktura" element={<Pdf />} />
         {/* Default route */}
         <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>

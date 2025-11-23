@@ -65,7 +65,9 @@ const Prodekan: React.FC = () => {
   const [statusTehnicki, setStatusTehnicki] = useState<string>("");
   const [statusTipNabavka, setStatusTipNabavka] = useState<string>("");
   const [statusSmetkovodstvo, setStatusSmetkovodstvo] = useState<string>("");
-
+  console.log('====================================');
+  console.log(br_faktura);
+  console.log('====================================');
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
@@ -404,7 +406,7 @@ const Prodekan: React.FC = () => {
               Одобри ја фактурата
             </button>
           ) : (
-            <button onClick={() => navigate(`/pdf/${br_faktura}`)}>
+            <button onClick={() => navigate(`/pdf/${encodeURIComponent(br_faktura || '')}`)}>
               Печати
             </button>
           )}
