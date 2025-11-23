@@ -112,7 +112,7 @@ const Prodekan: React.FC = () => {
 
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel ?? "");
-        setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
+        setBrKartonBaratel(data.baratel_javna_nabavka?.broj_kartoni.br_karton ?? undefined);
         setNazivProekt(data.baratel_javna_nabavka?.naziv_proekt ?? "");
         setPoteklo(data.baratel_javna_nabavka?.poteklo ?? "");
         setDatumBaratel(data.baratel_javna_nabavka?.datum ?? "");
@@ -124,7 +124,7 @@ const Prodekan: React.FC = () => {
         console.log(data.baratel_javna_nabavka);
 
         // Smetkovodstvo
-        setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? "");
+        setBrKartonSmetkovodstvo(data.smetkovodstvo?.broj_kartoni.br_karton ?? "");
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
         setOsnovaEvidentiranje(
           data.smetkovodstvo?.osnova_evidentiranje ?? undefined
