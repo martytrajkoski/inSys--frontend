@@ -112,7 +112,7 @@ const Prodekan: React.FC = () => {
 
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel ?? "");
-        setBrKartoni(data.baratel_javna_nabavka?.br_karton ?? undefined);
+        setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
         setNazivProekt(data.baratel_javna_nabavka?.naziv_proekt ?? "");
         setPoteklo(data.baratel_javna_nabavka?.poteklo ?? "");
         setDatumBaratel(data.baratel_javna_nabavka?.datum ?? "");
