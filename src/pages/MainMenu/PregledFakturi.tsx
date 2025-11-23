@@ -7,17 +7,18 @@ import Pagination from "../../components/Pagination/Pagination";
 import ImportFile from "../../components/ImportFile/ImportFile";
 
 const getRouteByRole = (role: string, br_faktura: string): string => {
+  const encoded = encodeURIComponent(br_faktura);
   switch (role) {
     case "Продекан за финансии":
-      return `/prodekan/${br_faktura}`;
+      return `/prodekan/${encoded}`;
     case "Технички секретар":
-      return `/tehnickisekretar/${br_faktura}`;
+      return `/tehnickisekretar/${encoded}`;
     case "Јавна набавка":
-      return `/tipnabavka/${br_faktura}`;
+      return `/tipnabavka/${encoded}`;
     case "Барател на набавка":
-      return `/baratelnabavka/${br_faktura}`;
+      return `/baratelnabavka/${encoded}`;
     case "Сметководство":
-      return `/smetkovodstvo/${br_faktura}`;
+      return `/smetkovodstvo/${encoded}`;
     default:
       return "/";
   }
@@ -143,10 +144,12 @@ const PregledFakturi: React.FC = () => {
                   className="dropdown-item"
                 >
                   <span>Број Фактура: {item.br_faktura}</span>
-                  <span>|&nbsp;Број  Договор: {item.br_dogovor}</span>
+                  <span>|&nbsp;Број Договор: {item.br_dogovor}</span>
                   {role !== "Продекан за финансии" && (
                     <span
-                      className={`invoice-flag ${item.read ? "read" : "unread"}`}
+                      className={`invoice-flag ${
+                        item.read ? "read" : "unread"
+                      }`}
                     >
                       {item.read ? "Прочитано" : "Непрочитано"}
                     </span>
@@ -162,7 +165,9 @@ const PregledFakturi: React.FC = () => {
       {role === "Технички секретар" ? (
         <div className="mainmenu-invoices">
           <div className="mainmenu-tehnicki-buttons">
-            <button onClick={() => navigate("/tehnickisekretar")}>Креирај фактура</button>
+            <button onClick={() => navigate("/tehnickisekretar")}>
+              Креирај фактура
+            </button>
           </div>
           <InvoiceCard items={faktura} role={role} />
           {fakturaLastPage && fakturaLastPage > 1 && (
@@ -210,9 +215,7 @@ const PregledFakturi: React.FC = () => {
         </div>
       )}
 
-      {openImportModal && (
-        <ImportFile onClose={handleImportModal}/>
-      )}
+      {openImportModal && <ImportFile onClose={handleImportModal} />}
     </div>
   );
 };

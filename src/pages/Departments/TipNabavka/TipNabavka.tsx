@@ -6,7 +6,12 @@ import SweetAlert from "../../../components/Sweet-Alert/Sweet-Alert";
 import type { BrKartonType } from "../../../types/types";
 
 const TipNabavka: React.FC = () => {
-  const { br_faktura } = useParams<string>();
+  const { br_faktura: br_faktura_param } = useParams<{ br_faktura?: string }>();
+  // decode route param so values like "123/2025" are preserved instead of being
+  // interpreted as path separators by the router
+  const br_faktura = br_faktura_param
+    ? decodeURIComponent(br_faktura_param)
+    : undefined;
   const [is_sealed, setIs_sealed] = useState<number>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
@@ -56,11 +61,12 @@ const TipNabavka: React.FC = () => {
 
   const showTipNabavka = async () => {
     try {
-      const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
+      const encoded = encodeURIComponent(br_faktura ?? "");
+      const responsePDF = await axiosClient.get(`/faktura/show/${encoded}`);
 
       setFile(responsePDF.data.faktura.scan_file);
 
-      const response = await axiosClient.get(`/tipnabavka/show/${br_faktura}`);
+      const response = await axiosClient.get(`/tipnabavka/show/${encoded}`);
 
       if (response.status === 201) {
         const doc = response.data.document;
@@ -237,9 +243,9 @@ const TipNabavka: React.FC = () => {
 
   const showBaratel = async () => {
     try {
-      const response = await axiosClient.get(
-        `/baratelnabavka/show/${br_faktura}`
-      );
+      const encoded = encodeURIComponent(br_faktura ?? "");
+
+      const response = await axiosClient.get(`/baratelnabavka/show/${encoded}`);
 
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);

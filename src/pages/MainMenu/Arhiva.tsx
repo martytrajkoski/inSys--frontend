@@ -6,17 +6,18 @@ import Pagination from "../../components/Pagination/Pagination";
 import { useNavigate } from "react-router-dom";
 
 const getRouteByRole = (role: string, br_faktura: string): string => {
+  const encoded = encodeURIComponent(br_faktura);
   switch (role) {
     case "Продекан за финансии":
-      return `/prodekan/${br_faktura}`;
+      return `/prodekan/${encoded}`;
     case "Технички секретар":
-      return `/tehnickisekretar/${br_faktura}`;
+      return `/tehnickisekretar/${encoded}`;
     case "Јавна набавка":
-      return `/tipnabavka/${br_faktura}`;
+      return `/tipnabavka/${encoded}`;
     case "Барател на набавка":
-      return `/baratelnabavka/${br_faktura}`;
+      return `/baratelnabavka/${encoded}`;
     case "Сметководство":
-      return `/smetkovodstvo/${br_faktura}`;
+      return `/smetkovodstvo/${encoded}`;
     default:
       return "/";
   }

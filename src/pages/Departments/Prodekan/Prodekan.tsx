@@ -79,19 +79,19 @@ const Prodekan: React.FC = () => {
         setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setPotpisTehnicki(
           data.tehnicki_sekretar.updated_by?.name ??
-          data.tehnicki_sekretar.submited_by?.name
+            data.tehnicki_sekretar.submited_by?.name
         );
         setCommentTehnicki(data.tehnicki_sekretar?.review_comment ?? "");
         setStatusTehnicki(data.tehnicki_sekretar?.status ?? "");
-        setFile(data.scan_file)
+        setFile(data.scan_file);
         // Tip Nabavka
         setTip(data.tip_nabavka?.tip ?? "javna");
         setDatumTip(data.tip_nabavka?.datum ?? "");
         if (data.tip_nabavka?.tip === "javna") {
-          setBrDogovor(
-            data.tip_nabavka?.javna_nabavka?.br_dogovor ?? ""
+          setBrDogovor(data.tip_nabavka?.javna_nabavka?.br_dogovor ?? "");
+          setVk_vrednost(
+            data.tip_nabavka?.javna_nabavka?.vk_vrednost ?? undefined
           );
-          setVk_vrednost(data.tip_nabavka?.javna_nabavka?.vk_vrednost ?? undefined);
           setVaznostDo(data.tip_nabavka?.javna_nabavka?.vaznost_do ?? "");
           setSoglasnoDogovor(
             data.tip_nabavka?.javna_nabavka?.soglasno_dogovor ?? undefined
@@ -105,21 +105,23 @@ const Prodekan: React.FC = () => {
         }
         setPotpisTip(
           data.tip_nabavka.updated_by?.name ??
-          data.tip_nabavka.submited_by?.name
+            data.tip_nabavka.submited_by?.name
         );
         setCommentTipNabavka(data.tip_nabavka?.review_comment ?? "");
         setStatusTipNabavka(data.tip_nabavka?.status ?? "");
 
         // Baratel Nabavka
         setBaratel(data.baratel_javna_nabavka?.baratel ?? "");
-        setBrKartonBaratel(data.baratel_javna_nabavka?.br_karton ?? undefined);
+        setBrKartoni(data.baratel_javna_nabavka?.br_karton ?? undefined);
         setNazivProekt(data.baratel_javna_nabavka?.naziv_proekt ?? "");
         setPoteklo(data.baratel_javna_nabavka?.poteklo ?? "");
         setDatumBaratel(data.baratel_javna_nabavka?.datum ?? "");
         setPotpisBaratel(
           data.baratel_javna_nabavka.updated_by?.name ??
-          data.baratel_javna_nabavka.submited_by?.name
+            data.baratel_javna_nabavka.submited_by?.name
         );
+
+        console.log(data.baratel_javna_nabavka);
 
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.br_karton ?? "");
@@ -135,7 +137,7 @@ const Prodekan: React.FC = () => {
         setDatumSmetkovodstvo(data.smetkovodstvo?.datum ?? "");
         setPotpisSmetkovodstvo(
           data.smetkovodstvo.updated_by?.name ??
-          data.smetkovodstvo.submited_by?.name
+            data.smetkovodstvo.submited_by?.name
         );
         setCommentSmetkovodstvo(data.smetkovodstvo?.review_comment ?? "");
         setStatusSmetkovodstvo(data.smetkovodstvo?.status ?? "");
@@ -202,7 +204,7 @@ const Prodekan: React.FC = () => {
   }, [br_faktura]);
 
   const showPdf = (path: string, e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     window.open(path, "_blank");
   };
 
@@ -393,7 +395,9 @@ const Prodekan: React.FC = () => {
         </div>
       </div>
       <div className="form-buttons">
-        <button className="vidi-faktura" onClick={(e) => showPdf(file, e)} >Види фактура</button>
+        <button className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
+          Види фактура
+        </button>
         <div className="form-buttons-edit">
           {!isSealed ? (
             <button onClick={(e) => handleApproval(e)}>

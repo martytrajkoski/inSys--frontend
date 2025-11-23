@@ -11,8 +11,10 @@ const Smetkovodstvo: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showFakturaError, setShowFakturaError] = useState<boolean>(false);
-  const [showAddBrKartonModal, setShowAddBrKartonModal] = useState<boolean>(false);
-  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] = useState<boolean>(false);
+  const [showAddBrKartonModal, setShowAddBrKartonModal] =
+    useState<boolean>(false);
+  const [showUpdateModalBrKarton, setShowUpdateModalBrKarton] =
+    useState<boolean>(false);
 
   const [brKartoni, setBrKartoni] = useState<BrKartonType[]>([]);
   const [brKarton_id, setBrKarton_id] = useState<number>();
@@ -34,7 +36,7 @@ const Smetkovodstvo: React.FC = () => {
 
   useEffect(() => {
     showSmetkovodstvo();
-    fetchBrKarton()
+    fetchBrKarton();
   }, []);
 
   useEffect(() => {
@@ -45,21 +47,19 @@ const Smetkovodstvo: React.FC = () => {
     }
   }, [osnovaEvidentiranje]);
 
-
   const handleAddBrKartonModal = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
   };
 
   const showSmetkovodstvo = async () => {
     try {
+      const encoded = encodeURIComponent(br_faktura ?? "");
 
-      const responsePDF = await axiosClient.get(`/faktura/show/${br_faktura}`);
+      const responsePDF = await axiosClient.get(`/faktura/show/${encoded}`);
 
       setFile(responsePDF.data.faktura.scan_file);
 
-      const response = await axiosClient.get(
-        `/smetkovodstvo/show/${br_faktura}`
-      );
+      const response = await axiosClient.get(`/smetkovodstvo/show/${encoded}`);
 
       if (response.status === 201) {
         setIs_sealed(response.data.is_sealed);
@@ -209,7 +209,7 @@ const Smetkovodstvo: React.FC = () => {
   };
 
   const showPdf = (path: string, e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     window.open(path, "_blank");
   };
 
@@ -267,12 +267,14 @@ const Smetkovodstvo: React.FC = () => {
                 <button type="button" onClick={() => handleAddBrKartonModal()}>
                   Креирај нов број на картон (конто)
                 </button>
-              ))
-            }
+              ))}
           </div>
 
           <div className="form-item-radio">
-            <label>Предметот на набавка има основа за евидентирање како основно средство(а):</label>
+            <label>
+              Предметот на набавка има основа за евидентирање како основно
+              средство(а):
+            </label>
             <div className="form-radio">
               <label>
                 <input
@@ -282,8 +284,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(1)}
                   required
-                />&nbsp;
-                Да
+                />
+                &nbsp; Да
               </label>
               <label>
                 <input
@@ -293,14 +295,16 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed)}
                   onChange={() => setOsnovaEvidentiranje(0)}
                   required
-                />&nbsp;
-                Не
+                />
+                &nbsp; Не
               </label>
             </div>
           </div>
 
           <div className="form-item-radio">
-            <label>Пополнет е формулар за задолжување на основно средство:</label>
+            <label>
+              Пополнет е формулар за задолжување на основно средство:
+            </label>
             <div className="form-radio">
               <label>
                 <input
@@ -310,8 +314,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setFormular(1)}
                   required
-                />&nbsp;
-                Да
+                />
+                &nbsp; Да
               </label>
               <label>
                 <input
@@ -321,14 +325,17 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setFormular(0)}
                   required
-                />&nbsp;
-                Не
+                />
+                &nbsp; Не
               </label>
             </div>
           </div>
 
           <div className="form-item-radio">
-            <label>Средствата се внесени (поединечно) како новонабавени за тековната година:</label>
+            <label>
+              Средствата се внесени (поединечно) како новонабавени за тековната
+              година:
+            </label>
             <div className="form-radio">
               <label>
                 <input
@@ -338,8 +345,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setVneseniSredstva(1)}
                   required
-                />&nbsp;
-                Да
+                />
+                &nbsp; Да
               </label>
               <label>
                 <input
@@ -349,8 +356,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed) || osnovaEvidentiranje === 0}
                   onChange={() => setVneseniSredstva(0)}
                   required
-                />&nbsp;
-                Не
+                />
+                &nbsp; Не
               </label>
             </div>
           </div>
@@ -377,8 +384,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("603")}
                   required
-                />&nbsp;
-                603
+                />
+                &nbsp; 603
               </label>
               <label>
                 <input
@@ -388,8 +395,8 @@ const Smetkovodstvo: React.FC = () => {
                   disabled={Boolean(is_sealed)}
                   onChange={() => setSmetka("788")}
                   required
-                />&nbsp;
-                788
+                />
+                &nbsp; 788
               </label>
             </div>
           </div>
@@ -415,9 +422,9 @@ const Smetkovodstvo: React.FC = () => {
           </div>
 
           <div className="form-buttons">
-            <button className="vidi-faktura"
-              onClick={(e) => showPdf(file, e)}
-            >Види фактура</button>
+            <button className="vidi-faktura" onClick={(e) => showPdf(file, e)}>
+              Види фактура
+            </button>
             <div className="form-buttons-edit">
               {is_sealed === 0 && (
                 <>
@@ -425,8 +432,15 @@ const Smetkovodstvo: React.FC = () => {
                     <button type="submit">Зачувај</button>
                   ) : (
                     <>
-                      <button type="button" onClick={updateSmetkovodstvo}>Измени</button>
-                      <button type="button" onClick={() => setShowDeleteModal(true)}>Избриши</button>
+                      <button type="button" onClick={updateSmetkovodstvo}>
+                        Измени
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowDeleteModal(true)}
+                      >
+                        Избриши
+                      </button>
                     </>
                   )}
                 </>

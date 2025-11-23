@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import type { FakturaType, InvoiceType } from "../../types/types";
 
 const getRouteByRole = (role: string, br_faktura: string): string => {
+  const encoded = encodeURIComponent(br_faktura);
   switch (role) {
     case "Продекан за финансии":
-      return `/prodekan/${br_faktura}`;
+      return `/prodekan/${encoded}`;
     case "Технички секретар":
-      return `/tehnickisekretar/${br_faktura}`;
+      return `/tehnickisekretar/${encoded}`;
     case "Јавна набавка":
-      return `/tipnabavka/${br_faktura}`;
+      return `/tipnabavka/${encoded}`;
     case "Барател на набавка":
-      return `/baratelnabavka/${br_faktura}`;
+      return `/baratelnabavka/${encoded}`;
     case "Сметководство":
-      return `/smetkovodstvo/${br_faktura}`;
+      return `/smetkovodstvo/${encoded}`;
     default:
       return "/";
   }
@@ -60,7 +61,6 @@ const getStatusDepartment = (
 };
 
 const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
-
   return (
     <div className="invoice-component">
       <div className="invoice-card">
@@ -80,53 +80,53 @@ const InvoiceCard: React.FC<InvoiceType> = ({ items, role }) => {
             let statusDepartment = getStatusDepartment(role, item);
             return (
               <>
-                  <Link
-                    to={getRouteByRole(role, item.br_faktura)}
-                    className="invoice-card-item"
-                    key={index}
-                  >
-                    <div>{item.tehnicki_sekretar.arhivski_br}</div>
-                    <div>{item.br_faktura}</div>
-                    <div className="invoice-date">
-                      {new Date(item.tehnicki_sekretar.datum)
-                        .toISOString()
-                        .slice(0, 10)}
-                    </div>
-                    {role !== "Продекан за финансии" && (
-                      <div>
-                        {statusDepartment ? (
-                          <p
-                            className={`invoice-status-department-flag ${
-                              statusDepartment === "Прифатена"
-                                ? "approved"
-                                : statusDepartment === "Одбиена"
-                                ? "rejected"
-                                : "pending"
-                            }`}
-                          >
-                            {statusDepartment}
-                          </p>
-                        ) : (
-                          <p className="invoice-status-department-flag pending">
-                            Чекање
-                          </p>
-                        )}
-                      </div>
-                    )}
+                <Link
+                  to={getRouteByRole(role, item.br_faktura)}
+                  className="invoice-card-item"
+                  key={index}
+                >
+                  <div>{item.tehnicki_sekretar.arhivski_br}</div>
+                  <div>{item.br_faktura}</div>
+                  <div className="invoice-date">
+                    {new Date(item.tehnicki_sekretar.datum)
+                      .toISOString()
+                      .slice(0, 10)}
+                  </div>
+                  {role !== "Продекан за финансии" && (
                     <div>
-                      {item.is_sealed ? (
-                        <p className="sealed">Запечатена</p>
-                      ) : (
+                      {statusDepartment ? (
                         <p
-                          className={`invoice-status-faktura-flag ${
-                            statusLabel === "Спремна" ? "approved" : "pending"
+                          className={`invoice-status-department-flag ${
+                            statusDepartment === "Прифатена"
+                              ? "approved"
+                              : statusDepartment === "Одбиена"
+                              ? "rejected"
+                              : "pending"
                           }`}
                         >
-                          {statusLabel}
+                          {statusDepartment}
+                        </p>
+                      ) : (
+                        <p className="invoice-status-department-flag pending">
+                          Чекање
                         </p>
                       )}
                     </div>
-                  </Link>
+                  )}
+                  <div>
+                    {item.is_sealed ? (
+                      <p className="sealed">Запечатена</p>
+                    ) : (
+                      <p
+                        className={`invoice-status-faktura-flag ${
+                          statusLabel === "Спремна" ? "approved" : "pending"
+                        }`}
+                      >
+                        {statusLabel}
+                      </p>
+                    )}
+                  </div>
+                </Link>
               </>
             );
           })}

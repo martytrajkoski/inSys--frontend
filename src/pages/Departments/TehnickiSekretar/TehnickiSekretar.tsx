@@ -52,8 +52,9 @@ const TehnickiSekretar: React.FC = () => {
 
   const fetchTehnicki = async () => {
     try {
+      const encoded = encodeURIComponent(br_faktura ?? "");
       const response = await axiosClient.get(
-        `/tehnickisekretar/show/${br_faktura}`
+        `/tehnickisekretar/show/${encoded}`
       );
 
       if (response.status === 201 && response.data.document) {
