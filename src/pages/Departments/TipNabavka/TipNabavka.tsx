@@ -312,8 +312,6 @@ const TipNabavka: React.FC = () => {
         setShowUpdateModal(true);
       }
     } catch (error) {
-      console.log(error);
-
       setShowFakturaError(true);
     }
   };
