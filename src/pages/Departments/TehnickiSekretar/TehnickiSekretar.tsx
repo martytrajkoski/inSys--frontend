@@ -235,7 +235,7 @@ const TehnickiSekretar: React.FC = () => {
             <label>Број на фактура</label>
             <input
               type="text"
-              placeholder="Да не се користи знакот ' / ' во бројот на фактура"
+              placeholder=""
               value={br_fakturaa}
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_fakturaa(e.target.value)}
