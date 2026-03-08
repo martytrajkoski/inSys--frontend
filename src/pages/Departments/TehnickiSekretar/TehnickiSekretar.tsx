@@ -216,7 +216,10 @@ const TehnickiSekretar: React.FC = () => {
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
-    window.open(path, "_blank");
+    // If path is already a full URL, use it directly
+    // Otherwise, construct the storage URL
+    const pdfUrl = path.startsWith('http') ? path : `http://127.0.0.1:8000/storage/${path}`;
+    window.open(pdfUrl, "_blank");
   };
 
   return (
@@ -289,32 +292,48 @@ const TehnickiSekretar: React.FC = () => {
               ))}
             {!is_sealed && (
               <>
-                <label>Прикачи фактура: </label>
-                <div
-                  className="upload-container"
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                >
-                  <div className="upload-content">
-                    <div className="upload-icon">
-                      <FontAwesomeIcon icon={faUpload} />
+                <label>PDF Фактура: </label>
+                {file && (typeof file === 'string' || file instanceof File) ? (
+                  <div className="pdf-viewer">
+                    <div className="pdf-info">
+                      <p style={{ marginBottom: '15px', fontWeight: 600, color: '#2e7d32' }}>
+                        Прикачена фактура: {typeof file === 'string' ? file.split('/').pop() : file.name}
+                      </p>
+                      <button
+                        className="remove-pdf-btn"
+                        onClick={() => setFile("")}
+                      >
+                        Отстрани
+                      </button>
                     </div>
-                    <p>
-                      Drag & drop or{" "}
-                      <span className="upload-choose">Choose file</span> to
-                      upload
-                    </p>
-                    <p className="upload-formats">PDF</p>
-                    <input
-                      type="file"
-                      className="upload-input"
-                      onChange={handleFileChange}
-                      accept="application/pdf"
-                    />
-
-                    {file && <p>{file.name}</p>}
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className="upload-container"
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                  >
+                    <div className="upload-content">
+                      <div className="upload-icon">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <p>
+                        Drag & drop or{" "}
+                        <span className="upload-choose">Choose file</span> to
+                        upload
+                      </p>
+                      <p className="upload-formats">PDF</p>
+                      <input
+                        type="file"
+                        className="upload-input"
+                        onChange={handleFileChange}
+                        accept="application/pdf"
+                      />
+
+                      {file && <p>{file.name}</p>}
+                    </div>
+                  </div>
+                )}
               </>
             )}
 
@@ -327,10 +346,10 @@ const TehnickiSekretar: React.FC = () => {
             />
           </div>
           <div className="form-buttons">
-            {br_faktura ? (
+            {file && (typeof file === 'string' || file instanceof File) ? (
               <button
                 className="vidi-faktura"
-                onClick={(e) => showPdf(file, e)}
+                onClick={(e) => showPdf(typeof file === 'string' ? file : URL.createObjectURL(file), e)}
               >
                 Види фактура
               </button>
