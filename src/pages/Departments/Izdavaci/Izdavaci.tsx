@@ -134,7 +134,7 @@ const IzdavaciPage: React.FC = () => {
                     izdavac.name
                   )}
                 </td>
-                <td>
+                <td style={{display: "flex", gap: "10px"}}>
                   {editId === izdavac.id ? (
                     <button onClick={handleUpdate}>Зачувај</button>
                   ) : (

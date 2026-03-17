@@ -22,8 +22,8 @@ interface Faktura {
 const DogovoriPage: React.FC = () => {
   const [dogovori, setDogovori] = useState<Dogovor[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedDogovor, setSelectedDogovor] = useState<Dogovor | null>(null);
-  const [fakturi, setFakturi] = useState<Faktura[]>([]);
+  const [expandedDogovor, setExpandedDogovor] = useState<number | null>(null);
+  const [fakturiMap, setFakturiMap] = useState<{ [key: number]: Faktura[] }>({});
   const [role, setRole] = useState<string>("");
 
   const filteredDogovori = dogovori.filter((d) =>
@@ -72,11 +72,17 @@ const DogovoriPage: React.FC = () => {
     }
   };
 
-  const fetchFakturiForDogovor = async (dogovorId: number, dogovorData: Dogovor) => {
+  const fetchFakturiForDogovor = async (dogovorId: number) => {
     try {
+      // If already expanded, collapse it
+      if (expandedDogovor === dogovorId) {
+        setExpandedDogovor(null);
+        return;
+      }
+      
       const response = await axiosClient.get(`/dogovori/${dogovorId}/fakturi`);
-      setFakturi(response.data);
-      setSelectedDogovor(dogovorData);
+      setFakturiMap(prev => ({ ...prev, [dogovorId]: response.data }));
+      setExpandedDogovor(dogovorId);
     } catch (error: any) {
       console.error("Error fetching fakturi for dogovor:", error);
     }
@@ -107,20 +113,6 @@ const DogovoriPage: React.FC = () => {
     window.open(getRouteByRole(role, faktura.br_faktura));
   };
 
-  const removeDogovorFromFaktura = async (faktura: Faktura) => {
-    try {
-      const response = await axiosClient.post(`/dogovori/${faktura.id}/remove-dogovor`);
-      
-      if (response.status === 200) {
-        // Refresh dogovori list to update the UI
-        await fetchDogovori();
-        alert('Договорот е успешно отстранет од фактурата');
-      }
-    } catch (error) {
-      console.error('Error removing dogovor from faktura:', error);
-      alert('Грешка при отстранување на договорот од фактурата');
-    }
-  };
 
   return (
     <div className="mainmenu-content">
@@ -143,122 +135,120 @@ const DogovoriPage: React.FC = () => {
               <th>Датум од</th>
               <th>Датум до</th>
               <th>Износ</th>
+              <th>Потрошен износ</th>
             </tr>
           </thead>
           <tbody>
             {filteredDogovori.map((dogovor) => (
-              <tr 
-                key={dogovor.id}
-                onClick={() => fetchFakturiForDogovor(dogovor.id, dogovor)}
-                style={{ cursor: "pointer", backgroundColor: selectedDogovor?.id === dogovor.id ? "#f0f0f" : "transparent" }}
-              >
-                <td>{dogovor.br_dog}</td>
-                <td>{formatDate(dogovor.datum_od_dog)}</td>
-                <td>{formatDate(dogovor.datum_do_dog)}</td>
-                <td>{dogovor.iznos_dog.toLocaleString('mk-MK')}</td>
-              </tr>
+              <React.Fragment key={dogovor.id}>
+                <tr 
+                  onClick={() => fetchFakturiForDogovor(dogovor.id)}
+                  style={{ cursor: "pointer", backgroundColor: expandedDogovor === dogovor.id ? "#f0f0f" : "transparent" }}
+                >
+                  <td>{dogovor.br_dog}</td>
+                  <td>{formatDate(dogovor.datum_od_dog)}</td>
+                  <td>{formatDate(dogovor.datum_do_dog)}</td>
+                  <td>{dogovor.iznos_dog.toLocaleString('mk-MK')}</td>
+                  {/* <td>{dogovor.potrosen_iznos.toLocaleString('mk-MK')}</td> */}
+                </tr>
+                
+                {expandedDogovor === dogovor.id && (
+                  <tr>
+                    <td colSpan={4} style={{ padding: 0 }}>
+                      <div style={{ 
+                        padding: "20px", 
+                        backgroundColor: "#f8f9fa", 
+                        borderBottom: "1px solid #ddd",
+                        borderRadius: "0 0 8px 8px"
+                      }}>
+                        <h4 style={{ margin: "0 0 15px 0", color: "#333" }}>
+                          Фактури за договор: {dogovor.br_dog}
+                        </h4>
+                        {fakturiMap[dogovor.id]?.length > 0 ? (
+                          <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+                            <thead>
+                              <tr>
+                                <th style={{ padding: "8px", textAlign: "left", borderBottom: "1px solid #ddd" }}>Број на фактура</th>
+                                <th style={{ padding: "8px", textAlign: "left", borderBottom: "1px solid #ddd" }}>Статус</th>
+                                <th style={{ padding: "8px", textAlign: "left", borderBottom: "1px solid #ddd" }}>Датум</th>
+                                <th style={{ padding: "8px", textAlign: "left", borderBottom: "1px solid #ddd" }}>Акции</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fakturiMap[dogovor.id].map((faktura: Faktura) => (
+                                <tr 
+                                  key={faktura.id}
+                                  onClick={() => openFakturaDetails(faktura)}
+                                  style={{ 
+                                    cursor: "pointer",
+                                    transition: "background-color 0.2s"
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = "#f0f0f0";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = "transparent";
+                                  }}
+                                >
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #eee", width: "25%" }}>{faktura.br_faktura}</td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #eee", width: "25%" }}>
+                                    <span style={{
+                                      padding: "4px 8px",
+                                      borderRadius: "4px",
+                                      fontSize: "12px",
+                                      fontWeight: "bold",
+                                      backgroundColor: 
+                                        faktura.status === 'pending' ? '#fff3cd' :
+                                        faktura.status === 'ready' ? '#ffc107' :
+                                        faktura.status === 'approved' ? '#198754' : '#6c757d',
+                                      color: 'white'
+                                    }}>
+                                      {faktura.status === 'pending' ? 'Чекање' :
+                                       faktura.status === 'ready' ? 'Подготвено' :
+                                       faktura.status === 'approved' ? 'Одобрено' : 'Непознато'}
+                                    </span>
+                                  </td>
+                                  <td style={{ padding: "8px", borderBottom: "1px solid #eee", width: "20%" }}>{formatDate(faktura.created_at)}</td>
+                                  <td  style={{ display: "flex", gap: "15px" }}>
+                                    {faktura.scan_file && (
+                                      <>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            showPdf(faktura.scan_file, e);
+                                          }}
+                                          style={{
+                                            padding: "5px 15px",
+                                            borderRadius: "4px",
+                                            border: "none",
+                                            backgroundColor: "#007bff",
+                                            color: "white",
+                                            cursor: "pointer",
+                                            justifyContent: "center"
+                                          }}
+                                        >
+                                          Види фактура
+                                        </button>
+                                      </>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ) : (
+                          <p style={{ textAlign: 'center', padding: '20px', color: '#666', margin: 0 }}>
+                            Нема фактури за овој договор.
+                          </p>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
-
-        {selectedDogovor && (
-          <div style={{ marginTop: "20px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
-            <h3>Фактури за договор: {selectedDogovor.br_dog}</h3>
-            {fakturi.length > 0 ? (
-              <table style={{ width: "100%", marginTop: "10px" }}>
-                <thead>
-                  <tr>
-                    <th>Број на фактура</th>
-                    <th>Статус</th>
-                    <th>Датум</th>
-                    <th>Акции</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fakturi.map((faktura) => (
-                    <tr 
-                      key={faktura.id}
-                      onClick={() => openFakturaDetails(faktura)}
-                      style={{ 
-                        cursor: "pointer",
-                        transition: "background-color 0.2s"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#f0f0f0";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }}
-                    >
-                      <td>{faktura.br_faktura}</td>
-                      <td>
-                        <span style={{
-                          padding: "4px 8px",
-                          borderRadius: "4px",
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                          backgroundColor: 
-                            faktura.status === 'pending' ? '#fff3cd' :
-                            faktura.status === 'ready' ? '#ffc107' :
-                            faktura.status === 'approved' ? '#198754' : '#6c757d',
-                          color: 'white'
-                        }}>
-                          {faktura.status === 'pending' ? 'Чекање' :
-                           faktura.status === 'ready' ? 'Подготвено' :
-                           faktura.status === 'approved' ? 'Одобрено' : 'Непознато'}
-                        </span>
-                      </td>
-                      <td>{formatDate(faktura.created_at)}</td>
-                      <td>
-                        {faktura.scan_file && (
-                          <>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation(); // Prevent row click when clicking button
-                                showPdf(faktura.scan_file, e);
-                              }}
-                              style={{
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                border: "none",
-                                backgroundColor: "#007bff",
-                                color: "white",
-                                cursor: "pointer",
-                                marginRight: "5px"
-                              }}
-                            >
-                              Види фактура
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation(); // Prevent row click when clicking button
-                                removeDogovorFromFaktura(faktura);
-                              }}
-                              style={{
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                                border: "none",
-                                backgroundColor: "#dc3545",
-                                color: "white",
-                                cursor: "pointer"
-                              }}
-                            >
-                              Отстрани договор
-                            </button>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-                Нема фактури за овој договор.
-              </p>
-            )}
-          </div>
-        )}
 
         {filteredDogovori.length === 0 && (
           <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
