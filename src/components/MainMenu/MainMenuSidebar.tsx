@@ -27,6 +27,12 @@ const MainMenuSidebar: React.FC = () => {
             Преглед на издавачи
           </NavLink>
           <NavLink
+            to="/pregled-dogovori"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Преглед на договори
+          </NavLink>
+          <NavLink
             to={"/archive"}
             className={({ isActive }) => (isActive ? "active" : "")}
           >

@@ -26,10 +26,7 @@ const Prodekan: React.FC = () => {
   const [datumTip, setDatumTip] = useState<string>("");
   const [brDogovor, setBrDogovor] = useState<string>();
   const [vk_vrednost, setVk_vrednost] = useState<number>();
-  const [vaznostDo, setVaznostDo] = useState<string>("");
   const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
-  const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
-  const [istTip, setIstTip] = useState<number>();
   const [vkPotroseno, setVkPotroseno] = useState<number>();
   const [potpisTip, setPotpisTip] = useState<string>("");
 
@@ -65,9 +62,6 @@ const Prodekan: React.FC = () => {
   const [statusTehnicki, setStatusTehnicki] = useState<string>("");
   const [statusTipNabavka, setStatusTipNabavka] = useState<string>("");
   const [statusSmetkovodstvo, setStatusSmetkovodstvo] = useState<string>("");
-  console.log('====================================');
-  console.log(br_faktura);
-  console.log('====================================');
   const fetchFakturas = async () => {
     try {
       const response = await axiosClient.get(`/faktura/show/${br_faktura}`);
@@ -94,15 +88,11 @@ const Prodekan: React.FC = () => {
           setVk_vrednost(
             data.tip_nabavka?.javna_nabavka?.vk_vrednost ?? undefined
           );
-          setVaznostDo(data.tip_nabavka?.javna_nabavka?.vaznost_do ?? "");
           setSoglasnoDogovor(
             data.tip_nabavka?.javna_nabavka?.soglasno_dogovor ?? undefined
           );
-          setOstanatiRaspSredstva(
-            data.tip_nabavka?.javna_nabavka?.ostanati_rasp_sredstva ?? undefined
-          );
         } else {
-          setIstTip(data.tip_nabavka?.tender?.ist_tip ?? undefined);
+          setTip(data.tip_nabavka?.tender?.ist_tip ?? undefined);
           setVkPotroseno(data.tip_nabavka?.tender?.vk_potroseno ?? undefined);
         }
         setPotpisTip(
@@ -123,8 +113,7 @@ const Prodekan: React.FC = () => {
             data.baratel_javna_nabavka.submited_by?.name
         );
 
-        console.log(data.baratel_javna_nabavka);
-
+        
         // Smetkovodstvo
         setBrKartonSmetkovodstvo(data.smetkovodstvo?.broj_kartoni.br_karton ?? "");
         setSostojbaKarton(data.smetkovodstvo?.sostojba_karton ?? "");
@@ -186,6 +175,10 @@ const Prodekan: React.FC = () => {
         is_sealed: true,
         review_comment: "",
       });
+
+      console.log("Approval response:", response);
+      console.log("Approval response status:", response.status);
+      console.log("Approval response data:", response.data);
 
       if (response.status === 201) {
         navigate("/");
@@ -263,8 +256,6 @@ const Prodekan: React.FC = () => {
           <div className="form-item-inputs">
             <label>Број на договор</label>
             <input type="text" value={brDogovor ?? ""} readOnly />
-            <label>Важност на договор до</label>
-            <input type="text" value={vaznostDo} readOnly />
             <label>
               Описот на сите ставки и единечната цена во фактурата е согласно
               договорот:
@@ -272,10 +263,6 @@ const Prodekan: React.FC = () => {
             <input type="text" value={soglasnoDogovor ? "Да" : "Не"} readOnly />
             <label>Вкупна вредност на фактура (со ДДВ)</label>
             <input type="text" value={vk_vrednost} readOnly />
-            <label>
-              Останати расположливи средства по договорот (без вред. на факт.)
-            </label>
-            <input type="text" value={ostanatiRaspSredstva ?? ""} readOnly />
             <label>Датум</label>
             <input type="date" value={datumTip ?? ""} readOnly />
             <label>Потпис</label>
@@ -288,7 +275,7 @@ const Prodekan: React.FC = () => {
             <label>
               Дали до сега е набавувана стока или услуга од исти тип:
             </label>
-            <input type="text" value={istTip ?? ""} readOnly />
+            <input type="text" value={tip ?? ""} readOnly />
             <label>
               Вкупно потрошени средства по основ на набавка од тој тип
             </label>

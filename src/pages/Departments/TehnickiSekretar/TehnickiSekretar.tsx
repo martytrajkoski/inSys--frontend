@@ -26,7 +26,6 @@ const TehnickiSekretar: React.FC = () => {
   const [br_fakturaa, setBr_fakturaa] = useState<string>();
   const [izdavaci_id, setIzdavaci_id] = useState<number>();
   const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
-  const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
@@ -65,7 +64,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br(document.arhivski_br ?? "");
         setBr_fakturaa(document.br_faktura ?? "");
         setIzdavaci_id(document.izdavaci_id ?? undefined);
-        setIznos_dogovor(document.iznos_dogovor ?? undefined);
         setDatum(document.datum ?? "");
         setFile(response.data.scan_file ?? "");
         setReview_comment(document.review_comment ?? "");
@@ -77,7 +75,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br("");
         setBr_fakturaa("");
         setIzdavaci_id(undefined);
-        setIznos_dogovor(undefined);
         setDatum("");
         setFile(response.data.scan_file);
         setDocumentId(undefined);
@@ -97,7 +94,6 @@ const TehnickiSekretar: React.FC = () => {
       formData.append("arhivski_br", arhivski_br);
       formData.append("br_faktura", br_fakturaa || "");
       formData.append("izdavaci_id", String(izdavaci_id));
-      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
       formData.append("datum", datum);
       if (file) formData.append("scan_file", file);
 
@@ -150,7 +146,6 @@ const TehnickiSekretar: React.FC = () => {
       formData.append("arhivski_br", arhivski_br);
       formData.append("br_faktura", br_fakturaa || "");
       formData.append("izdavaci_id", String(izdavaci_id));
-      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
       formData.append("datum", datum);
       if (file instanceof File) {
         formData.append("scan_file", file);
@@ -180,7 +175,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br("");
         setBr_fakturaa("");
         setIzdavaci_id(0);
-        setIznos_dogovor(0);
         setDatum("");
         setFile("");
         setCreated(false);
@@ -216,7 +210,10 @@ const TehnickiSekretar: React.FC = () => {
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
-    window.open(path, "_blank");
+    // If path is already a full URL, use it directly
+    // Otherwise, construct the storage URL
+    const pdfUrl = path.startsWith('http') ? path : `http://127.0.0.1:8000/storage/${path}`;
+    window.open(pdfUrl, "_blank");
   };
 
   return (
@@ -235,18 +232,10 @@ const TehnickiSekretar: React.FC = () => {
             <label>Број на фактура</label>
             <input
               type="text"
-              placeholder="Да не се користи знакот ' / ' во бројот на фактура"
+              placeholder=""
               value={br_fakturaa}
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_fakturaa(e.target.value)}
-            />
-            <label>Износ на договор</label>
-            <input
-              type="number"
-              value={iznos_dogovor}
-              placeholder="0"
-              readOnly={Boolean(is_sealed)}
-              onChange={(e) => setIznos_dogovor(Number(e.target.value))}
             />
             {showAddIzdavacModal ? (
               <div>
@@ -289,32 +278,48 @@ const TehnickiSekretar: React.FC = () => {
               ))}
             {!is_sealed && (
               <>
-                <label>Прикачи фактура: </label>
-                <div
-                  className="upload-container"
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                >
-                  <div className="upload-content">
-                    <div className="upload-icon">
-                      <FontAwesomeIcon icon={faUpload} />
+                <label>PDF Фактура: </label>
+                {file && (typeof file === 'string' || file instanceof File) ? (
+                  <div className="pdf-viewer">
+                    <div className="pdf-info">
+                      <p style={{ marginBottom: '15px', fontWeight: 600, color: '#2e7d32' }}>
+                        Прикачена фактура: {typeof file === 'string' ? file.split('/').pop() : file.name}
+                      </p>
+                      <button
+                        className="remove-pdf-btn"
+                        onClick={() => setFile("")}
+                      >
+                        Отстрани
+                      </button>
                     </div>
-                    <p>
-                      Drag & drop or{" "}
-                      <span className="upload-choose">Choose file</span> to
-                      upload
-                    </p>
-                    <p className="upload-formats">PDF</p>
-                    <input
-                      type="file"
-                      className="upload-input"
-                      onChange={handleFileChange}
-                      accept="application/pdf"
-                    />
-
-                    {file && <p>{file.name}</p>}
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className="upload-container"
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                  >
+                    <div className="upload-content">
+                      <div className="upload-icon">
+                        <FontAwesomeIcon icon={faUpload} />
+                      </div>
+                      <p>
+                        Drag & drop or{" "}
+                        <span className="upload-choose">Choose file</span> to
+                        upload
+                      </p>
+                      <p className="upload-formats">PDF</p>
+                      <input
+                        type="file"
+                        className="upload-input"
+                        onChange={handleFileChange}
+                        accept="application/pdf"
+                      />
+
+                      {file && <p>{file.name}</p>}
+                    </div>
+                  </div>
+                )}
               </>
             )}
 
@@ -327,10 +332,10 @@ const TehnickiSekretar: React.FC = () => {
             />
           </div>
           <div className="form-buttons">
-            {br_faktura ? (
+            {file && (typeof file === 'string' || file instanceof File) ? (
               <button
                 className="vidi-faktura"
-                onClick={(e) => showPdf(file, e)}
+                onClick={(e) => showPdf(typeof file === 'string' ? file : URL.createObjectURL(file), e)}
               >
                 Види фактура
               </button>

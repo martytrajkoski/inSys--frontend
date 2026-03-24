@@ -24,11 +24,21 @@ const TipNabavka: React.FC = () => {
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
 
+  //DOGOVOR
   const [brDogovor, setBrDogovor] = useState<string>();
+  const [dogovori, setDogovori] = useState<any[]>([]);
+  const [showCreateDogovorModal, setShowCreateDogovorModal] = useState<boolean>(false);
+  const [newDogovor, setNewDogovor] = useState({
+    br_dog: "",
+    datum_od_dog: "",
+    datum_do_dog: "",
+    iznos_dog: 0,
+  });
+  const [isCreatingDogovor, setIsCreatingDogovor] = useState(false);
+  const [dogovorError, setDogovorError] = useState<string>("");
   const [vk_vrednost, setVk_vrednost] = useState<number>();
-  const [vaznostDo, setVaznostDo] = useState<string>();
   const [soglasnoDogovor, setSoglasnoDogovor] = useState<number>();
-  const [ostanatiRaspSredstva, setOstanatiRaspSredstva] = useState<number>();
+  const [calculatedOstanati, setCalculatedOstanati] = useState<number | null>(null);
 
   const [istTip, setIstTip] = useState<number>();
   const [vkPotroseno, setVkPotroseno] = useState<number>();
@@ -53,10 +63,141 @@ const TipNabavka: React.FC = () => {
     setShowAddBrKartonModal(!showAddBrKartonModal);
   };
 
+  const navigateToCreateDogovor = () => {
+    setShowCreateDogovorModal(true);
+  };
+
+  const calculateRemainingAmount = async () => {
+    console.log("=== CALCULATION START ===");
+    console.log("brDogovor:", brDogovor);
+    console.log("vk_vrednost:", vk_vrednost);
+    console.log("dogovori array:", dogovori);
+    
+    if (!brDogovor) {
+      console.log("RETURNING: Missing brDogovor");
+      return null;
+    }
+    
+    const selectedDogovor = dogovori.find(d => d.br_dog === brDogovor);
+    console.log("selectedDogovor:", selectedDogovor);
+    
+    if (!selectedDogovor) {
+      console.log("RETURNING: No dogovor found");
+      return null;
+    }
+    
+    try {
+      // Fetch all invoices for this contract
+      console.log("Making API call to:", `/dogovori/${selectedDogovor.id}/fakturi`);
+      const response = await axiosClient.get(`/dogovori/${selectedDogovor.id}/fakturi`);
+      console.log("API response:", response.data);
+      const contractInvoices = response.data;
+      
+      const totalContractAmount = selectedDogovor.iznos_dog || 0;
+      console.log("totalContractAmount:", totalContractAmount);
+      
+      const totalInvoicesAmount = contractInvoices.reduce((sum: number, inv: any) => {
+        // Skip the current invoice if we're editing it (by comparing br_faktura)
+        if (inv.br_faktura === br_faktura) {
+          console.log("Skipping current invoice:", inv.br_faktura);
+          return sum;
+        }
+        
+        // Get amount from javna_nabavka relationship if it exists
+        let invAmount = 0;
+        if (inv.tip_nabavka && inv.tip_nabavka.javna_nabavka) {
+          invAmount = inv.tip_nabavka.javna_nabavka.vk_vrednost || 0;
+        } else if (inv.tip_nabavka && inv.tip_nabavka.tender) {
+          invAmount = inv.tip_nabavka.tender.vk_potroseno || 0;
+        }
+        console.log("Processing invoice:", inv.br_faktura, "amount:", invAmount, "tip_nabavka:", inv.tip_nabavka);
+        return sum + invAmount;
+      }, 0);
+      console.log("totalInvoicesAmount:", totalInvoicesAmount);
+      console.log("totalContractAmount:", totalContractAmount);
+      
+      // Calculate remaining amount BEFORE adding current invoice
+      const remainingWithoutCurrent = totalContractAmount - totalInvoicesAmount;
+      console.log("Remaining before current invoice:", remainingWithoutCurrent);
+      
+      // Subtract current invoice amount dynamically
+      const remainingWithCurrent = remainingWithoutCurrent - (vk_vrednost || 0);
+      console.log("Final remaining (after subtracting current invoice):", remainingWithCurrent);
+      
+      setCalculatedOstanati(remainingWithCurrent);
+      return remainingWithCurrent;
+    } catch (error) {
+      console.error("Error fetching invoices for calculation:", error);
+      return null;
+    }
+  };
+
+  const handleVkVrednostChange = (value: number) => {
+    console.log("vk_vrednost changed to:", value);
+    setVk_vrednost(value);
+  };
+
+  useEffect(() => {
+    console.log("useEffect triggered with:", { brDogovor, vk_vrednost, dogovori });
+    if (brDogovor) {
+      calculateRemainingAmount();
+    }
+  }, [brDogovor, vk_vrednost, dogovori]);
+
+  const handleCreateDogovor = async (e: any) => {
+    e.preventDefault();
+    setIsCreatingDogovor(true);
+    setDogovorError("");
+
+    try {
+      const response = await axiosClient.post("/dogovori", newDogovor);
+      
+      if (response.status === 201) {
+        // Refresh dogovori list
+        fetchDogovori();
+        
+        // Select the newly created dogovor
+        setBrDogovor(response.data.br_dog);
+        
+        // Close modal and reset form
+        setShowCreateDogovorModal(false);
+        setNewDogovor({
+          br_dog: "",
+          datum_od_dog: "",
+          datum_do_dog: "",
+          iznos_dog: 0,
+        });
+      }
+    } catch (error: any) {
+      setDogovorError(error.response?.data?.message || "Грешка при креирање на договор");
+    } finally {
+      setIsCreatingDogovor(false);
+    }
+  };
+
+  const fetchDogovori = async () => {
+    try {
+      const response = await axiosClient.get("/dogovori");
+      if (response.status === 200) {
+        setDogovori(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching dogovori:", error);
+    }
+  };
+
   useEffect(() => {
     showTipNabavka();
     showBaratel();
     fetchBrKarton();
+    fetchDogovori();
+    
+    // Check if there's a newly created dogovor to select
+    const selectedDogovor = localStorage.getItem('selectedDogovor');
+    if (selectedDogovor) {
+      setBrDogovor(selectedDogovor);
+      localStorage.removeItem('selectedDogovor');
+    }
   }, []);
 
   const showTipNabavka = async () => {
@@ -80,9 +221,7 @@ const TipNabavka: React.FC = () => {
         if (doc.tip === "javna") {
           setBrDogovor(doc.javna_nabavka.br_dogovor);
           setVk_vrednost(doc.javna_nabavka.vk_vrednost ?? undefined);
-          setVaznostDo(doc.javna_nabavka.vaznost_do);
           setSoglasnoDogovor(doc.javna_nabavka.soglasno_dogovor);
-          setOstanatiRaspSredstva(doc.javna_nabavka.ostanati_rasp_sredstva);
         } else if (doc.tip === "tender") {
           setIstTip(doc.tender.ist_tip);
           setVkPotroseno(doc.tender.vk_potroseno);
@@ -95,9 +234,7 @@ const TipNabavka: React.FC = () => {
         setDatum(undefined);
         setBrDogovor("");
         setVk_vrednost(undefined);
-        setVaznostDo(undefined);
         setSoglasnoDogovor(undefined);
-        setOstanatiRaspSredstva(undefined);
         setIstTip(undefined);
         setVkPotroseno(undefined);
         setReview_comment("");
@@ -117,13 +254,10 @@ const TipNabavka: React.FC = () => {
         tip: tip,
         read: true,
         datum: datum,
-
         br_dogovor: brDogovor,
         vk_vrednost: vk_vrednost,
-        vaznost_do: vaznostDo,
-        ostanati_rasp_sredstva: ostanatiRaspSredstva,
+        rasp_sredstva: calculatedOstanati,
         soglasno_dogovor: soglasnoDogovor,
-
         ist_tip: istTip,
         vk_potroseno: vkPotroseno,
       });
@@ -149,8 +283,6 @@ const TipNabavka: React.FC = () => {
 
           br_dogovor: brDogovor,
           vk_vrednost: vk_vrednost,
-          vaznost_do: vaznostDo,
-          ostanati_rasp_sredstva: ostanatiRaspSredstva,
           soglasno_dogovor: soglasnoDogovor,
 
           ist_tip: istTip,
@@ -169,42 +301,47 @@ const TipNabavka: React.FC = () => {
 
   const deleteTipNabavka = async () => {
     try {
-      const responseTip = await axiosClient.delete(
-        `/tipnabavka/destroy/${documentId}`
-      );
-
-      if (responseTip.status === 201) {
-        setCreated(false);
-        setTip("");
-        setDatum("");
-        setBrDogovor("");
-        setVk_vrednost(undefined);
-        setVaznostDo("");
-        setSoglasnoDogovor(undefined);
-        setOstanatiRaspSredstva(undefined);
-        setIstTip(undefined);
-        setVkPotroseno(undefined);
-        setDocumentId(undefined);
-
-        setShowDeleteModal(false);
+      // Delete tip nabavka section
+      if (documentId) {
+        try {
+          await axiosClient.delete(`/tipnabavka/destroy/${documentId}`);
+        } catch (error) {
+          console.error("Error deleting tip nabavka:", error);
+        }
       }
 
-      const responseBaratel = await axiosClient.delete(
-        `/baratelnabavka/destroy/${documentId}`
-      );
-
-      if (responseBaratel.status === 201) {
-        setDocumentId(undefined);
-        setCreated(false);
-        setBaratel("");
-        setBrKarton_id(0);
-        setNazivProekt("");
-        setPoteklo("");
-        setDatum("");
-
-        setShowDeleteModal(false);
+      // Delete baratel nabavka section
+      if (documentId) {
+        try {
+          await axiosClient.delete(`/baratelnabavka/destroy/${documentId}`);
+        } catch (error) {
+          console.error("Error deleting baratel nabavka:", error);
+        }
       }
+
+      // Clear all form data for both sections
+      setCreated(false);
+      setTip("");
+      setDatum("");
+      setBrDogovor("");
+      setVk_vrednost(undefined);
+      setSoglasnoDogovor(undefined);
+      setIstTip(undefined);
+      setVkPotroseno(undefined);
+      setDocumentId(undefined);
+      
+      // Clear evidencija section
+      setBaratel("");
+      setBrKarton_id(0);
+      setNazivProekt("");
+      setPoteklo("");
+      setReview_comment("");
+      setStatus("pending");
+      setEvidencijaId(undefined);
+
+      setShowDeleteModal(false);
     } catch (error) {
+      console.error("Error during deletion:", error);
       setShowFakturaError(true);
     }
   };
@@ -312,15 +449,13 @@ const TipNabavka: React.FC = () => {
         setShowUpdateModal(true);
       }
     } catch (error) {
-      console.log(error);
-
       setShowFakturaError(true);
     }
   };
 
   const showPdf = (path: string, e: any) => {
     e.preventDefault();
-    window.open(path, "_blank");
+    window.open(path, "_self");
   };
 
   return (
@@ -357,42 +492,58 @@ const TipNabavka: React.FC = () => {
           <div className="form-item">
             <div className="form-item-inputs">
               <label>Број на договор</label>
-              <input
-                type="text"
+              <select
                 value={brDogovor}
-                readOnly={Boolean(is_sealed)}
+                disabled={Boolean(is_sealed)}
                 onChange={(e) => setBrDogovor(e.target.value)}
                 required
-              />
-              <label>Важност на договор до</label>
-              <input
-                type="date"
-                value={vaznostDo}
-                readOnly={Boolean(is_sealed)}
-                onChange={(e) => setVaznostDo(e.target.value)}
-                required
-              />
+              >
+                <option value="">-- Избери договор --</option>
+                {dogovori.map((dogovor) => (
+                  <option key={dogovor.id} value={dogovor.br_dog}>
+                    {dogovor.br_dog}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={navigateToCreateDogovor}
+                disabled={Boolean(is_sealed)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: "#e45830",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  marginTop: "10px"
+                }}
+              >
+                Креирај нов договор
+              </button>
               <label>Вкупна вредност на фактура (со ДДВ)</label>
               <input
-                type="number"
-                value={vk_vrednost}
+                type="text"
+                value={vk_vrednost || ""}
                 placeholder="0"
-                onChange={(e) => setVk_vrednost(Number(e.target.value))}
-              />
-              <label>
-                Останати расположливи средства по договорот (без вредност на
-                фактура)
-              </label>
-              <input
-                type="number"
-                placeholder="0"
-                value={ostanatiRaspSredstva}
-                readOnly={Boolean(is_sealed)}
-                onChange={(e) =>
-                  setOstanatiRaspSredstva(Number(e.target.value))
-                }
+                onChange={(e) => handleVkVrednostChange(Number(e.target.value) || 0)}
                 required
               />
+              <label>
+                Останати расположливи средства по договорот:
+              </label>
+              <div style={{
+                padding: "8px 12px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: "#f8f9fa",
+                color: calculatedOstanati !== null && calculatedOstanati < 0 ? "#dc3545" : "#333",
+                fontWeight: "bold",
+                fontSize: "14px"
+              }}>
+                {calculatedOstanati !== null ? calculatedOstanati.toLocaleString('mk-MK') : "0"}
+              </div>
             </div>
             <div className="form-item-radio">
               <label>
@@ -543,7 +694,11 @@ const TipNabavka: React.FC = () => {
                   Избери број на картон (конто)
                 </button>
               ) : (
-                <button type="button" onClick={() => handleAddBrKartonModal()}>
+                <button 
+                  type="button" 
+                  onClick={() => handleAddBrKartonModal()}
+                  style={{ marginTop: "15px" }}
+                >
                   Креирај нов број на картон (конто)
                 </button>
               ))}
@@ -675,6 +830,180 @@ const TipNabavka: React.FC = () => {
         confirmButton=""
         message="Грешка при ажурирање на оваа фактура"
       />
+
+      {/* Create Dogovor Modal */}
+      {showCreateDogovorModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '30px',
+            borderRadius: '10px',
+            width: '500px',
+            maxWidth: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}>
+            <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>Креирај нов договор</h2>
+            
+            <form onSubmit={handleCreateDogovor}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Број на договор *
+                  </label>
+                  <input
+                    type="text"
+                    name="br_dog"
+                    value={newDogovor.br_dog}
+                    onChange={(e) => setNewDogovor(prev => ({ ...prev, br_dog: e.target.value }))}
+                    required
+                    placeholder="Внесете број на договор"
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '14px'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Датум од *
+                  </label>
+                  <input
+                    type="date"
+                    name="datum_od_dog"
+                    value={newDogovor.datum_od_dog}
+                    onChange={(e) => setNewDogovor(prev => ({ ...prev, datum_od_dog: e.target.value }))}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '14px'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Датум до *
+                  </label>
+                  <input
+                    type="date"
+                    name="datum_do_dog"
+                    value={newDogovor.datum_do_dog}
+                    onChange={(e) => setNewDogovor(prev => ({ ...prev, datum_do_dog: e.target.value }))}
+                    required
+                    min={newDogovor.datum_od_dog}
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '14px'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                    Износ на договор *
+                  </label>
+                  <input
+                    type="number"
+                    name="iznos_dog"
+                    value={newDogovor.iznos_dog}
+                    onChange={(e) => setNewDogovor(prev => ({ ...prev, iznos_dog: Number(e.target.value) }))}
+                    required
+                    min="0"
+                    step="1"
+                    placeholder="Внесете износ"
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '14px'
+                    }}
+                  />
+                </div>
+
+                {dogovorError && (
+                  <div style={{
+                    color: 'red',
+                    padding: '10px',
+                    backgroundColor: '#ffebee',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}>
+                    {dogovorError}
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', marginTop: '20px' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCreateDogovorModal(false);
+                      setDogovorError("");
+                      setNewDogovor({
+                        br_dog: "",
+                        datum_od_dog: "",
+                        datum_do_dog: "",
+                        iznos_dog: 0,
+                      });
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Откажи
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    disabled={isCreatingDogovor}
+                    style={{
+                      flex: 1,
+                      padding: '10px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: isCreatingDogovor ? '#6c757d' : '#007bff',
+                      color: 'white',
+                      cursor: isCreatingDogovor ? 'not-allowed' : 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
+                    {isCreatingDogovor ? 'Креирање...' : 'Креирај'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 };

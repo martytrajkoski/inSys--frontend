@@ -12,6 +12,7 @@ import Prodekan from "../pages/Departments/Prodekan/Prodekan";
 import Izdavaci from "../pages/Departments/Izdavaci/Izdavaci";
 import PregledFakturi from "../pages/MainMenu/PregledFakturi";
 import Arhiva from "../pages/MainMenu/Arhiva";
+import Dogovori from "../pages/MainMenu/Dogovori";
 import Pdf from "../pages/PDF/Pdf";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleProtectedRoute from "./RoleProtectedRoute";
@@ -30,6 +31,7 @@ const AppRoutes: React.FC = () => {
           <Route element={<MainMenu />}>
             <Route index element={<PregledFakturi />} />
             <Route path="lista-izdavaci" element={<Izdavaci />} />
+            <Route path="pregled-dogovori" element={<Dogovori />} />
             <Route path="archive" element={<Arhiva />} />
             <Route path="fakturipoizdavac" element={<PregledFakturaFilter />} />
           </Route>
