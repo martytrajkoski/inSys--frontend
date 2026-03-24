@@ -7,6 +7,7 @@ interface Dogovor {
   datum_od_dog: string;
   datum_do_dog: string;
   iznos_dog: number;
+  potrosen_iznos: number;
   created_at: string;
   updated_at: string;
 }
@@ -33,6 +34,8 @@ const DogovoriPage: React.FC = () => {
   const fetchDogovori = async () => {
     try {
       const response = await axiosClient.get("/dogovori");
+      console.log("Dogovori response:", response.data);
+      console.log("Dogovori count:", response.data.length);
       setDogovori(response.data);
     } catch (error: any) {
       console.error("Error fetching dogovori:", error);
@@ -47,6 +50,8 @@ const DogovoriPage: React.FC = () => {
     try {
       const response = await axiosClient.get("/auth/user");
       if (response.status === 201) {
+        console.log("User data:", response.data);
+        console.log("Role data:", response.data.role);
         setRole(response.data.role.name);
       }
     } catch (error) {
@@ -109,8 +114,10 @@ const DogovoriPage: React.FC = () => {
   };
 
   const openFakturaDetails = (faktura: Faktura) => {
-    // Open faktura details in new tab
-    window.open(getRouteByRole(role, faktura.br_faktura));
+    // Navigate to faktura details in same tab
+    const route = getRouteByRole(role, faktura.br_faktura);
+    console.log("Navigating to faktura details for role:", role, "faktura:", faktura.br_faktura, "route:", route);
+    window.location.href = route;
   };
 
 
@@ -149,12 +156,12 @@ const DogovoriPage: React.FC = () => {
                   <td>{formatDate(dogovor.datum_od_dog)}</td>
                   <td>{formatDate(dogovor.datum_do_dog)}</td>
                   <td>{dogovor.iznos_dog.toLocaleString('mk-MK')}</td>
-                  {/* <td>{dogovor.potrosen_iznos.toLocaleString('mk-MK')}</td> */}
+                  <td>{dogovor.potrosen_iznos.toLocaleString('mk-MK')}</td>
                 </tr>
                 
                 {expandedDogovor === dogovor.id && (
                   <tr>
-                    <td colSpan={4} style={{ padding: 0 }}>
+                    <td colSpan={5} style={{ padding: 0 }}>
                       <div style={{ 
                         padding: "20px", 
                         backgroundColor: "#f8f9fa", 
@@ -204,8 +211,8 @@ const DogovoriPage: React.FC = () => {
                                       color: 'white'
                                     }}>
                                       {faktura.status === 'pending' ? 'Чекање' :
-                                       faktura.status === 'ready' ? 'Подготвено' :
-                                       faktura.status === 'approved' ? 'Одобрено' : 'Непознато'}
+                                       faktura.status === 'ready' ? 'Спремна' :
+                                       faktura.status === 'approved' ? 'Запечатена' : 'Непознато'}
                                     </span>
                                   </td>
                                   <td style={{ padding: "8px", borderBottom: "1px solid #eee", width: "20%" }}>{formatDate(faktura.created_at)}</td>

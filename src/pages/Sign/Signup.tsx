@@ -45,9 +45,18 @@ const Signup: React.FC = () => {
   const fetchRoles = async () => {
     try {
       const response = await axiosClient.get("/roles");
+      console.log("Roles response:", response.data);
 
       if (response.status === 201) {
-        setRoles(response.data.roles);
+        // Remove duplicates based on name, keeping only the first occurrence
+        const uniqueRoles = response.data.roles.reduce((acc: RoleType[], current: RoleType) => {
+          const existing = acc.find(role => role.name === current.name);
+          if (!existing) {
+            acc.push(current);
+          }
+          return acc;
+        }, []);
+        setRoles(uniqueRoles);
       }
     } catch (error) {
       console.error(error);
@@ -129,7 +138,7 @@ const Signup: React.FC = () => {
               Choose your role
             </option>
             {roles.map((item) => (
-              <option key={item.id} value={item.id}>
+              <option key={`${item.id}-${item.name}`} value={item.id}>
                 {item.name}
               </option>
             ))}

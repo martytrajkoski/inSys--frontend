@@ -73,8 +73,8 @@ const TipNabavka: React.FC = () => {
     console.log("vk_vrednost:", vk_vrednost);
     console.log("dogovori array:", dogovori);
     
-    if (!brDogovor || !vk_vrednost) {
-      console.log("RETURNING: Missing brDogovor or vk_vrednost");
+    if (!brDogovor) {
+      console.log("RETURNING: Missing brDogovor");
       return null;
     }
     
@@ -135,16 +135,11 @@ const TipNabavka: React.FC = () => {
   const handleVkVrednostChange = (value: number) => {
     console.log("vk_vrednost changed to:", value);
     setVk_vrednost(value);
-    
-    // Immediately calculate remaining after amount changes
-    if (brDogovor && value) {
-      setTimeout(() => calculateRemainingAmount(), 0);
-    }
   };
 
   useEffect(() => {
     console.log("useEffect triggered with:", { brDogovor, vk_vrednost, dogovori });
-    if (brDogovor && vk_vrednost) {
+    if (brDogovor) {
       calculateRemainingAmount();
     }
   }, [brDogovor, vk_vrednost, dogovori]);

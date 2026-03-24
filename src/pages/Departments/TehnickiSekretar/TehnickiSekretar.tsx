@@ -26,7 +26,6 @@ const TehnickiSekretar: React.FC = () => {
   const [br_fakturaa, setBr_fakturaa] = useState<string>();
   const [izdavaci_id, setIzdavaci_id] = useState<number>();
   const [izdavaci, setIzdavaci] = useState<IzdavaciType[]>([]);
-  const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [datum, setDatum] = useState<string>("");
   const [review_comment, setReview_comment] = useState<string>();
   const [status, setStatus] = useState<string>("pending");
@@ -65,7 +64,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br(document.arhivski_br ?? "");
         setBr_fakturaa(document.br_faktura ?? "");
         setIzdavaci_id(document.izdavaci_id ?? undefined);
-        setIznos_dogovor(document.iznos_dogovor ?? undefined);
         setDatum(document.datum ?? "");
         setFile(response.data.scan_file ?? "");
         setReview_comment(document.review_comment ?? "");
@@ -77,7 +75,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br("");
         setBr_fakturaa("");
         setIzdavaci_id(undefined);
-        setIznos_dogovor(undefined);
         setDatum("");
         setFile(response.data.scan_file);
         setDocumentId(undefined);
@@ -97,7 +94,6 @@ const TehnickiSekretar: React.FC = () => {
       formData.append("arhivski_br", arhivski_br);
       formData.append("br_faktura", br_fakturaa || "");
       formData.append("izdavaci_id", String(izdavaci_id));
-      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
       formData.append("datum", datum);
       if (file) formData.append("scan_file", file);
 
@@ -150,7 +146,6 @@ const TehnickiSekretar: React.FC = () => {
       formData.append("arhivski_br", arhivski_br);
       formData.append("br_faktura", br_fakturaa || "");
       formData.append("izdavaci_id", String(izdavaci_id));
-      formData.append("iznos_dogovor", String(iznos_dogovor || 0));
       formData.append("datum", datum);
       if (file instanceof File) {
         formData.append("scan_file", file);
@@ -180,7 +175,6 @@ const TehnickiSekretar: React.FC = () => {
         setArhivski_br("");
         setBr_fakturaa("");
         setIzdavaci_id(0);
-        setIznos_dogovor(0);
         setDatum("");
         setFile("");
         setCreated(false);
@@ -242,14 +236,6 @@ const TehnickiSekretar: React.FC = () => {
               value={br_fakturaa}
               readOnly={Boolean(is_sealed)}
               onChange={(e) => setBr_fakturaa(e.target.value)}
-            />
-            <label>Износ на договор</label>
-            <input
-              type="number"
-              value={iznos_dogovor}
-              placeholder="0"
-              readOnly={Boolean(is_sealed)}
-              onChange={(e) => setIznos_dogovor(Number(e.target.value))}
             />
             {showAddIzdavacModal ? (
               <div>
