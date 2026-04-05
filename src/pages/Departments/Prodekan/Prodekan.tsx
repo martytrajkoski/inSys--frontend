@@ -16,7 +16,6 @@ const Prodekan: React.FC = () => {
   // TEHNICKI SEKRETAR
   const [arhivski_br, setArhivski_br] = useState<string>("");
   const [izdavac, setIzdavac] = useState<number>();
-  const [iznos_dogovor, setIznos_dogovor] = useState<number>();
   const [datumTehnicki, setDatumTehnicki] = useState<string>("");
   const [potpisTehnicki, setPotpisTehnicki] = useState<string>("");
   const [file, setFile] = useState<any>();
@@ -68,11 +67,14 @@ const Prodekan: React.FC = () => {
 
       if (response.status === 201) {
         const data = response.data.faktura;
+        console.log("Full invoice data:", data);
+        console.log("tip_nabavka data:", data.tip_nabavka);
+        console.log("javna_nabavka data:", data.tip_nabavka?.javna_nabavka);
+
         // Tehnicki Sekretar
         setArhivski_br(data.tehnicki_sekretar?.arhivski_br ?? "");
         setDatumTehnicki(data.tehnicki_sekretar?.datum ?? "");
         setIzdavac(data.tehnicki_sekretar?.izdavac.name ?? undefined);
-        setIznos_dogovor(data.tehnicki_sekretar?.iznos_dogovor ?? undefined);
         setPotpisTehnicki(
           data.tehnicki_sekretar.updated_by?.name ??
             data.tehnicki_sekretar.submited_by?.name
@@ -88,6 +90,7 @@ const Prodekan: React.FC = () => {
           setVk_vrednost(
             data.tip_nabavka?.javna_nabavka?.vk_vrednost ?? undefined
           );
+          console.log("Setting vk_vrednost to:", data.tip_nabavka?.javna_nabavka?.vk_vrednost);
           setSoglasnoDogovor(
             data.tip_nabavka?.javna_nabavka?.soglasno_dogovor ?? undefined
           );
@@ -215,7 +218,7 @@ const Prodekan: React.FC = () => {
           <input type="text" value={br_faktura ?? ""} readOnly />
 
           <label>Износ на фактура</label>
-          <input type="text" value={iznos_dogovor} readOnly />
+          <input type="text" value={vk_vrednost} readOnly />
 
           <label>Датум</label>
           <input type="text" value={datumTehnicki} readOnly />
