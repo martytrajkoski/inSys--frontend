@@ -26,6 +26,8 @@ const DogovoriPage: React.FC = () => {
   const [expandedDogovor, setExpandedDogovor] = useState<number | null>(null);
   const [fakturiMap, setFakturiMap] = useState<{ [key: number]: Faktura[] }>({});
   const [role, setRole] = useState<string>("");
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [editingDogovor, setEditingDogovor] = useState<Dogovor | null>(null);
 
   const filteredDogovori = dogovori.filter((d) =>
     d.br_dog.toLowerCase().includes(searchQuery.toLowerCase())
@@ -120,6 +122,40 @@ const DogovoriPage: React.FC = () => {
     window.location.href = route;
   };
 
+  const deleteDogovor = async (dogovor: Dogovor) => {
+    try {
+      const response = await axiosClient.delete(`/dogovori/${dogovor.id}`);
+      if (response.status === 200) {
+        setDogovori(prev => prev.filter(d => d.id !== dogovor.id));
+        alert('Договорот е успешно избришан!');
+      }
+    } catch (error) {
+      console.error('Error deleting dogovor:', error);
+      alert('Грешка при бришење на договорот!');
+    }
+  };
+
+  const editDogovor = (dogovor: Dogovor) => {
+    setEditingDogovor(dogovor);
+    setShowEditModal(true);
+  };
+
+  const updateDogovor = async () => {
+    if (!editingDogovor) return;
+    
+    try {
+      const response = await axiosClient.put(`/dogovori/${editingDogovor.id}`, editingDogovor);
+      if (response.status === 200) {
+        setDogovori(prev => prev.map(d => d.id === editingDogovor.id ? editingDogovor : d));
+        setShowEditModal(false);
+        setEditingDogovor(null);
+        alert('Договорот е успешно ажуриран!');
+      }
+    } catch (error) {
+      console.error('Error updating dogovor:', error);
+      alert('Грешка при ажурирање на договорот!');
+    }
+  };
 
   return (
     <div className="mainmenu-content">
@@ -143,6 +179,7 @@ const DogovoriPage: React.FC = () => {
               <th>Датум до</th>
               <th>Износ</th>
               <th>Потрошен износ</th>
+              <th>Акции</th>
             </tr>
           </thead>
           <tbody>
@@ -157,11 +194,47 @@ const DogovoriPage: React.FC = () => {
                   <td>{formatDate(dogovor.datum_do_dog)}</td>
                   <td>{dogovor.iznos_dog.toLocaleString('mk-MK')}</td>
                   <td>{dogovor.potrosen_iznos.toLocaleString('mk-MK')}</td>
+                  <td style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        editDogovor(dogovor);
+                      }}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "4px",
+                        border: "none",
+                        backgroundColor: "#28a745",
+                        color: "white",
+                        cursor: "pointer",
+                        fontSize: "12px"
+                      }}
+                    >
+                      Измени
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteDogovor(dogovor);
+                      }}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "4px",
+                        border: "none",
+                        backgroundColor: "#dc3545",
+                        color: "white",
+                        cursor: "pointer",
+                        fontSize: "12px"
+                      }}
+                    >
+                      Избриши
+                    </button>
+                  </td>
                 </tr>
                 
                 {expandedDogovor === dogovor.id && (
                   <tr>
-                    <td colSpan={5} style={{ padding: 0 }}>
+                    <td colSpan={6} style={{ padding: 0 }}>
                       <div style={{ 
                         padding: "20px", 
                         backgroundColor: "#f8f9fa", 
@@ -263,6 +336,129 @@ const DogovoriPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {showEditModal && editingDogovor && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '30px',
+            borderRadius: '8px',
+            width: '500px',
+            maxWidth: '90%'
+          }}>
+            <h2 style={{ margin: '0 0 20px 0' }}>Уреди договор</h2>
+            
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Број на договор:</label>
+              <input
+                type="text"
+                value={editingDogovor.br_dog}
+                onChange={(e) => setEditingDogovor({...editingDogovor, br_dog: e.target.value})}
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Датум од:</label>
+              <input
+                type="date"
+                value={editingDogovor.datum_od_dog}
+                onChange={(e) => setEditingDogovor({...editingDogovor, datum_od_dog: e.target.value})}
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Датум до:</label>
+              <input
+                type="date"
+                value={editingDogovor.datum_do_dog}
+                onChange={(e) => setEditingDogovor({...editingDogovor, datum_do_dog: e.target.value})}
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Износ на договор:</label>
+              <input
+                type="number"
+                value={editingDogovor.iznos_dog}
+                onChange={(e) => setEditingDogovor({...editingDogovor, iznos_dog: Number(e.target.value)})}
+                style={{
+                  width: '100%',
+                  padding: '8px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => {
+                  setShowEditModal(false);
+                  setEditingDogovor(null);
+                }}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Откажи
+              </button>
+              <button
+                onClick={updateDogovor}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Зачувај
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
